@@ -1,0 +1,9 @@
+name: ${project.name}
+version: ${project.version}
+main: me.bramhaag.guilds.Main
+author: bramhaag
+
+commands:
+  guild:
+    aliases: "guilds"
+    description: See the Guild commands
