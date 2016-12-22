@@ -1,6 +1,6 @@
 package me.bramhaag.guilds;
 
-import me.bramhaag.guilds.commands.CommandHelp;
+import me.bramhaag.guilds.commands.*;
 import me.bramhaag.guilds.commands.base.CommandHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,7 +22,19 @@ public class Main extends JavaPlugin {
         commandHandler.enable();
 
         getCommand("guild").setExecutor(commandHandler);
+        commandHandler.register(new CommandAccept(null, null, null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandAccept(null, null, null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandChat(null, null, null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandCreate(null, null, null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandDelete(null, null, null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandCreate(null, null, null, false, null, null, -1, -1)); //Not yet implemented
         commandHandler.register(new CommandHelp());
+        commandHandler.register(new CommandDemote(null, null, null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandInfo(null, null, null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandInvite(null, null, null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandLeave(null, null, null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandPromote(null, null, null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandRole());
 
         this.saveDefaultConfig();
     }
