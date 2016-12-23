@@ -10,7 +10,7 @@ import java.util.UUID;
 public abstract class DatabaseProvider {
 
     public abstract boolean createGuild(String name, UUID master);
-    public abstract boolean removeGuild();
+    public abstract boolean removeGuild(int id);
 
     public abstract Guild getGuild();
 

@@ -27,6 +27,10 @@ public class Guild {
         return id;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public List<GuildMember> getMembers() {
         return members;
     }
@@ -51,6 +55,10 @@ public class Guild {
         this.members.remove(uuid);
 
         return true;
+    }
+
+    public GuildMember getMember(UUID uuid) {
+        return members.stream().filter(member -> member.getUuid() == uuid).findFirst().get();
     }
 
     public boolean isMember(UUID uuid) {
