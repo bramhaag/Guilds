@@ -18,7 +18,10 @@ public enum Message {
 
     COMMAND_ROLE_ERROR_NO_GUILD,
     COMMAND_ROLE_ERROR_ROLE_NOT_FOUND,
-    COMMAND_ROLE_PLAYERS, COMMAND_CREATE_ERROR_IN_GUILD, COMMAND_CREATE_SUCCESSFUL, COMMAND_CREATE_ERROR_CREATE;
+    COMMAND_ROLE_PLAYERS,
+    COMMAND_CREATE_ERROR_IN_GUILD,
+    COMMAND_CREATE_SUCCESSFUL,
+    COMMAND_CREATE_ERROR_CREATE, COMMAND_HELP_MESSAGE;
 
     public static void sendMessage(CommandSender sender, Message message) {
         sender.sendMessage(Main.PREFIX + Main.getInstance().getConfig().getString("message." + message.name().toLowerCase().replace('_', '-')));

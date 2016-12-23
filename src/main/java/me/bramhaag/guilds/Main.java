@@ -62,6 +62,10 @@ public class Main extends JavaPlugin {
         return guildHandler;
     }
 
+    public CommandHandler getCommandHandler() {
+        return commandHandler;
+    }
+
     public static Main getInstance() {
         return instance;
     }

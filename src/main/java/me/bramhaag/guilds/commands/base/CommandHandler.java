@@ -75,7 +75,12 @@ public class CommandHandler implements CommandExecutor, IHandler {
             }
         }
 
+        Message.sendMessage(sender, Message.COMMAND_ERROR_NOT_FOUND);
         return true;
+    }
+
+    public List<CommandBase> getCommands() {
+        return commands;
     }
 
     public CommandBase getCommand(String name) {

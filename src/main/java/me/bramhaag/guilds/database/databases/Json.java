@@ -1,15 +1,20 @@
 package me.bramhaag.guilds.database.databases;
 
-import me.bramhaag.guilds.database.Database;
+import com.google.gson.Gson;
+import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.guild.Guild;
+
+import java.util.UUID;
 
 /**
  * Created by Bram on 22-12-2016.
  */
-public class Json extends Database {
+public class Json extends DatabaseProvider {
+
+    private Gson gson = new Gson();
 
     @Override
-    public boolean createGuild() {
+    public boolean createGuild(String name, UUID master) {
         return false;
     }
 
