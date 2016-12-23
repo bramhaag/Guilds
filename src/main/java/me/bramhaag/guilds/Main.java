@@ -3,6 +3,8 @@ package me.bramhaag.guilds;
 import me.bramhaag.guilds.commands.*;
 import me.bramhaag.guilds.commands.base.CommandHandler;
 import me.bramhaag.guilds.database.DatabaseProvider;
+import me.bramhaag.guilds.database.databases.Json;
+import me.bramhaag.guilds.database.databases.MySql;
 import me.bramhaag.guilds.guild.GuildHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,9 +24,23 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        this.saveDefaultConfig();
+
         instance = this;
 
-        this.database = null; //TODO get database/flatfile from config and initialize
+        switch (getConfig().getString("database.type").toLowerCase()) {
+            case "json":
+                database = new Json();
+                break;
+            case "mysql":
+                database = new MySql();
+                break;
+            default:
+                database = null;
+                break;
+        }
+
+        database.initialize();
 
         guildHandler = new GuildHandler();
         guildHandler.enable();
@@ -34,19 +50,17 @@ public class Main extends JavaPlugin {
 
         getCommand("guild").setExecutor(commandHandler);
 
-        commandHandler.register(new CommandAccept(null, null, null, false, null, null, -1, -1)); //Not yet implemented
-        commandHandler.register(new CommandChat(null, null, null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandAccept("accept", "null", null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandChat("chat", "null", null, false, null, null, -1, -1)); //Not yet implemented
         commandHandler.register(new CommandCreate());
         commandHandler.register(new CommandDelete());
         commandHandler.register(new CommandHelp());
-        commandHandler.register(new CommandDemote(null, null, null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandDemote("demote", "null", null, false, null, null, -1, -1)); //Not yet implemented
         commandHandler.register(new CommandInfo());
-        commandHandler.register(new CommandInvite(null, null, null, false, null, null, -1, -1)); //Not yet implemented
-        commandHandler.register(new CommandLeave(null, null, null, false, null, null, -1, -1)); //Not yet implemented
-        commandHandler.register(new CommandPromote(null, null, null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandInvite("invite", "null", null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandLeave("leave", "null", null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandPromote("promote", "null", null, false, null, null, -1, -1)); //Not yet implemented
         commandHandler.register(new CommandRole());
-
-        this.saveDefaultConfig();
     }
 
     @Override

@@ -1,0 +1,36 @@
+database:
+# Set the type of the database (Either JSON or MySQL)
+  type: JSON
+#  Uncomment when using MySQL
+#  credentials:
+#    host: "127.0.0.1"
+#    port: 3306
+#    user: "root"
+#    password: "password"
+#    database: "guilds"
+
+#Note: Current "messages" are temporary and only for testing, one day they will be made better
+#TODO: Categorize these messages and make the messages better
+messages:
+  command-error-console: "console can't use this command"
+  command-error-args: "invalid arguments"
+  command-error-permission: "no permission"
+  command-error-not-found: "command not found"
+  command-error-no-guild: "you're not in a guild"
+  command-error-not-guildmaster: "you're not the guild master"
+  command-help-message: "{command} - {description}"
+  command-help-error-number: ""
+  command-help-next-page: ""
+  command-role-error-no-guild: ""
+  command-role-error-role-not-found: ""
+  command-role-players: ""
+  command-create-error-in-guild: ""
+  command-create-successful: ""
+  command-create-error-create: ""
+  command-delete-successful: ""
+  command-delete-error: ""
+  command-info-header: ""
+  command-info-name: ""
+  command-info-master: ""
+  command-info-member-count: ""
+  command-info-rank: ""

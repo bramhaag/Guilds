@@ -37,7 +37,7 @@ public enum Message {
     COMMAND_INFO_RANK;
 
     public static void sendMessage(CommandSender sender, Message message) {
-        sender.sendMessage(Main.PREFIX + Main.getInstance().getConfig().getString("message." + message.name().toLowerCase().replace('_', '-')));
+        sender.sendMessage(Main.PREFIX + Main.getInstance().getConfig().getString("messages." + message.name().toLowerCase().replace('_', '-')));
     }
 
     public static void sendMessage(CommandSender sender, String message) {
@@ -48,13 +48,13 @@ public enum Message {
         //String[] keys = new String[strings.length / 2];
         //String[] values = new String[strings.length / 2];
 
-        String message =  Main.getInstance().getConfig().getString("message." + this.name().toLowerCase().replace('_', '-'));
+        String message = Main.getInstance().getConfig().getString("messages." + this.name().toLowerCase().replace('_', '-'));
 
         for(int i = 0; i < strings.length / 2; i++) {
             //keys[i] = strings[i * 2];
             //values[i] = strings[(i * 2) + 1];
 
-            message.replace(strings[i * 2], strings[(i * 2) + 1]);
+            message = message.replace(strings[i * 2], strings[(i * 2) + 1]);
         }
 
         /*for(int i = 0; i < keys.length; i++) {

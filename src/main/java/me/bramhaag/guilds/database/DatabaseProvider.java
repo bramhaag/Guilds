@@ -9,10 +9,12 @@ import java.util.UUID;
  */
 public abstract class DatabaseProvider {
 
+    public abstract void initialize();
+
     public abstract boolean createGuild(String name, UUID master);
     public abstract boolean removeGuild(int id);
 
-    public abstract Guild getGuild();
+    public abstract Guild getGuild(int id);
 
     public abstract boolean updateGuild(Guild guild);
 }

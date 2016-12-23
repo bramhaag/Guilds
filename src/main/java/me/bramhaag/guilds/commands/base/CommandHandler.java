@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -40,7 +41,7 @@ public class CommandHandler implements CommandExecutor, IHandler {
             return true;
         }
 
-        if(args.length == 0) {
+        if(args.length == 0 || args[0] == "") {
             getCommand("help").execute(sender, args);
             return true;
         }
@@ -59,6 +60,8 @@ public class CommandHandler implements CommandExecutor, IHandler {
                 Message.sendMessage(sender, Message.COMMAND_ERROR_PERMISSION);
                 return true;
             }
+
+            args = Arrays.copyOfRange(args, 1, args.length);
 
             if(command.getMinimumArguments() != -1 && command.getMinimumArguments() < args.length || command.getMaximumArguments() != -1 && command.getMaximumArguments() > args.length) {
                 Message.sendMessage(sender, Message.COMMAND_ERROR_ARGS);
@@ -84,6 +87,10 @@ public class CommandHandler implements CommandExecutor, IHandler {
     }
 
     public CommandBase getCommand(String name) {
-        return commands.stream().filter(command -> command.getName().equals(name)).findFirst().get();
+        //return commands.stream().filter(command -> command.getName().equals(name)).findFirst().get();
+
+        return commands.
+                stream().filter(command -> command.getName() != null && command.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+
     }
 }

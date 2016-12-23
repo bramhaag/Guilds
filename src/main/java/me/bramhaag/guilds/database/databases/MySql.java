@@ -11,17 +11,22 @@ import java.util.UUID;
 public class MySql extends DatabaseProvider {
 
     @Override
+    public void initialize() {
+
+    }
+
+    @Override
     public boolean createGuild(String name, UUID master) {
         return false;
     }
 
     @Override
-    public boolean removeGuild() {
+    public boolean removeGuild(int id) {
         return false;
     }
 
     @Override
-    public Guild getGuild() {
+    public Guild getGuild(int id) {
         return null;
     }
 

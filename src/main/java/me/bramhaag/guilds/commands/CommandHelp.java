@@ -21,7 +21,7 @@ public class CommandHelp extends CommandBase {
 
         int page = 0;
 
-        if(args[0] != null) {
+        if(args.length > 0) {
             try {
                 page = Integer.valueOf(args[0]);
             } catch (NumberFormatException ex) {
@@ -40,7 +40,6 @@ public class CommandHelp extends CommandBase {
             CommandBase command = Main.getInstance().getCommandHandler().getCommands().get(index);
 
             Message.sendMessage(sender, Message.COMMAND_HELP_MESSAGE.replace("{command}", command.getName(), "{description}", command.getDescription()));
-            sender.sendMessage(Main.getInstance().getCommandHandler().getCommands().get(index).getName());
         }
 
         Message.sendMessage(sender, Message.COMMAND_HELP_NEXT_PAGE);
