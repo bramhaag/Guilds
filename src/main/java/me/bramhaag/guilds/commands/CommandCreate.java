@@ -1,13 +1,33 @@
 package me.bramhaag.guilds.commands;
 
+import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.commands.base.CommandBase;
+import me.bramhaag.guilds.guild.Guild;
+import me.bramhaag.guilds.message.Message;
+import org.bukkit.entity.Player;
 
 /**
  * Created by Bram on 22-12-2016.
  */
 public class CommandCreate extends CommandBase {
 
-    public CommandCreate(String name, String description, String permission, boolean allowConsole, String[] aliases, String[] arguments, int minimumArguments, int maximumArguments) {
-        super(name, description, permission, allowConsole, aliases, arguments, minimumArguments, maximumArguments);
+    public CommandCreate() {
+        super("create", "Create a guild", "guilds.commands.create", false, new String[] { "c" }, new String[] { "<name>" }, 1, 1);
+    }
+
+    @Override
+    public void execute(Player player, String[] args) {
+
+        if(Guild.getGuild(player.getUniqueId()) != null) {
+            Message.sendMessage(player, Message.COMMAND_CREATE_ERROR_IN_GUILD);
+            return;
+        }
+
+        if(Main.getInstance().getDatabaseProvider().createGuild(args[0], player.getUniqueId())) {
+            Message.sendMessage(player, Message.COMMAND_CREATE_SUCCESSFUL.replace("{guildname}", args[0]));
+        }
+        else {
+            Message.sendMessage(player, Message.COMMAND_CREATE_ERROR_CREATE);
+        }
     }
 }

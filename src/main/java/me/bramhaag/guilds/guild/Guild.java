@@ -1,5 +1,7 @@
 package me.bramhaag.guilds.guild;
 
+import me.bramhaag.guilds.Main;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -9,6 +11,8 @@ import java.util.UUID;
  */
 public class Guild {
 
+    private int id;
+
     private String name;
     private List<GuildMember> members;
 
@@ -17,6 +21,21 @@ public class Guild {
 
         this.members = new ArrayList<>();
         this.members.add(new GuildMember(master, GuildRole.MASTER));
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public List<GuildMember> getMembers() {
+        return members;
+    }
+
+    public GuildMember getGuildMaster() {
+        return this.members.stream()
+                .filter(member -> member.getRole() == GuildRole.MASTER)
+                .findFirst()
+                .get();
     }
 
     public boolean addMember(UUID uuid, GuildRole role) {
@@ -34,13 +53,6 @@ public class Guild {
         return true;
     }
 
-    public GuildMember getGuildMaster() {
-        return this.members.stream()
-                .filter(member -> member.getRole() == GuildRole.MASTER)
-                .findFirst()
-                .get();
-    }
-
     public boolean isMember(UUID uuid) {
 
         /*for(UUID member : members.keySet()) {
@@ -51,5 +63,9 @@ public class Guild {
 
         return members.stream()
                 .anyMatch(member -> member.getUuid() == uuid);
+    }
+
+    public static Guild getGuild(UUID uuid) {
+        return Main.getInstance().getGuildHandler().getGuilds().stream() .filter(guild -> guild.getMembers().stream().anyMatch(member -> member.getUuid() == uuid)).findFirst().get();
     }
 }

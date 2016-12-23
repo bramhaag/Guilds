@@ -14,9 +14,35 @@ public enum Message {
     COMMAND_ERROR_NOT_FOUND,
 
     COMMAND_HELP_ERROR_NUMBER,
-    COMMAND_HELP_NEXT_PAGE;
+    COMMAND_HELP_NEXT_PAGE,
+
+    COMMAND_ROLE_ERROR_NO_GUILD,
+    COMMAND_ROLE_ERROR_ROLE_NOT_FOUND,
+    COMMAND_ROLE_PLAYERS, COMMAND_CREATE_ERROR_IN_GUILD, COMMAND_CREATE_SUCCESSFUL, COMMAND_CREATE_ERROR_CREATE;
 
     public static void sendMessage(CommandSender sender, Message message) {
         sender.sendMessage(Main.PREFIX + Main.getInstance().getConfig().getString("message." + message.name().toLowerCase().replace('_', '-')));
+    }
+
+    public static void sendMessage(CommandSender sender, String message) {
+        sender.sendMessage(Main.PREFIX + message);
+    }
+
+    public String replace(String... strings) {
+        String[] keys = new String[strings.length / 2];
+        String[] values = new String[strings.length / 2];
+
+        for(int i = 0; i < strings.length / 2; i++) {
+            keys[i] = strings[i * 2];
+            values[i] = strings[(i * 2) + 1];
+        }
+
+        String message =  Main.getInstance().getConfig().getString("message." + this.name().toLowerCase().replace('_', '-'));
+
+        for(int i = 0; i < keys.length; i++) {
+            message.replace(keys[i], values[i]);
+        }
+
+        return message;
     }
 }
