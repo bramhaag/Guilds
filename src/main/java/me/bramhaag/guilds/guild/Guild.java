@@ -12,13 +12,8 @@ import java.util.UUID;
  */
 public class Guild {
 
-    @Expose
     private int id;
-
-    @Expose
     private String name;
-
-    @Expose
     private List<GuildMember> members;
 
     public Guild(String name, UUID master) {

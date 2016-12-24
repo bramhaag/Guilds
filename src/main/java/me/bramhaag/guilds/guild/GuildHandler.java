@@ -29,8 +29,8 @@ public class GuildHandler implements IHandler {
         //TODO implement
     }
 
-    public void addGuild() {
-        //TODO implement
+    public void addGuild(Guild guild) {
+        guilds.add(guild);
     }
 
     public List<Guild> getGuilds() {

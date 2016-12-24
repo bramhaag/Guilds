@@ -3,6 +3,7 @@ package me.bramhaag.guilds.database.databases;
 import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.guild.Guild;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -27,6 +28,11 @@ public class MySql extends DatabaseProvider {
 
     @Override
     public Guild getGuild(int id) {
+        return null;
+    }
+
+    @Override
+    public List<Guild> getGuilds() {
         return null;
     }
 

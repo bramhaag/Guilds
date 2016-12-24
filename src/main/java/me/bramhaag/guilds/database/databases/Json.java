@@ -9,6 +9,7 @@ import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.guild.Guild;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +25,6 @@ public class Json extends DatabaseProvider {
     public void initialize() {
         guildsFile = new File(Main.getInstance().getDataFolder(), "guilds.json");
         gson = new GsonBuilder()
-                .excludeFieldsWithoutExposeAnnotation()
                 .setPrettyPrinting()
                 .create();
 
@@ -40,16 +40,21 @@ public class Json extends DatabaseProvider {
 
     @Override
     public boolean createGuild(String name, UUID master) {
-        //TODO add to list
         Guild guild = new Guild(name, master);
 
         try (Writer writer = new FileWriter(guildsFile.getAbsolutePath())) {
-            gson.toJson(guild, writer);
+            List<Guild> guilds = getGuilds() == null ? new ArrayList<>() : getGuilds();
+
+            guilds.add(guild);
+            gson.toJson(guilds, writer);
         } catch (IOException e) {
             e.printStackTrace();
+
+            return false;
         }
 
-        return false;
+        Main.getInstance().getGuildHandler().addGuild(guild);
+        return true;
     }
 
     @Override
@@ -59,6 +64,11 @@ public class Json extends DatabaseProvider {
 
     @Override
     public Guild getGuild(int id) {
+        return getGuilds().stream().filter(guild -> guild.getId() == id).findFirst().orElse(null);
+    }
+
+    @Override
+    public List<Guild> getGuilds() {
         JsonReader reader;
 
         try {
@@ -69,9 +79,7 @@ public class Json extends DatabaseProvider {
             return null;
         }
 
-        List<Guild> guilds = gson.fromJson(reader, new TypeToken<List<Guild>>(){}.getType());
-
-        return guilds.stream().filter(guild -> guild.getId() == id).findFirst().orElse(null);
+        return gson.fromJson(reader, new TypeToken<List<Guild>>(){}.getType());
     }
 
     @Override
