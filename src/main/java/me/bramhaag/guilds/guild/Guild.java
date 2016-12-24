@@ -1,11 +1,8 @@
 package me.bramhaag.guilds.guild;
 
-import com.google.gson.annotations.Expose;
 import me.bramhaag.guilds.Main;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Bram on 22-12-2016.
@@ -17,6 +14,8 @@ public class Guild {
     private List<GuildMember> members;
 
     public Guild(String name, UUID master) {
+        this.id = getFreeId();
+
         this.name = name;
 
         this.members = new ArrayList<>();
@@ -64,5 +63,27 @@ public class Guild {
 
     public static Guild getGuild(UUID uuid) {
         return Main.getInstance().getGuildHandler().getGuilds().stream().filter(guild -> guild.getMembers().stream().anyMatch(member -> member.getUuid().equals(uuid))).findFirst().orElse(null);
+    }
+
+    private static int getFreeId() {
+        if(Main.getInstance().getDatabaseProvider().getGuilds() == null) {
+            return 0;
+        }
+
+        List<Integer> ids = new ArrayList<>(Main.getInstance().getDatabaseProvider().getGuilds().keySet());
+
+        if(ids == null || ids.size() == 0) {
+            return 0;
+        }
+
+        Collections.sort(ids);
+
+        for(int i = 0; i < ids.size(); i++) {
+            if(ids.get(i) != i) {
+                return i;
+            }
+        }
+
+        return ids.get(ids.size() - 1) + 1;
     }
 }

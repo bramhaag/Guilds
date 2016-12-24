@@ -22,4 +22,8 @@ public class GuildMember {
     public GuildRole getRole() {
         return role;
     }
+
+    public void setRole(GuildRole role) {
+        this.role = role;
+    }
 }

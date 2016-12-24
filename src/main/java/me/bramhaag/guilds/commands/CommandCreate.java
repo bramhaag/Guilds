@@ -18,12 +18,12 @@ public class CommandCreate extends CommandBase {
     @Override
     public void execute(Player player, String[] args) {
 
-        if(Guild.getGuild(player.getUniqueId()) != null) {
+        /*if(Guild.getGuild(player.getUniqueId()) != null) {
             Message.sendMessage(player, Message.COMMAND_CREATE_ERROR_IN_GUILD);
             return;
-        }
+        }*/
 
-        if(Main.getInstance().getDatabaseProvider().createGuild(args[0], player.getUniqueId())) {
+        if(Main.getInstance().getDatabaseProvider().createGuild(new Guild(args[0], player.getUniqueId()))) {
             Message.sendMessage(player, Message.COMMAND_CREATE_SUCCESSFUL.replace("{guildname}", args[0]));
         }
         else {

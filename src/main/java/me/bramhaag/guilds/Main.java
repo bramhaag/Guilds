@@ -5,8 +5,11 @@ import me.bramhaag.guilds.commands.base.CommandHandler;
 import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.database.databases.Json;
 import me.bramhaag.guilds.database.databases.MySql;
+import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.guild.GuildHandler;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Arrays;
 
 /**
  * Created by Bram on 22-12-2016.
@@ -59,7 +62,7 @@ public class Main extends JavaPlugin {
         commandHandler.register(new CommandInfo());
         commandHandler.register(new CommandInvite("invite", "null", null, false, null, null, -1, -1)); //Not yet implemented
         commandHandler.register(new CommandLeave("leave", "null", null, false, null, null, -1, -1)); //Not yet implemented
-        commandHandler.register(new CommandPromote("promote", "null", null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandPromote()); //Not yet implemented
         commandHandler.register(new CommandRole());
     }
 

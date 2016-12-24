@@ -35,7 +35,7 @@ public enum Message {
     COMMAND_INFO_NAME,
     COMMAND_INFO_MASTER,
     COMMAND_INFO_MEMBER_COUNT,
-    COMMAND_INFO_RANK;
+    COMMAND_INFO_RANK, COMMAND_PROMOTE_PLAYER_NOT_FOUND, COMMAND_PROMOTE_CANNOT_PROMOTE;
 
     public static void sendMessage(CommandSender sender, Message message) {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.PREFIX + Main.getInstance().getConfig().getString("messages." + message.name().toLowerCase().replace('_', '-'))));

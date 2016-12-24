@@ -1,17 +1,16 @@
 package me.bramhaag.guilds.database.databases;
 
-import com.google.gson.Gson;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.JsonElement;
 import com.google.gson.stream.JsonReader;
 import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.guild.Guild;
+import me.bramhaag.guilds.util.GuildMapDeserializer;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Bram on 22-12-2016.
@@ -19,12 +18,12 @@ import java.util.UUID;
 public class Json extends DatabaseProvider {
 
     private File guildsFile;
-    private Gson gson;
 
     @Override
     public void initialize() {
         guildsFile = new File(Main.getInstance().getDataFolder(), "guilds.json");
         gson = new GsonBuilder()
+                .registerTypeAdapter(new HashMap<Integer, Guild>().getClass(), new GuildMapDeserializer())
                 .setPrettyPrinting()
                 .create();
 
@@ -39,13 +38,10 @@ public class Json extends DatabaseProvider {
     }
 
     @Override
-    public boolean createGuild(String name, UUID master) {
-        Guild guild = new Guild(name, master);
-
-        try (Writer writer = new FileWriter(guildsFile.getAbsolutePath())) {
-            List<Guild> guilds = getGuilds() == null ? new ArrayList<>() : getGuilds();
-
-            guilds.add(guild);
+    public boolean createGuild(Guild guild) {
+        HashMap<Integer, Guild> guilds = getGuilds() == null ? new HashMap<>() : getGuilds();
+        try (Writer writer = new FileWriter(guildsFile)) {
+            guilds.put(guild.getId(), guild);
             gson.toJson(guilds, writer);
         } catch (IOException e) {
             e.printStackTrace();
@@ -64,22 +60,22 @@ public class Json extends DatabaseProvider {
 
     @Override
     public Guild getGuild(int id) {
-        return getGuilds().stream().filter(guild -> guild.getId() == id).findFirst().orElse(null);
+        return getGuilds().entrySet().stream().filter(entry -> entry.getKey() == id).findFirst().orElse(null).getValue();
     }
 
     @Override
-    public List<Guild> getGuilds() {
+    public HashMap<Integer, Guild> getGuilds() {
         JsonReader reader;
 
         try {
-            reader = new JsonReader(new FileReader(guildsFile.getAbsolutePath()));
+            reader = new JsonReader(new FileReader(guildsFile));
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
 
             return null;
         }
 
-        return gson.fromJson(reader, new TypeToken<List<Guild>>(){}.getType());
+        return gson.fromJson(reader, new HashMap<Integer, Guild>().getClass());;
     }
 
     @Override
