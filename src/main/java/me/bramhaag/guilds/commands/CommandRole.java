@@ -12,9 +12,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Created by Bram on 22-12-2016.
- */
 public class CommandRole extends CommandBase {
 
     public CommandRole() {
@@ -30,9 +27,12 @@ public class CommandRole extends CommandBase {
             return;
         }
 
-        GuildRole role = GuildRole.valueOf(args[0].toUpperCase());
+        GuildRole role;
 
-        if(role == null) {
+        try {
+             role = GuildRole.valueOf(args[0].toUpperCase());
+        }
+        catch (IllegalArgumentException ex) {
             Message.sendMessage(player, Message.COMMAND_ROLE_ERROR_ROLE_NOT_FOUND);
             return;
         }

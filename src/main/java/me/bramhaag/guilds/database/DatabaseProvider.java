@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Created by Bram on 22-12-2016.
- */
 public abstract class DatabaseProvider {
 
     protected Gson gson;

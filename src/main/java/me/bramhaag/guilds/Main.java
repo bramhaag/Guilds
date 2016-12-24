@@ -11,9 +11,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
 
-/**
- * Created by Bram on 22-12-2016.
- */
 public class Main extends JavaPlugin {
 
     private static Main instance;
@@ -39,7 +36,7 @@ public class Main extends JavaPlugin {
                 database = new MySql();
                 break;
             default:
-                database = null;
+                database = new Json();
                 break;
         }
 
@@ -58,11 +55,11 @@ public class Main extends JavaPlugin {
         commandHandler.register(new CommandCreate());
         commandHandler.register(new CommandDelete());
         commandHandler.register(new CommandHelp());
-        commandHandler.register(new CommandDemote("demote", "null", null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandDemote());
         commandHandler.register(new CommandInfo());
         commandHandler.register(new CommandInvite("invite", "null", null, false, null, null, -1, -1)); //Not yet implemented
         commandHandler.register(new CommandLeave("leave", "null", null, false, null, null, -1, -1)); //Not yet implemented
-        commandHandler.register(new CommandPromote()); //Not yet implemented
+        commandHandler.register(new CommandPromote());
         commandHandler.register(new CommandRole());
     }
 

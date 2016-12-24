@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by Bram on 22-12-2016.
- */
 public class CommandHandler implements CommandExecutor, IHandler {
 
     private List<CommandBase> commands;
@@ -41,7 +38,7 @@ public class CommandHandler implements CommandExecutor, IHandler {
             return true;
         }
 
-        if(args.length == 0 || args[0] == "") {
+        if(args.length == 0 || args[0].isEmpty()) {
             getCommand("help").execute(sender, args);
             return true;
         }
@@ -87,10 +84,7 @@ public class CommandHandler implements CommandExecutor, IHandler {
     }
 
     public CommandBase getCommand(String name) {
-        //return commands.stream().filter(command -> command.getName().equals(name)).findFirst().get();
-
-        return commands.
-                stream().filter(command -> command.getName() != null && command.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+        return commands.stream().filter(command -> command.getName() != null && command.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
 
     }
 }

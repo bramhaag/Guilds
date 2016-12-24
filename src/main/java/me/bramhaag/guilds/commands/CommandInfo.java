@@ -6,9 +6,6 @@ import me.bramhaag.guilds.message.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-/**
- * Created by Bram on 22-12-2016.
- */
 public class CommandInfo extends CommandBase {
 
     public CommandInfo() {

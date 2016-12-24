@@ -4,9 +4,6 @@ import me.bramhaag.guilds.Main;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
 
-/**
- * Created by Bram on 22-12-2016.
- */
 public enum Message {
 
     COMMAND_ERROR_CONSOLE,
@@ -20,11 +17,11 @@ public enum Message {
     COMMAND_HELP_ERROR_NUMBER,
     COMMAND_HELP_NEXT_PAGE,
 
+    COMMAND_CREATE_ERROR_IN_GUILD,
     COMMAND_ROLE_ERROR_NO_GUILD,
     COMMAND_ROLE_ERROR_ROLE_NOT_FOUND,
     COMMAND_ROLE_PLAYERS,
 
-    COMMAND_CREATE_ERROR_IN_GUILD,
     COMMAND_CREATE_SUCCESSFUL,
     COMMAND_CREATE_ERROR_CREATE,
 
@@ -35,7 +32,17 @@ public enum Message {
     COMMAND_INFO_NAME,
     COMMAND_INFO_MASTER,
     COMMAND_INFO_MEMBER_COUNT,
-    COMMAND_INFO_RANK, COMMAND_PROMOTE_PLAYER_NOT_FOUND, COMMAND_PROMOTE_CANNOT_PROMOTE;
+    COMMAND_INFO_RANK,
+
+    COMMAND_PROMOTE_PLAYER_NOT_FOUND,
+    COMMAND_PROMOTE_CANNOT_PROMOTE,
+    COMMAND_PROMOTE_PLAYER_NOT_IN_GUILD,
+    COMMAND_PROMOTE_INVALID_ROLE,
+
+    COMMAND_DEMOTE_PLAYER_NOT_FOUND,
+    COMMAND_DEMOTE_PLAYER_NOT_IN_GUILD,
+    COMMAND_DEMOTE_CANNOT_DEMOTE,
+    COMMAND_DEMOTE_INVALID_ROLE;
 
     public static void sendMessage(CommandSender sender, Message message) {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.PREFIX + Main.getInstance().getConfig().getString("messages." + message.name().toLowerCase().replace('_', '-'))));

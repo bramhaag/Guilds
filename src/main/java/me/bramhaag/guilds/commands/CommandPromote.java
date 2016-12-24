@@ -9,17 +9,25 @@ import me.bramhaag.guilds.message.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-/**
- * Created by Bram on 22-12-2016.
- */
 public class CommandPromote extends CommandBase {
 
     public CommandPromote() {
-        super("promote", "Promote a member of your guild", "guilds.command.promote", false, new String[] { "rankup" }, new String[] { "<player> [role]" }, 1, 2);
+        super("promote", "Promote a member of your guild", "guilds.command.promote", false, new String[] { "rankup" }, new String[] { "<player> [new role]" }, 1, 2);
     }
 
     @Override
     public void execute(Player player, String[] args) {
+        Guild guild = Guild.getGuild(player.getUniqueId());
+        if(guild == null) {
+            Message.sendMessage(player, Message.COMMAND_ERROR_NO_GUILD);
+            return;
+        }
+
+        if(guild.getGuildMaster().getUuid() != player.getUniqueId()) {
+            Message.sendMessage(player, Message.COMMAND_ERROR_NOT_GUILDMASTER);
+            return;
+        }
+
         Player promotedPlayer = Bukkit.getPlayer(args[0]);
 
         if(promotedPlayer == null || !promotedPlayer.isOnline()) {
@@ -27,8 +35,12 @@ public class CommandPromote extends CommandBase {
             return;
         }
 
-        //TODO checks for player
-        GuildMember promotedMember = Main.getInstance().getDatabaseProvider().getGuild(Guild.getGuild(player.getUniqueId()).getId()).getMember(promotedPlayer.getUniqueId());
+        GuildMember promotedMember = guild.getMember(promotedPlayer.getUniqueId());
+        if(promotedMember == null) {
+            Message.sendMessage(player, Message.COMMAND_PROMOTE_PLAYER_NOT_IN_GUILD.replace("{player}", promotedPlayer.getName()));
+            return;
+        }
+
         int currentLevel = promotedMember.getRole().getLevel();
 
         if(currentLevel <= 1) {
@@ -36,6 +48,20 @@ public class CommandPromote extends CommandBase {
             return;
         }
 
-        promotedMember.setRole(GuildRole.getRole(currentLevel - 1));
+        GuildRole role;
+
+        if(args.length == 2) {
+            role = GuildRole.valueOf(args[1]);
+
+            if(role == null || role.getLevel() > currentLevel) {
+                Message.sendMessage(player, Message.COMMAND_PROMOTE_INVALID_ROLE);
+                return;
+            }
+        }
+        else {
+            role = GuildRole.getRole(currentLevel - 1);
+        }
+
+        promotedMember.setRole(role);
     }
 }

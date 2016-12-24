@@ -5,9 +5,6 @@ import me.bramhaag.guilds.commands.base.CommandBase;
 import me.bramhaag.guilds.message.Message;
 import org.bukkit.command.CommandSender;
 
-/**
- * Created by Bram on 22-12-2016.
- */
 public class CommandHelp extends CommandBase {
 
     private final int MAX_PAGE_SIZE = 6;

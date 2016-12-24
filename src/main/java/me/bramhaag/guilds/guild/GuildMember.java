@@ -2,9 +2,6 @@ package me.bramhaag.guilds.guild;
 
 import java.util.UUID;
 
-/**
- * Created by Bram on 22-12-2016.
- */
 public class GuildMember {
 
     private UUID uuid;

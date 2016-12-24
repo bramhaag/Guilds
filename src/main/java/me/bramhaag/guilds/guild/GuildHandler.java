@@ -1,13 +1,11 @@
 package me.bramhaag.guilds.guild;
 
 import me.bramhaag.guilds.IHandler;
+import me.bramhaag.guilds.Main;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Bram on 23-12-2016.
- */
 public class GuildHandler implements IHandler {
 
     private List<Guild> guilds;
@@ -26,7 +24,7 @@ public class GuildHandler implements IHandler {
     }
 
     public void initialize() {
-        //TODO implement
+        Main.getInstance().getDatabaseProvider().getGuilds().values().forEach(this::addGuild);
     }
 
     public void addGuild(Guild guild) {

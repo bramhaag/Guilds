@@ -2,9 +2,6 @@ package me.bramhaag.guilds.guild;
 
 import java.util.Arrays;
 
-/**
- * Created by Bram on 22-12-2016.
- */
 public enum GuildRole {
     MASTER(0),
     OFFICER(1),
@@ -22,6 +19,6 @@ public enum GuildRole {
     }
 
     public static GuildRole getRole(int level) {
-        return Arrays.stream(GuildRole.values()).filter(role -> role.getLevel() == level).findFirst().get();
+        return Arrays.stream(GuildRole.values()).filter(role -> role.getLevel() == level).findFirst().orElse(null);
     }
 }

@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by Bram on 22-12-2016.
- */
 public abstract class CommandBase {
 
     private String name;
@@ -19,8 +16,8 @@ public abstract class CommandBase {
 
     private boolean allowConsole;
 
-    List<String> aliases;
-    List<String> arguments;
+    private List<String> aliases;
+    private List<String> arguments;
 
     private int minimumArguments;
     private int maximumArguments;

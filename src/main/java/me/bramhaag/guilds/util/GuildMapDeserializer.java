@@ -7,9 +7,6 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Bram on 24-12-2016.
- */
 public class GuildMapDeserializer implements JsonDeserializer<Map<Integer, Guild>> {
     @Override
     public Map<Integer, Guild> deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {

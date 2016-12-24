@@ -4,9 +4,6 @@ import me.bramhaag.guilds.Main;
 
 import java.util.*;
 
-/**
- * Created by Bram on 22-12-2016.
- */
 public class Guild {
 
     private int id;
@@ -45,20 +42,17 @@ public class Guild {
     }
 
     public boolean removeMember(UUID uuid) {
-        if(!isMember(uuid))
+        GuildMember member = getMember(uuid);
+        if(member == null)
             return false;
 
-        this.members.remove(uuid);
+        this.members.remove(member);
 
         return true;
     }
 
     public GuildMember getMember(UUID uuid) {
         return members.stream().filter(member -> member.getUuid() == uuid).findFirst().orElse(null);
-    }
-
-    public boolean isMember(UUID uuid) {
-        return members.stream().anyMatch(member -> member.getUuid() == uuid);
     }
 
     public static Guild getGuild(UUID uuid) {
@@ -72,7 +66,7 @@ public class Guild {
 
         List<Integer> ids = new ArrayList<>(Main.getInstance().getDatabaseProvider().getGuilds().keySet());
 
-        if(ids == null || ids.size() == 0) {
+        if(ids.size() == 0) {
             return 0;
         }
 

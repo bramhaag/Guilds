@@ -6,9 +6,6 @@ import me.bramhaag.guilds.guild.Guild;
 import java.util.HashMap;
 import java.util.UUID;
 
-/**
- * Created by Bram on 22-12-2016.
- */
 public class MySql extends DatabaseProvider {
 
     @Override

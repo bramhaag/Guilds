@@ -6,9 +6,6 @@ import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.message.Message;
 import org.bukkit.entity.Player;
 
-/**
- * Created by Bram on 22-12-2016.
- */
 public class CommandCreate extends CommandBase {
 
     public CommandCreate() {
@@ -18,10 +15,10 @@ public class CommandCreate extends CommandBase {
     @Override
     public void execute(Player player, String[] args) {
 
-        /*if(Guild.getGuild(player.getUniqueId()) != null) {
+        if(Guild.getGuild(player.getUniqueId()) != null) {
             Message.sendMessage(player, Message.COMMAND_CREATE_ERROR_IN_GUILD);
             return;
-        }*/
+        }
 
         if(Main.getInstance().getDatabaseProvider().createGuild(new Guild(args[0], player.getUniqueId()))) {
             Message.sendMessage(player, Message.COMMAND_CREATE_SUCCESSFUL.replace("{guildname}", args[0]));

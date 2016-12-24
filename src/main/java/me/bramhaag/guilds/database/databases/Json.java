@@ -1,8 +1,6 @@
 package me.bramhaag.guilds.database.databases;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.google.gson.stream.JsonReader;
 import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.database.DatabaseProvider;
@@ -12,9 +10,6 @@ import me.bramhaag.guilds.util.GuildMapDeserializer;
 import java.io.*;
 import java.util.*;
 
-/**
- * Created by Bram on 22-12-2016.
- */
 public class Json extends DatabaseProvider {
 
     private File guildsFile;
@@ -29,7 +24,9 @@ public class Json extends DatabaseProvider {
 
         if(!guildsFile.exists()) {
             try {
-                guildsFile.createNewFile();
+                if(!guildsFile.createNewFile()) {
+                    //TODO something went wrong :C
+                }
             }
             catch (IOException ex) {
                 ex.printStackTrace();
@@ -40,12 +37,9 @@ public class Json extends DatabaseProvider {
     @Override
     public boolean createGuild(Guild guild) {
         HashMap<Integer, Guild> guilds = getGuilds() == null ? new HashMap<>() : getGuilds();
-        try (Writer writer = new FileWriter(guildsFile)) {
-            guilds.put(guild.getId(), guild);
-            gson.toJson(guilds, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
+        guilds.put(guild.getId(), guild);
 
+        if(!write(guilds)) {
             return false;
         }
 
@@ -55,7 +49,14 @@ public class Json extends DatabaseProvider {
 
     @Override
     public boolean removeGuild(int id) {
-        return false;
+        HashMap<Integer, Guild> guilds = getGuilds();
+
+        if(guilds == null || !guilds.keySet().contains(id)) {
+            return false;
+        }
+
+        guilds.remove(id);
+        return write(guilds);
     }
 
     @Override
@@ -75,11 +76,22 @@ public class Json extends DatabaseProvider {
             return null;
         }
 
-        return gson.fromJson(reader, new HashMap<Integer, Guild>().getClass());;
+        return gson.fromJson(reader, new HashMap<Integer, Guild>().getClass());
     }
 
     @Override
     public boolean updateGuild(Guild guild) {
         return false;
+    }
+
+    private boolean write(HashMap<Integer, Guild> guilds) {
+        try (Writer writer = new FileWriter(guildsFile)) {
+            gson.toJson(guilds, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 }
