@@ -30,17 +30,17 @@ public abstract class CommandBase {
         this.allowConsole = allowConsole;
 
         this.aliases = aliases == null ? new ArrayList<>() : Arrays.asList(aliases);
-        this.aliases = arguments == null ? new ArrayList<>() : Arrays.asList(arguments);
+        this.arguments = arguments == null ? new ArrayList<>() : Arrays.asList(arguments);
 
         this.minimumArguments = minimumArguments;
         this.maximumArguments = maximumArguments;
     }
 
     public void execute(CommandSender sender, String[] args) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException("Method not implemented");
     }
     public void execute(Player sender, String[] args) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     public String getName() {

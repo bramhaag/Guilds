@@ -51,7 +51,7 @@ public class Main extends JavaPlugin {
         getCommand("guild").setExecutor(commandHandler);
 
         commandHandler.register(new CommandAccept("accept", "null", null, false, null, null, -1, -1)); //Not yet implemented
-        commandHandler.register(new CommandChat("chat", "null", null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandChat());
         commandHandler.register(new CommandCreate());
         commandHandler.register(new CommandDelete());
         commandHandler.register(new CommandHelp());

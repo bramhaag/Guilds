@@ -42,7 +42,7 @@ public enum Message {
     COMMAND_DEMOTE_PLAYER_NOT_FOUND,
     COMMAND_DEMOTE_PLAYER_NOT_IN_GUILD,
     COMMAND_DEMOTE_CANNOT_DEMOTE,
-    COMMAND_DEMOTE_INVALID_ROLE;
+    COMMAND_DEMOTE_INVALID_ROLE, COMMAND_CHAT_MESSAGE;
 
     public static void sendMessage(CommandSender sender, Message message) {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.PREFIX + Main.getInstance().getConfig().getString("messages." + message.name().toLowerCase().replace('_', '-'))));
@@ -55,6 +55,10 @@ public enum Message {
     public String replace(String... strings) {
         //String[] keys = new String[strings.length / 2];
         //String[] values = new String[strings.length / 2];
+
+        if(strings.length % 2 != 0) {
+            throw new IllegalArgumentException("Amount of keys and values do not match!");
+        }
 
         String message = Main.getInstance().getConfig().getString("messages." + this.name().toLowerCase().replace('_', '-'));
 

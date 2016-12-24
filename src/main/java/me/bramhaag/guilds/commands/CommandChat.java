@@ -1,10 +1,34 @@
 package me.bramhaag.guilds.commands;
 
 import me.bramhaag.guilds.commands.base.CommandBase;
+import me.bramhaag.guilds.guild.Guild;
+import me.bramhaag.guilds.guild.GuildMember;
+import me.bramhaag.guilds.message.Message;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 public class CommandChat extends CommandBase {
 
-    public CommandChat(String name, String description, String permission, boolean allowConsole, String[] aliases, String[] arguments, int minimumArguments, int maximumArguments) {
-        super(name, description, permission, allowConsole, aliases, arguments, minimumArguments, maximumArguments);
+    public CommandChat() {
+        super("chat", "Send a message to your guild members", "guilds.command.chat", false, new String[] { "c" }, new String[] { "<message>" }, 1, -1);
+    }
+
+    public void execute(Player player, String[] args) {
+        Guild guild = Guild.getGuild(player.getUniqueId());
+
+        if(guild == null) {
+            Message.sendMessage(player, Message.COMMAND_ERROR_NO_GUILD);
+            return;
+        }
+
+        String message = String.join(" ", args);
+        for(GuildMember member : guild.getMembers()) {
+            Player receiver = Bukkit.getPlayer(member.getUuid());
+            if(receiver == null || !receiver.isOnline()) {
+                continue;
+            }
+
+            Message.sendMessage(receiver, Message.COMMAND_CHAT_MESSAGE.replace("{role}", guild.getMember(player.getUniqueId()).getRole().name(), "{player}", player.getName(), "{message}", message));
+        }
     }
 }
