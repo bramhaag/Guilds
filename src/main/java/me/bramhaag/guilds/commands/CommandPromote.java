@@ -31,7 +31,7 @@ public class CommandPromote extends CommandBase {
         Player promotedPlayer = Bukkit.getPlayer(args[0]);
 
         if(promotedPlayer == null || !promotedPlayer.isOnline()) {
-            Message.sendMessage(player, Message.COMMAND_PROMOTE_PLAYER_NOT_FOUND.replace("{player}", args[0]));
+            Message.sendMessage(player, Message.COMMAND_ERROR_PLAYER_NOT_FOUND.replace("{player}", args[0]));
             return;
         }
 
@@ -51,9 +51,15 @@ public class CommandPromote extends CommandBase {
         GuildRole role;
 
         if(args.length == 2) {
-            role = GuildRole.valueOf(args[1]);
+            try {
+                role = GuildRole.valueOf(args[1]);
+            }
+            catch (IllegalArgumentException ex) {
+                Message.sendMessage(player, Message.COMMAND_PROMOTE_INVALID_ROLE);
+                return;
+            }
 
-            if(role == null || role.getLevel() > currentLevel) {
+            if(role.getLevel() > currentLevel) {
                 Message.sendMessage(player, Message.COMMAND_PROMOTE_INVALID_ROLE);
                 return;
             }

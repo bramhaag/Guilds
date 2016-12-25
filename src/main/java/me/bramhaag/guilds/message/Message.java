@@ -12,12 +12,13 @@ public enum Message {
     COMMAND_ERROR_NOT_FOUND,
     COMMAND_ERROR_NO_GUILD,
     COMMAND_ERROR_NOT_GUILDMASTER,
+    COMMAND_ERROR_INVALID_NUMBER,
+    COMMAND_ERROR_ALREADY_IN_GUILD,
+    COMMAND_ERROR_PLAYER_NOT_FOUND,
 
     COMMAND_HELP_MESSAGE,
-    COMMAND_HELP_ERROR_NUMBER,
     COMMAND_HELP_NEXT_PAGE,
 
-    COMMAND_CREATE_ERROR_IN_GUILD,
     COMMAND_ROLE_ERROR_NO_GUILD,
     COMMAND_ROLE_ERROR_ROLE_NOT_FOUND,
     COMMAND_ROLE_PLAYERS,
@@ -34,15 +35,30 @@ public enum Message {
     COMMAND_INFO_MEMBER_COUNT,
     COMMAND_INFO_RANK,
 
-    COMMAND_PROMOTE_PLAYER_NOT_FOUND,
     COMMAND_PROMOTE_CANNOT_PROMOTE,
     COMMAND_PROMOTE_PLAYER_NOT_IN_GUILD,
     COMMAND_PROMOTE_INVALID_ROLE,
 
-    COMMAND_DEMOTE_PLAYER_NOT_FOUND,
     COMMAND_DEMOTE_PLAYER_NOT_IN_GUILD,
     COMMAND_DEMOTE_CANNOT_DEMOTE,
-    COMMAND_DEMOTE_INVALID_ROLE, COMMAND_CHAT_MESSAGE;
+    COMMAND_DEMOTE_INVALID_ROLE,
+
+    COMMAND_CHAT_MESSAGE,
+
+    COMMAND_ACCEPT_GUILD_NOT_FOUND,
+    COMMAND_ACCEPT_NOT_INVITED,
+    COMMAND_ACCEPT_SUCCESFUL,
+    COMMAND_ACCEPT_PLAYER_JOINED,
+
+    COMMAND_INVITE_MESSAGE,
+    COMMAND_INVITE_SUCCESFUL,
+
+    COMMAND_LEAVE_SUCCESFUL,
+    COMMAND_LEAVE_PLAYER_LEFT,
+
+    COMMAND_BOOT_SUCCESFUL,
+    COMMAND_BOOT_KICKED,
+    COMMAND_BOOT_PLAYER_KICKED;
 
     public static void sendMessage(CommandSender sender, Message message) {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.PREFIX + Main.getInstance().getConfig().getString("messages." + message.name().toLowerCase().replace('_', '-'))));
@@ -53,9 +69,6 @@ public enum Message {
     }
 
     public String replace(String... strings) {
-        //String[] keys = new String[strings.length / 2];
-        //String[] values = new String[strings.length / 2];
-
         if(strings.length % 2 != 0) {
             throw new IllegalArgumentException("Amount of keys and values do not match!");
         }

@@ -22,7 +22,7 @@ public class CommandHelp extends CommandBase {
             try {
                 page = Integer.valueOf(args[0]);
             } catch (NumberFormatException ex) {
-                Message.sendMessage(sender, Message.COMMAND_HELP_ERROR_NUMBER);
+                Message.sendMessage(sender, Message.COMMAND_ERROR_INVALID_NUMBER);
             }
         }
 

@@ -16,7 +16,7 @@ public class CommandCreate extends CommandBase {
     public void execute(Player player, String[] args) {
 
         if(Guild.getGuild(player.getUniqueId()) != null) {
-            Message.sendMessage(player, Message.COMMAND_CREATE_ERROR_IN_GUILD);
+            Message.sendMessage(player, Message.COMMAND_ERROR_ALREADY_IN_GUILD);
             return;
         }
 

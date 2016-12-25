@@ -8,7 +8,9 @@ public class Guild {
 
     private int id;
     private String name;
+
     private List<GuildMember> members;
+    private List<UUID> invitedMembers;
 
     public Guild(String name, UUID master) {
         this.id = getFreeId();
@@ -17,6 +19,8 @@ public class Guild {
 
         this.members = new ArrayList<>();
         this.members.add(new GuildMember(master, GuildRole.MASTER));
+
+        this.invitedMembers = new ArrayList<>();
     }
 
     public int getId() {
@@ -29,6 +33,10 @@ public class Guild {
 
     public List<GuildMember> getMembers() {
         return members;
+    }
+
+    public List<UUID> getInvitedMembers() {
+        return invitedMembers;
     }
 
     public GuildMember getGuildMaster() {
@@ -51,12 +59,24 @@ public class Guild {
         return true;
     }
 
+    public void inviteMember(UUID uuid) {
+        invitedMembers.add(uuid);
+    }
+
+    public void removeInvitedPlayer(UUID uuid) {
+        invitedMembers.remove(uuid);
+    }
+
     public GuildMember getMember(UUID uuid) {
         return members.stream().filter(member -> member.getUuid() == uuid).findFirst().orElse(null);
     }
 
     public static Guild getGuild(UUID uuid) {
         return Main.getInstance().getGuildHandler().getGuilds().stream().filter(guild -> guild.getMembers().stream().anyMatch(member -> member.getUuid().equals(uuid))).findFirst().orElse(null);
+    }
+
+    public static Guild getGuild(int id) {
+        return Main.getInstance().getGuildHandler().getGuilds().stream().filter(guild -> guild.getId() == id).findFirst().orElse(null);
     }
 
     private static int getFreeId() {

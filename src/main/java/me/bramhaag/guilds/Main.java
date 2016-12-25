@@ -50,15 +50,16 @@ public class Main extends JavaPlugin {
 
         getCommand("guild").setExecutor(commandHandler);
 
-        commandHandler.register(new CommandAccept("accept", "null", null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandAccept());
+        commandHandler.register(new CommandBoot());
         commandHandler.register(new CommandChat());
         commandHandler.register(new CommandCreate());
         commandHandler.register(new CommandDelete());
         commandHandler.register(new CommandHelp());
         commandHandler.register(new CommandDemote());
         commandHandler.register(new CommandInfo());
-        commandHandler.register(new CommandInvite("invite", "null", null, false, null, null, -1, -1)); //Not yet implemented
-        commandHandler.register(new CommandLeave("leave", "null", null, false, null, null, -1, -1)); //Not yet implemented
+        commandHandler.register(new CommandInvite());
+        commandHandler.register(new CommandLeave());
         commandHandler.register(new CommandPromote());
         commandHandler.register(new CommandRole());
     }

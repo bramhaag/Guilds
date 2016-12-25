@@ -30,7 +30,7 @@ public class CommandDemote extends CommandBase {
         Player demotedPlayer = Bukkit.getPlayer(args[0]);
 
         if(demotedPlayer == null || !demotedPlayer.isOnline()) {
-            Message.sendMessage(player, Message.COMMAND_DEMOTE_PLAYER_NOT_FOUND.replace("{player}", args[0]));
+            Message.sendMessage(player, Message.COMMAND_ERROR_PLAYER_NOT_FOUND.replace("{player}", args[0]));
             return;
         }
 
