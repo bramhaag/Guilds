@@ -38,6 +38,6 @@ public class CommandRole extends CommandBase {
         }
 
         List<GuildMember> members = guild.getMembers().stream().filter(member -> member.getRole() == role).collect(Collectors.toList());
-        members.forEach(member -> Message.sendMessage(player, Message.COMMAND_ROLE_PLAYERS.replace("{name}", Bukkit.getPlayer(member.getUuid()).getName(), "{role}", role.toString())));
+        members.forEach(member -> Message.sendMessage(player, Message.COMMAND_ROLE_PLAYERS.replace("{name}", Bukkit.getPlayer(member.getUniqueId()).getName(), "{role}", role.toString())));
     }
 }

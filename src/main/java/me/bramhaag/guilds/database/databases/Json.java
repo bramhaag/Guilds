@@ -81,7 +81,10 @@ public class Json extends DatabaseProvider {
 
     @Override
     public boolean updateGuild(Guild guild) {
-        return false;
+        HashMap<Integer, Guild> guilds = getGuilds();
+        guilds.put(guild.getId(), guild);
+
+        return write(guilds);
     }
 
     private boolean write(HashMap<Integer, Guild> guilds) {

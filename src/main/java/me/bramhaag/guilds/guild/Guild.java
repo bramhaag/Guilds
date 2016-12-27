@@ -54,25 +54,31 @@ public class Guild {
         if(member == null)
             return false;
 
+        if(member == getGuildMaster()) {
+            return Main.getInstance().getDatabaseProvider().removeGuild(this.id);
+        }
+
         this.members.remove(member);
 
-        return true;
+        return Main.getInstance().getDatabaseProvider().updateGuild(this);
     }
 
     public void inviteMember(UUID uuid) {
         invitedMembers.add(uuid);
+        Main.getInstance().getDatabaseProvider().updateGuild(this);
     }
 
     public void removeInvitedPlayer(UUID uuid) {
         invitedMembers.remove(uuid);
+        Main.getInstance().getDatabaseProvider().updateGuild(this);
     }
 
     public GuildMember getMember(UUID uuid) {
-        return members.stream().filter(member -> member.getUuid() == uuid).findFirst().orElse(null);
+        return members.stream().filter(member -> member.getUniqueId().equals(uuid)).findFirst().orElse(null);
     }
 
     public static Guild getGuild(UUID uuid) {
-        return Main.getInstance().getGuildHandler().getGuilds().stream().filter(guild -> guild.getMembers().stream().anyMatch(member -> member.getUuid().equals(uuid))).findFirst().orElse(null);
+        return Main.getInstance().getGuildHandler().getGuilds().stream().filter(guild -> guild.getMembers().stream().anyMatch(member -> member.getUniqueId().equals(uuid))).findFirst().orElse(null);
     }
 
     public static Guild getGuild(int id) {
@@ -80,7 +86,7 @@ public class Guild {
     }
 
     private static int getFreeId() {
-        if(Main.getInstance().getDatabaseProvider().getGuilds() == null) {
+        if(Main.getInstance().getGuildHandler().getGuilds() == null) {
             return 0;
         }
 

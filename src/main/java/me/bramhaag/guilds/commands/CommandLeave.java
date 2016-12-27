@@ -21,10 +21,10 @@ public class CommandLeave extends CommandBase {
         }
 
         guild.removeMember(player.getUniqueId());
-        Message.sendMessage(player, Message.COMMAND_LEAVE_SUCCESFUL);
+        Message.sendMessage(player, Message.COMMAND_LEAVE_SUCCESSFUL);
 
         for(GuildMember member : guild.getMembers()) {
-            Player receiver = Bukkit.getPlayer(member.getUuid());
+            Player receiver = Bukkit.getPlayer(member.getUniqueId());
             if (receiver == null || !receiver.isOnline()) {
                 continue;
             }

@@ -47,16 +47,16 @@ public enum Message {
 
     COMMAND_ACCEPT_GUILD_NOT_FOUND,
     COMMAND_ACCEPT_NOT_INVITED,
-    COMMAND_ACCEPT_SUCCESFUL,
+    COMMAND_ACCEPT_SUCCESSFUL,
     COMMAND_ACCEPT_PLAYER_JOINED,
 
     COMMAND_INVITE_MESSAGE,
-    COMMAND_INVITE_SUCCESFUL,
+    COMMAND_INVITE_SUCCESSFUL,
 
-    COMMAND_LEAVE_SUCCESFUL,
+    COMMAND_LEAVE_SUCCESSFUL,
     COMMAND_LEAVE_PLAYER_LEFT,
 
-    COMMAND_BOOT_SUCCESFUL,
+    COMMAND_BOOT_SUCCESSFUL,
     COMMAND_BOOT_KICKED,
     COMMAND_BOOT_PLAYER_KICKED;
 
@@ -74,6 +74,10 @@ public enum Message {
         }
 
         String message = Main.getInstance().getConfig().getString("messages." + this.name().toLowerCase().replace('_', '-'));
+
+        if(message == null) {
+            return null;
+        }
 
         for(int i = 0; i < strings.length / 2; i++) {
             message = message.replace(strings[i * 2], strings[(i * 2) + 1]);

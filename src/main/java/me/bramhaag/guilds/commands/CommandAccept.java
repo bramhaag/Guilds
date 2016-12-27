@@ -44,10 +44,10 @@ public class CommandAccept extends CommandBase {
         guild.addMember(player.getUniqueId(), GuildRole.MEMBER);
         guild.removeInvitedPlayer(player.getUniqueId());
 
-        Message.sendMessage(player, Message.COMMAND_ACCEPT_SUCCESFUL);
+        Message.sendMessage(player, Message.COMMAND_ACCEPT_SUCCESSFUL);
 
         for(GuildMember member : guild.getMembers()) {
-            Player receiver = Bukkit.getPlayer(member.getUuid());
+            Player receiver = Bukkit.getPlayer(member.getUniqueId());
             if (receiver == null || !receiver.isOnline()) {
                 continue;
             }

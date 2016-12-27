@@ -19,7 +19,7 @@ public class CommandInvite extends CommandBase {
             return;
         }
 
-        if(guild.getGuildMaster().getUuid() != player.getUniqueId()) {
+        if(guild.getGuildMaster().getUniqueId() != player.getUniqueId()) {
             Message.sendMessage(player, Message.COMMAND_ERROR_NOT_GUILDMASTER);
             return;
         }
@@ -34,6 +34,6 @@ public class CommandInvite extends CommandBase {
         guild.inviteMember(invitedPlayer.getUniqueId());
 
         Message.sendMessage(invitedPlayer, Message.COMMAND_INVITE_MESSAGE);
-        Message.sendMessage(player, Message.COMMAND_INVITE_SUCCESFUL);
+        Message.sendMessage(player, Message.COMMAND_INVITE_SUCCESSFUL);
     }
 }

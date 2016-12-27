@@ -12,7 +12,7 @@ public class GuildMember {
         this.role = role;
     }
 
-    public UUID getUuid() {
+    public UUID getUniqueId() {
         return uuid;
     }
 

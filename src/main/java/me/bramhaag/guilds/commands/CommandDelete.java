@@ -21,7 +21,7 @@ public class CommandDelete extends CommandBase {
             return;
         }
 
-        if(guild.getGuildMaster().getUuid() != player.getUniqueId()) {
+        if(guild.getGuildMaster().getUniqueId() != player.getUniqueId()) {
             Message.sendMessage(player, Message.COMMAND_ERROR_NOT_GUILDMASTER);
             return;
         }

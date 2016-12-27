@@ -23,7 +23,7 @@ public class CommandChat extends CommandBase {
 
         String message = String.join(" ", args);
         for(GuildMember member : guild.getMembers()) {
-            Player receiver = Bukkit.getPlayer(member.getUuid());
+            Player receiver = Bukkit.getPlayer(member.getUniqueId());
             if(receiver == null || !receiver.isOnline()) {
                 continue;
             }

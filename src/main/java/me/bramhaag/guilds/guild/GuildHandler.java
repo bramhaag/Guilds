@@ -1,9 +1,11 @@
 package me.bramhaag.guilds.guild;
 
+import com.google.gson.GsonBuilder;
 import me.bramhaag.guilds.IHandler;
 import me.bramhaag.guilds.Main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class GuildHandler implements IHandler {
@@ -24,7 +26,13 @@ public class GuildHandler implements IHandler {
     }
 
     public void initialize() {
-        Main.getInstance().getDatabaseProvider().getGuilds().values().forEach(this::addGuild);
+        HashMap<Integer, Guild> guilds = Main.getInstance().getDatabaseProvider().getGuilds();
+        System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(guilds));
+        if(guilds == null) {
+            return;
+        }
+
+        guilds.values().forEach(this::addGuild);
     }
 
     public void addGuild(Guild guild) {

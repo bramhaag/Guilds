@@ -20,7 +20,7 @@ public class CommandBoot extends CommandBase {
             return;
         }
 
-        if(guild.getGuildMaster().getUuid() != player.getUniqueId()) {
+        if(guild.getGuildMaster().getUniqueId() != player.getUniqueId()) {
             Message.sendMessage(player, Message.COMMAND_ERROR_NOT_GUILDMASTER);
             return;
         }
@@ -35,10 +35,10 @@ public class CommandBoot extends CommandBase {
         guild.removeMember(kickedPlayer.getUniqueId());
 
         Message.sendMessage(kickedPlayer, Message.COMMAND_BOOT_KICKED.replace("{kicker}", player.getName()));
-        Message.sendMessage(player, Message.COMMAND_BOOT_SUCCESFUL);
+        Message.sendMessage(player, Message.COMMAND_BOOT_SUCCESSFUL);
 
         for(GuildMember member : guild.getMembers()) {
-            Player receiver = Bukkit.getPlayer(member.getUuid());
+            Player receiver = Bukkit.getPlayer(member.getUniqueId());
             if (receiver == null || !receiver.isOnline()) {
                 continue;
             }

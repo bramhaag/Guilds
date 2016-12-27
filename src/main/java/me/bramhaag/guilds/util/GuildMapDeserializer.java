@@ -16,13 +16,13 @@ public class GuildMapDeserializer implements JsonDeserializer<Map<Integer, Guild
 
         object.entrySet().forEach(entry -> guilds.put(Integer.valueOf(entry.getKey()), context.deserialize(entry.getValue(), Guild.class)));
 
-        for (Map.Entry entry : object.entrySet()) {
+        /*for (Map.Entry entry : object.entrySet()) {
 
             System.out.println("key:" + entry.getKey());
             System.out.println("value:" + entry.getValue());
         }
 
-        System.out.println(object);
+        System.out.println(object);*/
 
         return guilds;
     }
