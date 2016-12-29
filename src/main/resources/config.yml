@@ -10,6 +10,14 @@ database:
 #    database: "guilds"
 #    pool-size: 10
 
+name:
+  min-length: 1
+  max-length: 64
+  regex: "^[a-zA-Z0-9]*$"
+
+members:
+  max-members: 64
+
 #Note: Current "messages" are temporary and only for testing, one day they will be made better
 #TODO: Categorize these messages and make the messages better
 messages:

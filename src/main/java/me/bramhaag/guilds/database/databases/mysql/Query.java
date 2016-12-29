@@ -9,5 +9,7 @@ public class Query {
                                                       "uuid VARCHAR(36) NOT NULL, " +
                                                       "role INTEGER NOT NULL, " +
                                                       "PRIMARY KEY (uuid)";
-
+    public static final String CREATE_GUILD = "";
+    public static final String REMOVE_GUILD = "";
+    public static final String GET_GUILD = "";
 }

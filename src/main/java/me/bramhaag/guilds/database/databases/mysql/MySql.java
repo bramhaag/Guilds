@@ -1,19 +1,16 @@
 package me.bramhaag.guilds.database.databases.mysql;
 
-import com.sun.rowset.CachedRowSetImpl;
+import co.aikar.taskchain.TaskChain;
 import com.zaxxer.hikari.HikariDataSource;
 import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.database.DatabaseProvider;
+
 import me.bramhaag.guilds.guild.Guild;
-import me.bramhaag.guilds.util.Callback;
 import org.bukkit.configuration.ConfigurationSection;
 
-import javax.sql.rowset.CachedRowSet;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
+
 
 public class MySql extends DatabaseProvider {
     private HikariDataSource hikari;
@@ -22,6 +19,7 @@ public class MySql extends DatabaseProvider {
     public void initialize() {
         ConfigurationSection databaseSection = Main.getInstance().getConfig().getConfigurationSection("database");
         if(databaseSection == null) {
+            //TODO probably should disable the plugin
             throw new IllegalStateException("MySQL database configured incorrectly, cannot continue properly");
         }
 
@@ -38,29 +36,11 @@ public class MySql extends DatabaseProvider {
 
         hikari.validate();
 
-        runUpdateAsync(Query.CREATE_TABLE_GUILDS, null, new Callback<Integer>() {
-            @Override
-            public void onQueryComplete(Integer result) {
-                return;
-            }
-
-            @Override
-            public void onQueryError(Exception ex) {
-                ex.printStackTrace();
-            }
-        });
-
-        runUpdateAsync(Query.CREATE_TABLE_MEMBERS, null, new Callback<Integer>() {
-            @Override
-            public void onQueryComplete(Integer result) {
-                return;
-            }
-
-            @Override
-            public void onQueryError(Exception ex) {
-                ex.printStackTrace();
-            }
-        });
+        TaskChain<?> chain = Main.newSharedChain("create_guild");
+        chain
+            .async(() -> updateQuery(Query.CREATE_TABLE_GUILDS))
+            .async(() -> updateQuery(Query.CREATE_TABLE_MEMBERS))
+            .execute();
     }
 
     @Override
@@ -88,71 +68,11 @@ public class MySql extends DatabaseProvider {
         return false;
     }
 
-    private void runQueryAsync(String query, Object[] parameters, Callback<ResultSet> callback) {
-        Connection connection = null;
-        PreparedStatement preparedStatement;
-
-        try {
-            connection = hikari.getConnection();
-            preparedStatement = connection.prepareStatement(query);
-
-            if(parameters != null) {
-                for(int i = 0; i < parameters.length; i++) {
-                    preparedStatement.setObject(i + 1, parameters[i]);
-                }
-            }
-
-            ResultSet rs = preparedStatement.executeQuery();
-            CachedRowSet cachedRowSet = new CachedRowSetImpl();
-            cachedRowSet.populate(rs);
-
-            callback.onQueryComplete(cachedRowSet);
-
-            rs.close();
-        }
-        catch (SQLException ex) {
-            callback.onQueryError(ex);
-        }
-        finally {
-            if(connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException ex) {
-                    callback.onQueryError(ex);
-                }
-            }
-        }
+    private void runQuery(String query, String... params) {
+        return;
     }
 
-    private void runUpdateAsync(String query, Object[] parameters, Callback<Integer> callback) {
-        Connection connection = null;
-        PreparedStatement preparedStatement;
-
-        try {
-            connection = hikari.getConnection();
-            preparedStatement = connection.prepareStatement(query);
-
-            if(parameters != null) {
-                for(int i = 0; i < parameters.length; i++) {
-                    preparedStatement.setObject(i + 1, parameters[i]);
-                }
-            }
-
-            int result = preparedStatement.executeUpdate();
-            callback.onQueryComplete(result);
-
-        }
-        catch (SQLException ex) {
-            callback.onQueryError(ex);
-        }
-        finally {
-            if(connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException ex) {
-                    callback.onQueryError(ex);
-                }
-            }
-        }
+    private ResultSet updateQuery(String query, String... params) {
+        return null;
     }
 }

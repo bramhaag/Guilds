@@ -1,5 +1,8 @@
 package me.bramhaag.guilds;
 
+import co.aikar.taskchain.BukkitTaskChainFactory;
+import co.aikar.taskchain.TaskChain;
+import co.aikar.taskchain.TaskChainFactory;
 import me.bramhaag.guilds.commands.*;
 import me.bramhaag.guilds.commands.base.CommandHandler;
 import me.bramhaag.guilds.database.DatabaseProvider;
@@ -17,6 +20,8 @@ public class Main extends JavaPlugin {
     private GuildHandler guildHandler;
     private CommandHandler commandHandler;
 
+    public static TaskChainFactory taskChainFactory;
+
     public static final String PREFIX = "[Guilds] ";
 
     @Override
@@ -24,6 +29,8 @@ public class Main extends JavaPlugin {
         this.saveDefaultConfig();
 
         instance = this;
+
+        taskChainFactory = BukkitTaskChainFactory.create(this);
 
         switch (getConfig().getString("database.type").toLowerCase()) {
             case "json":
@@ -76,6 +83,14 @@ public class Main extends JavaPlugin {
 
     public CommandHandler getCommandHandler() {
         return commandHandler;
+    }
+
+    public static <T> TaskChain<T> newChain() {
+        return taskChainFactory.newChain();
+    }
+
+    public static <T> TaskChain<T> newSharedChain(String name) {
+        return taskChainFactory.newSharedChain(name);
     }
 
     public static Main getInstance() {
