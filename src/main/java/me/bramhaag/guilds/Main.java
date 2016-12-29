@@ -3,13 +3,10 @@ package me.bramhaag.guilds;
 import me.bramhaag.guilds.commands.*;
 import me.bramhaag.guilds.commands.base.CommandHandler;
 import me.bramhaag.guilds.database.DatabaseProvider;
-import me.bramhaag.guilds.database.databases.Json;
-import me.bramhaag.guilds.database.databases.MySql;
-import me.bramhaag.guilds.guild.Guild;
+import me.bramhaag.guilds.database.databases.json.Json;
+import me.bramhaag.guilds.database.databases.mysql.MySql;
 import me.bramhaag.guilds.guild.GuildHandler;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.Arrays;
 
 public class Main extends JavaPlugin {
 

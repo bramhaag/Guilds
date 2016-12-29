@@ -1,4 +1,4 @@
-package me.bramhaag.guilds.database.databases;
+package me.bramhaag.guilds.database.databases.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -6,7 +6,6 @@ import com.google.gson.stream.JsonReader;
 import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.guild.Guild;
-import me.bramhaag.guilds.util.GuildMapDeserializer;
 
 import java.io.*;
 import java.util.*;

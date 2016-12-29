@@ -1,4 +1,4 @@
-package me.bramhaag.guilds.database.databases;
+package me.bramhaag.guilds.database.databases.mysql;
 
 import com.sun.rowset.CachedRowSetImpl;
 import com.zaxxer.hikari.HikariDataSource;
@@ -16,10 +16,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class MySql extends DatabaseProvider {
-
-    private final String QUERY_INITIALIZE = "";
-    private final String QUERY_CREATE_GUILD = "";
-
     private HikariDataSource hikari;
 
     @Override
@@ -41,6 +37,30 @@ public class MySql extends DatabaseProvider {
         hikari.addDataSourceProperty("password", databaseSection.getString("password"));
 
         hikari.validate();
+
+        runUpdateAsync(Query.CREATE_TABLE_GUILDS, null, new Callback<Integer>() {
+            @Override
+            public void onQueryComplete(Integer result) {
+                return;
+            }
+
+            @Override
+            public void onQueryError(Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        runUpdateAsync(Query.CREATE_TABLE_MEMBERS, null, new Callback<Integer>() {
+            @Override
+            public void onQueryComplete(Integer result) {
+                return;
+            }
+
+            @Override
+            public void onQueryError(Exception ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     @Override
