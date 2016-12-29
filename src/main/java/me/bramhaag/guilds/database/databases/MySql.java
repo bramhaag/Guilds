@@ -4,7 +4,6 @@ import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.guild.Guild;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 public class MySql extends DatabaseProvider {
 
@@ -19,17 +18,17 @@ public class MySql extends DatabaseProvider {
     }
 
     @Override
-    public boolean removeGuild(int id) {
+    public boolean removeGuild(String name) {
         return false;
     }
 
     @Override
-    public Guild getGuild(int id) {
+    public Guild getGuild(String name) {
         return null;
     }
 
     @Override
-    public HashMap<Integer, Guild> getGuilds() {
+    public HashMap<String, Guild> getGuilds() {
         return null;
     }
 

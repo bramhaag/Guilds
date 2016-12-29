@@ -14,10 +14,10 @@ public abstract class DatabaseProvider {
     public abstract void initialize();
 
     public abstract boolean createGuild(Guild guild);
-    public abstract boolean removeGuild(int id);
+    public abstract boolean removeGuild(String name);
 
-    public abstract Guild getGuild(int id);
-    public abstract HashMap<Integer, Guild> getGuilds();
+    public abstract Guild getGuild(String name);
+    public abstract HashMap<String, Guild> getGuilds();
 
     public abstract boolean updateGuild(Guild guild);
 

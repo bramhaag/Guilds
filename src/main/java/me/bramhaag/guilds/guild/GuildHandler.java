@@ -26,7 +26,7 @@ public class GuildHandler implements IHandler {
     }
 
     public void initialize() {
-        HashMap<Integer, Guild> guilds = Main.getInstance().getDatabaseProvider().getGuilds();
+        HashMap<String, Guild> guilds = Main.getInstance().getDatabaseProvider().getGuilds();
         System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(guilds));
         if(guilds == null) {
             return;

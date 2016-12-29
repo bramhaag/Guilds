@@ -18,7 +18,9 @@ public class Json extends DatabaseProvider {
     public void initialize() {
         guildsFile = new File(Main.getInstance().getDataFolder(), "guilds.json");
         gson = new GsonBuilder()
-                .registerTypeAdapter(new HashMap<Integer, Guild>().getClass(), new GuildMapDeserializer())
+                .registerTypeAdapter(new HashMap<String, Guild>().getClass(), new GuildMapDeserializer())
+                .excludeFieldsWithoutExposeAnnotation()
+                //.enableComplexMapKeySerialization()
                 .setPrettyPrinting()
                 .create();
 
@@ -36,8 +38,8 @@ public class Json extends DatabaseProvider {
 
     @Override
     public boolean createGuild(Guild guild) {
-        HashMap<Integer, Guild> guilds = getGuilds() == null ? new HashMap<>() : getGuilds();
-        guilds.put(guild.getId(), guild);
+        HashMap<String, Guild> guilds = getGuilds() == null ? new HashMap<>() : getGuilds();
+        guilds.put(guild.getName(), guild);
 
         if(!write(guilds)) {
             return false;
@@ -48,24 +50,24 @@ public class Json extends DatabaseProvider {
     }
 
     @Override
-    public boolean removeGuild(int id) {
-        HashMap<Integer, Guild> guilds = getGuilds();
+    public boolean removeGuild(String name) {
+        HashMap<String, Guild> guilds = getGuilds();
 
-        if(guilds == null || !guilds.keySet().contains(id)) {
+        if(guilds == null || !guilds.keySet().contains(name)) {
             return false;
         }
 
-        guilds.remove(id);
+        guilds.remove(name);
         return write(guilds);
     }
 
     @Override
-    public Guild getGuild(int id) {
-        return getGuilds().entrySet().stream().filter(entry -> entry.getKey() == id).findFirst().orElse(null).getValue();
+    public Guild getGuild(String name) {
+        return getGuilds().entrySet().stream().filter(entry -> entry.getKey().equals(name)).findFirst().orElse(null).getValue();
     }
 
     @Override
-    public HashMap<Integer, Guild> getGuilds() {
+    public HashMap<String, Guild> getGuilds() {
         JsonReader reader;
 
         try {
@@ -76,18 +78,18 @@ public class Json extends DatabaseProvider {
             return null;
         }
 
-        return gson.fromJson(reader, new HashMap<Integer, Guild>().getClass());
+        return gson.fromJson(reader, new HashMap<String, Guild>().getClass());
     }
 
     @Override
     public boolean updateGuild(Guild guild) {
-        HashMap<Integer, Guild> guilds = getGuilds();
-        guilds.put(guild.getId(), guild);
+        HashMap<String, Guild> guilds = getGuilds();
+        guilds.put(guild.getName(), guild);
 
         return write(guilds);
     }
 
-    private boolean write(HashMap<Integer, Guild> guilds) {
+    private boolean write(HashMap<String, Guild> guilds) {
         try (Writer writer = new FileWriter(guildsFile)) {
             gson.toJson(guilds, writer);
         } catch (IOException e) {

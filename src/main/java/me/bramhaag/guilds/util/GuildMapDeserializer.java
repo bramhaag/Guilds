@@ -6,23 +6,28 @@ import me.bramhaag.guilds.guild.Guild;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
-public class GuildMapDeserializer implements JsonDeserializer<Map<Integer, Guild>> {
+public class GuildMapDeserializer implements JsonDeserializer<Map<String, Guild>> {
     @Override
-    public Map<Integer, Guild> deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {
+    public Map<String, Guild> deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
 
-        Map<Integer, Guild> guilds = new HashMap<>();
+        Map<String, Guild> guilds = new HashMap<>();
+        object.entrySet().forEach(entry -> {
+            JsonObject guild = entry.getValue().getAsJsonObject();
+            guild.addProperty("name", entry.getKey());
 
-        object.entrySet().forEach(entry -> guilds.put(Integer.valueOf(entry.getKey()), context.deserialize(entry.getValue(), Guild.class)));
+            guilds.put(entry.getKey(), context.deserialize(guild, Guild.class));
+        });
 
-        /*for (Map.Entry entry : object.entrySet()) {
+        for (Map.Entry entry : object.entrySet()) {
 
             System.out.println("key:" + entry.getKey());
             System.out.println("value:" + entry.getValue());
         }
 
-        System.out.println(object);*/
+        System.out.println(object);
 
         return guilds;
     }

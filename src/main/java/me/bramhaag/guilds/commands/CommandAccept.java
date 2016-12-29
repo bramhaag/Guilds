@@ -20,17 +20,7 @@ public class CommandAccept extends CommandBase {
             return;
         }
 
-        int id;
-
-        try {
-            id = Integer.parseInt(args[0]);
-        }
-        catch (NumberFormatException ex) {
-            Message.sendMessage(player, Message.COMMAND_ERROR_INVALID_NUMBER.replace("{input}", args[0]));
-            return;
-        }
-
-        Guild guild = Guild.getGuild(id);
+        Guild guild = Guild.getGuild(args[0]);
         if(guild == null) {
             Message.sendMessage(player, Message.COMMAND_ACCEPT_GUILD_NOT_FOUND);
             return;
