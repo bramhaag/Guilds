@@ -23,7 +23,7 @@ public class CommandRole extends CommandBase {
         Guild guild = Guild.getGuild(player.getUniqueId());
 
         if(guild == null) {
-            Message.sendMessage(player, Message.COMMAND_ROLE_ERROR_NO_GUILD);
+            Message.sendMessage(player, Message.COMMAND_ERROR_NO_GUILD);
             return;
         }
 

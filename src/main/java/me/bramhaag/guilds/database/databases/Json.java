@@ -1,5 +1,6 @@
 package me.bramhaag.guilds.database.databases;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import me.bramhaag.guilds.Main;
@@ -12,6 +13,7 @@ import java.util.*;
 
 public class Json extends DatabaseProvider {
 
+    private Gson gson;
     private File guildsFile;
 
     @Override
@@ -20,14 +22,13 @@ public class Json extends DatabaseProvider {
         gson = new GsonBuilder()
                 .registerTypeAdapter(new HashMap<String, Guild>().getClass(), new GuildMapDeserializer())
                 .excludeFieldsWithoutExposeAnnotation()
-                //.enableComplexMapKeySerialization()
                 .setPrettyPrinting()
                 .create();
 
         if(!guildsFile.exists()) {
             try {
                 if(!guildsFile.createNewFile()) {
-                    //TODO something went wrong :C
+                    throw new IOException("Something went wrong when creating the guild storage file!");
                 }
             }
             catch (IOException ex) {

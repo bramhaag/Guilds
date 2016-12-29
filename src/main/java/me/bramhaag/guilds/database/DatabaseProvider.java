@@ -8,9 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 public abstract class DatabaseProvider {
-
-    protected Gson gson;
-
     public abstract void initialize();
 
     public abstract boolean createGuild(Guild guild);
@@ -20,8 +17,4 @@ public abstract class DatabaseProvider {
     public abstract HashMap<String, Guild> getGuilds();
 
     public abstract boolean updateGuild(Guild guild);
-
-    public Gson getGson() {
-        return gson;
-    }
 }
