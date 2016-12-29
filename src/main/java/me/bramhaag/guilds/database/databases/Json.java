@@ -63,7 +63,8 @@ public class Json extends DatabaseProvider {
 
     @Override
     public Guild getGuild(String name) {
-        return getGuilds().entrySet().stream().filter(entry -> entry.getKey().equals(name)).findFirst().orElse(null).getValue();
+        Map.Entry<String, Guild> guildEntry = getGuilds().entrySet().stream().filter(entry -> entry.getKey().equals(name)).findFirst().orElse(null);
+        return guildEntry == null ? null : guildEntry.getValue();
     }
 
     @Override

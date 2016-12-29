@@ -1,10 +1,15 @@
 package me.bramhaag.guilds.guild;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.UUID;
 
 public class GuildMember {
 
+    @Expose
     private UUID uuid;
+
+    @Expose
     private GuildRole role;
 
     public GuildMember(UUID uuid, GuildRole role) {
