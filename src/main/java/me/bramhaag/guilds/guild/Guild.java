@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import me.bramhaag.guilds.Main;
 
 import java.util.*;
+import java.util.logging.Level;
 
 public class Guild {
 
@@ -41,34 +42,69 @@ public class Guild {
         return this.members.stream().filter(member -> member.getRole() == GuildRole.MASTER).findFirst().orElse(null);
     }
 
-    public boolean addMember(UUID uuid, GuildRole role) {
+    public void addMember(UUID uuid, GuildRole role) {
         this.members.add(new GuildMember(uuid, role));
 
-        return Main.getInstance().getDatabaseProvider().updateGuild(this);
+        Main.getInstance().getDatabaseProvider().updateGuild(this, (result, exception) -> {
+            if(!result) {
+                Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while adding a member with an UUID of '%s' to guild '%s'", uuid, this.name));
+
+                if(exception != null) {
+                    exception.printStackTrace();
+                }
+            }
+        });
     }
 
-    public boolean removeMember(UUID uuid) {
+    public void removeMember(UUID uuid) {
         GuildMember member = getMember(uuid);
         if(member == null)
-            return false;
+            return;
 
         if(member == getGuildMaster()) {
-            return Main.getInstance().getDatabaseProvider().removeGuild(this.name);
+            Main.getInstance().getDatabaseProvider().removeGuild(this, (result, exception) -> {
+                if(!result) {
+                    Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while removing guild '%s'", this.name));
+                    if(exception != null) {
+                        exception.printStackTrace();
+                    }
+                }
+            });
         }
 
         this.members.remove(member);
-
-        return Main.getInstance().getDatabaseProvider().updateGuild(this);
+        Main.getInstance().getDatabaseProvider().updateGuild(this, ((result, exception) -> {
+            if(!result) {
+                Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while removing a member with the UUID of '%s' from guild '%s'", uuid, this.name));
+                if(exception != null) {
+                    exception.printStackTrace();
+                }
+            }
+        }));
     }
 
     public void inviteMember(UUID uuid) {
         invitedMembers.add(uuid);
-        Main.getInstance().getDatabaseProvider().updateGuild(this);
+        Main.getInstance().getDatabaseProvider().updateGuild(this, ((result, exception) -> {
+            if(!result) {
+                Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while inviting a member with the UUID of '%s' to guild '%s'", uuid, this.name));
+                if(exception != null) {
+                    exception.printStackTrace();
+                }
+            }
+        }));
     }
 
     public void removeInvitedPlayer(UUID uuid) {
         invitedMembers.remove(uuid);
-        Main.getInstance().getDatabaseProvider().updateGuild(this);
+        Main.getInstance().getDatabaseProvider().updateGuild(this, ((result, exception) -> {
+            if(!result) {
+                Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while removing an invited member member with the UUID of '%s' to guild '%s'", uuid, this.name));
+                if(exception != null) {
+                    exception.printStackTrace();
+                }
+            }
+        }));
     }
 
     public GuildMember getMember(UUID uuid) {
@@ -76,10 +112,10 @@ public class Guild {
     }
 
     public static Guild getGuild(UUID uuid) {
-        return Main.getInstance().getGuildHandler().getGuilds().stream().filter(guild -> guild.getMembers().stream().anyMatch(member -> member.getUniqueId().equals(uuid))).findFirst().orElse(null);
+        return Main.getInstance().getGuildHandler().getGuilds().values().stream().filter(guild -> guild.getMembers().stream().anyMatch(member -> member.getUniqueId().equals(uuid))).findFirst().orElse(null);
     }
 
     public static Guild getGuild(String name) {
-        return Main.getInstance().getGuildHandler().getGuilds().stream().filter(guild -> guild.getName().equals(name)).findFirst().orElse(null);
+        return Main.getInstance().getGuildHandler().getGuilds().values().stream().filter(guild -> guild.getName().equals(name)).findFirst().orElse(null);
     }
 }

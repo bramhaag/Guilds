@@ -1,14 +1,13 @@
 package me.bramhaag.guilds.database.databases.mysql;
 
-import co.aikar.taskchain.TaskChain;
 import com.zaxxer.hikari.HikariDataSource;
 import me.bramhaag.guilds.Main;
+import me.bramhaag.guilds.database.Callback;
 import me.bramhaag.guilds.database.DatabaseProvider;
 
 import me.bramhaag.guilds.guild.Guild;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.sql.ResultSet;
 import java.util.HashMap;
 
 
@@ -36,43 +35,33 @@ public class MySql extends DatabaseProvider {
 
         hikari.validate();
 
-        TaskChain<?> chain = Main.newSharedChain("create_guild");
-        chain
+        Main.newChain()
             .async(() -> updateQuery(Query.CREATE_TABLE_GUILDS))
             .async(() -> updateQuery(Query.CREATE_TABLE_MEMBERS))
             .execute();
     }
 
     @Override
-    public boolean createGuild(Guild guild) {
-        return false;
+    public void createGuild(Guild guild, Callback<Boolean, Exception> callback) {
+
     }
 
     @Override
-    public boolean removeGuild(String name) {
-        return false;
+    public void removeGuild(Guild guild, Callback<Boolean, Exception> callback) {
+
     }
 
     @Override
-    public Guild getGuild(String name) {
-        return null;
+    public void getGuilds(Callback<HashMap<String, Guild>, Exception> callback) {
+
     }
 
     @Override
-    public HashMap<String, Guild> getGuilds() {
-        return null;
+    public void updateGuild(Guild guild, Callback<Boolean, Exception> callback) {
+
     }
 
-    @Override
-    public boolean updateGuild(Guild guild) {
-        return false;
-    }
-
-    private void runQuery(String query, String... params) {
+    private void updateQuery(String query) {
         return;
-    }
-
-    private ResultSet updateQuery(String query, String... params) {
-        return null;
     }
 }

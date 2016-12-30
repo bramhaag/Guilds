@@ -2,9 +2,13 @@ package me.bramhaag.guilds.commands;
 
 import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.commands.base.CommandBase;
+import me.bramhaag.guilds.database.Callback;
 import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.message.Message;
 import org.bukkit.entity.Player;
+
+import java.util.logging.Level;
+import java.util.regex.Pattern;
 
 public class CommandCreate extends CommandBase {
 
@@ -20,11 +24,27 @@ public class CommandCreate extends CommandBase {
             return;
         }
 
-        if(Main.getInstance().getDatabaseProvider().createGuild(new Guild(args[0], player.getUniqueId()))) {
-            Message.sendMessage(player, Message.COMMAND_CREATE_SUCCESSFUL.replace("{guildname}", args[0]));
+        int minLength = Main.getInstance().getConfig().getInt("name.min-length");
+        int maxLength = Main.getInstance().getConfig().getInt("name.max-length");
+        String regex = Main.getInstance().getConfig().getString("name.regex");
+
+        if(args[0].length() < minLength || args[0].length() > maxLength || !args[0].matches(regex)) {
+            Message.sendMessage(player, Message.COMMAND_CREATE_ERROR_REQUIREMENTS);
+            return;
         }
-        else {
-            Message.sendMessage(player, Message.COMMAND_CREATE_ERROR_CREATE);
-        }
+
+        Main.getInstance().getDatabaseProvider().createGuild(new Guild(args[0], player.getUniqueId()), ((result, exception) -> {
+            if(result) {
+                Message.sendMessage(player, Message.COMMAND_CREATE_SUCCESSFUL.replace("{guildname}", args[0]));
+            }
+            else {
+                Message.sendMessage(player, Message.COMMAND_CREATE_ERROR_CREATE);
+
+                Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while player '%s' was trying to create guild '%s'", player.getName(), args[0]));
+                if(exception != null) {
+                    exception.printStackTrace();
+                }
+            }
+        }));
     }
 }

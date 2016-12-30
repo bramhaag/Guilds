@@ -57,7 +57,7 @@ public enum Message {
 
     COMMAND_BOOT_SUCCESSFUL,
     COMMAND_BOOT_KICKED,
-    COMMAND_BOOT_PLAYER_KICKED;
+    COMMAND_BOOT_PLAYER_KICKED, COMMAND_CREATE_ERROR_REQUIREMENTS;
 
     public static void sendMessage(CommandSender sender, Message message) {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.PREFIX + Main.getInstance().getConfig().getString("messages." + message.name().toLowerCase().replace('_', '-'))));

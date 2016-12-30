@@ -1,20 +1,19 @@
 package me.bramhaag.guilds.guild;
 
-import com.google.gson.GsonBuilder;
 import me.bramhaag.guilds.IHandler;
 import me.bramhaag.guilds.Main;
+import me.bramhaag.guilds.database.Callback;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.logging.Level;
 
 public class GuildHandler implements IHandler {
 
-    private List<Guild> guilds;
+    private HashMap<String, Guild> guilds;
 
     @Override
     public void enable() {
-        guilds = new ArrayList<>();
+        guilds = new HashMap<>();
 
         initialize();
     }
@@ -26,8 +25,16 @@ public class GuildHandler implements IHandler {
     }
 
     public void initialize() {
-        HashMap<String, Guild> guilds = Main.getInstance().getDatabaseProvider().getGuilds();
-        System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(guilds));
+        Main.getInstance().getDatabaseProvider().getGuilds(((result, exception) -> {
+            if(result == null && exception != null) {
+                Main.getInstance().getLogger().log(Level.SEVERE, "An error occurred while loading guilds");
+                exception.printStackTrace();
+                return;
+            }
+
+            guilds = result;
+        }));
+
         if(guilds == null) {
             return;
         }
@@ -36,10 +43,14 @@ public class GuildHandler implements IHandler {
     }
 
     public void addGuild(Guild guild) {
-        guilds.add(guild);
+        guilds.put(guild.getName(), guild);
     }
 
-    public List<Guild> getGuilds() {
+    public void setGuilds(HashMap<String, Guild> guilds) {
+        this.guilds = guilds;
+    }
+
+    public HashMap<String, Guild> getGuilds() {
         return guilds;
     }
 }
