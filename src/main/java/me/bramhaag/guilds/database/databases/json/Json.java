@@ -44,9 +44,7 @@ public class Json extends DatabaseProvider {
         HashMap<String, Guild> guilds = getGuilds() == null ? new HashMap<>() : getGuilds();
         guilds.put(guild.getName(), guild);
 
-        if(!write(guilds)) {
-            return;
-        }
+        write(guilds);
 
         Main.getInstance().getGuildHandler().addGuild(guild);
     }
@@ -72,7 +70,8 @@ public class Json extends DatabaseProvider {
 
                 try {
                     reader = new JsonReader(new FileReader(guildsFile));
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
@@ -92,11 +91,31 @@ public class Json extends DatabaseProvider {
                 }.runTask(Main.getInstance());
             }
         }.runTaskAsynchronously(Main.getInstance());
+    }
 
-        /*Main.newChain()
-                .async(() -> loadGuilds())
-                .syncLast((guilds) -> Main.getInstance().getGuildHandler().setGuilds(guilds))
-                .execute();*/
+    @Override
+    public void updateGuild(Guild guild, Callback<Boolean, Exception> callback) {
+        HashMap<String, Guild> guilds = getGuilds();
+        guilds.put(guild.getName(), guild);
+
+        write(guilds);
+    }
+
+    private void write(HashMap<String, Guild> guilds) {
+        try (Writer writer = new FileWriter(guildsFile)) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    gson.toJson(guilds, writer);
+                }
+            }.runTaskAsynchronously(Main.getInstance());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private HashMap<String, Guild> getGuilds() {
+        return Main.getInstance().getGuildHandler().getGuilds();
     }
 
    /* @Override
@@ -119,41 +138,4 @@ public class Json extends DatabaseProvider {
 
         return gson.fromJson(reader, new HashMap<String, Guild>().getClass());
     }*/
-
-    @Override
-    public void updateGuild(Guild guild, Callback<Boolean, Exception> callback) {
-        HashMap<String, Guild> guilds = getGuilds();
-        guilds.put(guild.getName(), guild);
-
-        write(guilds);
-    }
-
-    private boolean write(HashMap<String, Guild> guilds) {
-        try (Writer writer = new FileWriter(guildsFile)) {
-            gson.toJson(guilds, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
-    }
-
-    /*private HashMap<String, Guild> loadGuilds() {
-        JsonReader reader;
-
-        try {
-            reader = new JsonReader(new FileReader(guildsFile));
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-
-            return null;
-        }
-
-        return gson.fromJson(reader, new HashMap<String, Guild>().getClass());
-    }*/
-
-    private HashMap<String, Guild> getGuilds() {
-        return Main.getInstance().getGuildHandler().getGuilds();
-    }
 }
