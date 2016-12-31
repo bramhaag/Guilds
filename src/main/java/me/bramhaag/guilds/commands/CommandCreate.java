@@ -33,6 +33,15 @@ public class CommandCreate extends CommandBase {
             return;
         }
 
+        Main.getInstance().getGuildHandler().getGuilds().keySet().forEach(name -> name.equalsIgnoreCase(args[0]));
+
+        for (String name : Main.getInstance().getGuildHandler().getGuilds().keySet()) {
+            if(name.equalsIgnoreCase(args[0])) {
+                Message.sendMessage(player, Message.COMMAND_CREATE_ERROR_GUILD_NAME_TAKEN);
+                return;
+            }
+        }
+
         Main.getInstance().getDatabaseProvider().createGuild(new Guild(args[0], player.getUniqueId()), ((result, exception) -> {
             if(result) {
                 Message.sendMessage(player, Message.COMMAND_CREATE_SUCCESSFUL.replace("{guildname}", args[0]));

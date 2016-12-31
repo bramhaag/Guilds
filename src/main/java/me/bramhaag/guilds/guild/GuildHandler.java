@@ -2,7 +2,6 @@ package me.bramhaag.guilds.guild;
 
 import me.bramhaag.guilds.IHandler;
 import me.bramhaag.guilds.Main;
-import me.bramhaag.guilds.database.Callback;
 
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -32,12 +31,10 @@ public class GuildHandler implements IHandler {
                 return;
             }
 
-            guilds = result;
+            if(result != null) {
+                guilds = result;
+            }
         }));
-
-        if(guilds == null) {
-            return;
-        }
 
         guilds.values().forEach(this::addGuild);
     }
