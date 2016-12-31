@@ -1,3 +1,15 @@
+name:
+# Minimum length of guild names
+  min-length: 1
+# Maximum length of guild names
+  max-length: 64
+# RegEx (https://en.wikipedia.org/wiki/Regular_expression) used to only allow certain characters (default only allows alphanumeric characters)
+  regex: "^[a-zA-Z0-9]*$"
+
+members:
+# Set to -1 to disable
+  max-members: 64
+
 database:
 # Set the type of the database (Either JSON or MySQL)
   type: JSON
@@ -9,14 +21,6 @@ database:
 #    password: "password"
 #    database: "guilds"
 #    pool-size: 10
-
-name:
-  min-length: 1
-  max-length: 64
-  regex: "^[a-zA-Z0-9]*$"
-
-members:
-  max-members: 64
 
 #Note: Current "messages" are temporary and only for testing, one day they will be made better
 #TODO: Categorize these messages and make the messages better

@@ -24,6 +24,8 @@ public enum Message {
 
     COMMAND_CREATE_SUCCESSFUL,
     COMMAND_CREATE_ERROR_CREATE,
+    COMMAND_CREATE_ERROR_REQUIREMENTS,
+    COMMAND_CREATE_ERROR_GUILD_NAME_TAKEN,
 
     COMMAND_DELETE_SUCCESSFUL,
     COMMAND_DELETE_ERROR,
@@ -46,6 +48,7 @@ public enum Message {
 
     COMMAND_ACCEPT_GUILD_NOT_FOUND,
     COMMAND_ACCEPT_NOT_INVITED,
+    COMMAND_ACCEPT_GUILD_FULL,
     COMMAND_ACCEPT_SUCCESSFUL,
     COMMAND_ACCEPT_PLAYER_JOINED,
 
@@ -57,7 +60,7 @@ public enum Message {
 
     COMMAND_BOOT_SUCCESSFUL,
     COMMAND_BOOT_KICKED,
-    COMMAND_BOOT_PLAYER_KICKED, COMMAND_CREATE_ERROR_REQUIREMENTS, COMMAND_CREATE_ERROR_GUILD_NAME_TAKEN;
+    COMMAND_BOOT_PLAYER_KICKED;
 
     public static void sendMessage(CommandSender sender, Message message) {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.PREFIX + Main.getInstance().getConfig().getString("messages." + message.name().toLowerCase().replace('_', '-'))));

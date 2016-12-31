@@ -1,5 +1,6 @@
 package me.bramhaag.guilds.commands;
 
+import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.commands.base.CommandBase;
 import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.guild.GuildMember;
@@ -28,6 +29,12 @@ public class CommandAccept extends CommandBase {
 
         if(!guild.getInvitedMembers().contains(player.getUniqueId())) {
             Message.sendMessage(player, Message.COMMAND_ACCEPT_NOT_INVITED);
+            return;
+        }
+
+        int maxMembers = Main.getInstance().getConfig().getInt("members.max-members");
+        if(maxMembers != -1 && guild.getMembers().size() >= maxMembers) {
+            Message.sendMessage(player, Message.COMMAND_ACCEPT_GUILD_FULL);
             return;
         }
 
