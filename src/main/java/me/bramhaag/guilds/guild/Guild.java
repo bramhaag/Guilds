@@ -17,6 +17,13 @@ public class Guild {
     @Expose
     private List<UUID> invitedMembers;
 
+    public Guild(String name) {
+        this.name = name;
+
+        this.members = new ArrayList<>();
+        this.invitedMembers = new ArrayList<>();
+    }
+
     public Guild(String name, UUID master) {
         this.name = name;
 

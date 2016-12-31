@@ -1,5 +1,6 @@
 package me.bramhaag.guilds.guild;
 
+import com.google.gson.GsonBuilder;
 import me.bramhaag.guilds.IHandler;
 import me.bramhaag.guilds.Main;
 
@@ -23,7 +24,7 @@ public class GuildHandler implements IHandler {
         guilds = null;
     }
 
-    public void initialize() {
+    private void initialize() {
         Main.getInstance().getDatabaseProvider().getGuilds(((result, exception) -> {
             if(result == null && exception != null) {
                 Main.getInstance().getLogger().log(Level.SEVERE, "An error occurred while loading guilds");
@@ -33,6 +34,7 @@ public class GuildHandler implements IHandler {
 
             if(result != null) {
                 guilds = result;
+                System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(result));
             }
         }));
 

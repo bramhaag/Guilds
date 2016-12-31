@@ -18,7 +18,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 
 
@@ -46,6 +49,7 @@ public class MySql extends DatabaseProvider {
 
         hikari.validate();
 
+        //TODO check for exceptions
         Main.newChain()
             .async(() -> execute(Query.CREATE_TABLE_GUILDS))
             .async(() -> execute(Query.CREATE_TABLE_MEMBERS))
@@ -58,6 +62,7 @@ public class MySql extends DatabaseProvider {
     public void createGuild(Guild guild, Callback<Boolean, Exception> callback) {
         TaskChain<?> chain = Main.newChain();
 
+        //TODO check for exceptions
         chain
             .async(() -> {
                 boolean result = execute(Query.CREATE_GUILD, guild.getName());
@@ -80,6 +85,7 @@ public class MySql extends DatabaseProvider {
     public void removeGuild(Guild guild, Callback<Boolean, Exception> callback) {
         TaskChain<?> chain = Main.newChain();
 
+        //TODO check for exceptions
         chain.
             async(() -> {
                 boolean result = true;
@@ -106,7 +112,55 @@ public class MySql extends DatabaseProvider {
 
     @Override
     public void getGuilds(Callback<HashMap<String, Guild>, Exception> callback) {
+        TaskChain<?> chain = Main.newChain();
 
+        //TODO check for exceptions
+        chain.
+            async(() -> {
+                ResultSet resultSet = executeQuery(Query.GET_GUILDS);
+                if(resultSet == null) {
+                    return;
+                }
+
+                List<String> guildNames = new ArrayList<>();
+                try {
+                    while(resultSet.next()) {
+                        guildNames.add(resultSet.getString("name"));
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                chain.setTaskData("guild_names", guildNames);
+            })
+        .async(() -> {
+            HashMap<String, Guild> guilds = new HashMap<>();
+            List<String> guildNames = chain.getTaskData("guild_names");
+
+            for(String name : guildNames) {
+                ResultSet resultSet = executeQuery(Query.GET_GUILD_MEMBERS);
+
+                if(resultSet == null) {
+                    return;
+                }
+
+                try {
+                    while(resultSet.next()) {
+                        Guild guild = new Guild(name);
+
+                        UUID uuid = UUID.fromString(resultSet.getString("uuid"));
+                        GuildRole role = GuildRole.getRole(resultSet.getInt("role"));
+
+                        guild.addMember(uuid, role);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                chain.setTaskData("guilds", guilds);
+            }
+        })
+        .sync(() -> callback.call(chain.getTaskData("guilds"), null));
     }
 
     @Override
@@ -116,15 +170,17 @@ public class MySql extends DatabaseProvider {
 
     private boolean execute(String query, Object... parameters) {
 
-        Connection connection;
-        PreparedStatement statement;
+        Connection connection = null;
+        PreparedStatement statement = null;
 
         try {
             connection = hikari.getConnection();
             statement = connection.prepareStatement(query);
 
-            for (int i = 0; i < parameters.length; i++) {
-                statement.setObject(i + 1, parameters[i]);
+            if(parameters != null) {
+                for (int i = 0; i < parameters.length; i++) {
+                    statement.setObject(i + 1, parameters[i]);
+                }
             }
 
             statement.execute();
@@ -134,18 +190,23 @@ public class MySql extends DatabaseProvider {
             e.printStackTrace();
             return false;
         }
+        finally {
+            close(connection, statement);
+        }
     }
 
     private ResultSet executeQuery(String query, Object... parameters) {
-        Connection connection;
-        PreparedStatement statement;
+        Connection connection = null;
+        PreparedStatement statement = null;
 
         try {
             connection = hikari.getConnection();
             statement = connection.prepareStatement(query);
 
-            for (int i = 0; i < parameters.length; i++) {
-                statement.setObject(i + 1, parameters[i]);
+            if (parameters != null) {
+                for (int i = 0; i < parameters.length; i++) {
+                    statement.setObject(i + 1, parameters[i]);
+                }
             }
 
             CachedRowSet resultCached = new CachedRowSetImpl();
@@ -155,10 +216,29 @@ public class MySql extends DatabaseProvider {
             resultSet.close();
 
             return resultCached;
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+          close(connection, statement);
         }
+    }
+
+        private void close(Connection connection, PreparedStatement statement) {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
     }
 }

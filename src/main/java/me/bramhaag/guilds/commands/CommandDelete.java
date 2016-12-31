@@ -28,16 +28,6 @@ public class CommandDelete extends CommandBase {
             return;
         }
 
-        //TODO implement this
-        /*if(Main.getInstance().getDatabaseProvider().removeGuild(guild.getName())) {
-            Message.sendMessage(player, Message.COMMAND_DELETE_SUCCESSFUL.replace("{guild}", guild.getName()));
-            return;
-        }
-        else {
-            Message.sendMessage(player, Message.COMMAND_DELETE_ERROR);
-            return;
-        }*/
-
         Main.getInstance().getDatabaseProvider().removeGuild(guild, ((result, exception) -> {
             if(result) {
                 Message.sendMessage(player, Message.COMMAND_DELETE_SUCCESSFUL.replace("{guildname}", args[0]));

@@ -1,23 +1,22 @@
 name:
 # Minimum length of guild names
-  min-length: 1
-# Maximum length of guild names
-  max-length: 64
+    min-length: 1
+#   Maximum length of guild names
+    max-length: 64
 # RegEx (https://en.wikipedia.org/wiki/Regular_expression) used to only allow certain characters (default only allows alphanumeric characters)
-  regex: "^[a-zA-Z0-9]*$"
+    regex: "^[a-zA-Z0-9]*$"
 
 members:
 # Set to -1 to disable
-  max-members: 64
+    max-members: 64
 
 database:
 # Set the type of the database (Either JSON or MySQL)
-  type: JSON
+    type: JSON
 #  Uncomment when using MySQL
-#  credentials:
 #    host: "127.0.0.1"
 #    port: 3306
-#    user: "root"
+#    username: "root"
 #    password: "password"
 #    database: "guilds"
 #    pool-size: 10

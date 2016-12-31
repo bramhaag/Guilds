@@ -1,7 +1,9 @@
 package me.bramhaag.guilds.database.databases.json;
 
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.database.Callback;
 import me.bramhaag.guilds.database.DatabaseProvider;
@@ -19,7 +21,7 @@ public class Json extends DatabaseProvider {
     public void initialize() {
         guildsFile = new File(Main.getInstance().getDataFolder(), "guilds.json");
         gson = new GsonBuilder()
-            .registerTypeAdapter(new HashMap<String, Guild>().getClass(), new GuildMapDeserializer())
+            .registerTypeAdapter(new TypeToken<Map<String, Guild>>() { }.getType(), new GuildMapDeserializer())
             .excludeFieldsWithoutExposeAnnotation()
             .setPrettyPrinting()
         .create();
@@ -66,10 +68,21 @@ public class Json extends DatabaseProvider {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void getGuilds(Callback<HashMap<String, Guild>, Exception> callback) {
         Main.newChain()
-            .asyncFirst(this::getGuilds)
-            .syncLast(guilds -> callback.call(guilds, null))
+            .asyncFirst(() -> {
+                JsonReader reader;
+                try {
+                    reader = new JsonReader(new FileReader(guildsFile));
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                    return null;
+                }
+
+                return gson.fromJson(reader, new TypeToken<Map<String, Guild>>() { }.getType());
+            })
+            .syncLast(guilds -> callback.call((HashMap<String, Guild>)guilds, null))
         .execute();
     }
 
