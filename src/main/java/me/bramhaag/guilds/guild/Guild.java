@@ -2,6 +2,8 @@ package me.bramhaag.guilds.guild;
 
 import com.google.gson.annotations.Expose;
 import me.bramhaag.guilds.Main;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -10,6 +12,9 @@ public class Guild {
 
     @Expose(serialize = false)
     private String name;
+
+    @Expose
+    private String prefix;
 
     @Expose
     private List<GuildMember> members;
@@ -27,6 +32,7 @@ public class Guild {
     public Guild(String name, UUID master) {
         this.name = name;
 
+        this.prefix = name.substring(0, Main.getInstance().getConfig().getInt("prefix.max-length") > name.length() ? name.length() : Main.getInstance().getConfig().getInt("prefix.max-length"));
         this.members = new ArrayList<>();
         this.members.add(new GuildMember(master, GuildRole.MASTER));
 
@@ -35,6 +41,10 @@ public class Guild {
 
     public String getName() {
         return name;
+    }
+
+    public String getPrefix() {
+        return prefix;
     }
 
     public List<GuildMember> getMembers() {
@@ -46,11 +56,16 @@ public class Guild {
     }
 
     public GuildMember getGuildMaster() {
-        return this.members.stream().filter(member -> member.getRole() == GuildRole.MASTER).findFirst().orElse(null);
+        return this.members.stream().filter(member -> GuildRole.MASTER == member.getRole()).findFirst().orElse(null);
     }
 
     public void addMember(UUID uuid, GuildRole role) {
         this.members.add(new GuildMember(uuid, role));
+
+        Player player = Bukkit.getPlayer(uuid);
+        if(player != null && player.isOnline()) {
+            Main.getInstance().getScoreboardHandler().show(player);
+        }
 
         Main.getInstance().getDatabaseProvider().updateGuild(this, (result, exception) -> {
             if(!result) {
@@ -68,6 +83,11 @@ public class Guild {
         if(member == null)
             return;
 
+        Player player = Bukkit.getPlayer(uuid);
+        if(player != null && player.isOnline()) {
+            Main.getInstance().getScoreboardHandler().hide(player);
+        }
+
         if(member == getGuildMaster()) {
             Main.getInstance().getDatabaseProvider().removeGuild(this, (result, exception) -> {
                 if(!result) {
@@ -75,11 +95,16 @@ public class Guild {
                     if(exception != null) {
                         exception.printStackTrace();
                     }
+                    return;
                 }
+
+                Main.getInstance().getScoreboardHandler().update();
             });
+            return;
         }
 
         this.members.remove(member);
+
         Main.getInstance().getDatabaseProvider().updateGuild(this, ((result, exception) -> {
             if(!result) {
                 Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while removing a member with the UUID of '%s' from guild '%s'", uuid, this.name));

@@ -2,13 +2,11 @@ package me.bramhaag.guilds.commands;
 
 import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.commands.base.CommandBase;
-import me.bramhaag.guilds.database.Callback;
 import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.message.Message;
 import org.bukkit.entity.Player;
 
 import java.util.logging.Level;
-import java.util.regex.Pattern;
 
 public class CommandCreate extends CommandBase {
 
@@ -45,6 +43,9 @@ public class CommandCreate extends CommandBase {
         Main.getInstance().getDatabaseProvider().createGuild(new Guild(args[0], player.getUniqueId()), ((result, exception) -> {
             if(result) {
                 Message.sendMessage(player, Message.COMMAND_CREATE_SUCCESSFUL.replace("{guildname}", args[0]));
+
+                Main.getInstance().getScoreboardHandler().update();
+                Main.getInstance().getScoreboardHandler().show(player);
             }
             else {
                 Message.sendMessage(player, Message.COMMAND_CREATE_ERROR_CREATE);

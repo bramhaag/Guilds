@@ -9,6 +9,11 @@ import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.database.databases.json.Json;
 import me.bramhaag.guilds.database.databases.mysql.MySql;
 import me.bramhaag.guilds.guild.GuildHandler;
+import me.bramhaag.guilds.listeners.ChatListener;
+import me.bramhaag.guilds.listeners.JoinListener;
+import me.bramhaag.guilds.scoreboard.GuildScoreboardHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
@@ -19,6 +24,7 @@ public class Main extends JavaPlugin {
 
     private GuildHandler guildHandler;
     private CommandHandler commandHandler;
+    private GuildScoreboardHandler scoreboardHandler;
 
     public static TaskChainFactory taskChainFactory;
 
@@ -52,6 +58,9 @@ public class Main extends JavaPlugin {
         commandHandler = new CommandHandler();
         commandHandler.enable();
 
+        //Enable it after guilds have been loaded
+        scoreboardHandler = new GuildScoreboardHandler();
+
         getCommand("guild").setExecutor(commandHandler);
 
         commandHandler.register(new CommandAccept());
@@ -66,11 +75,16 @@ public class Main extends JavaPlugin {
         commandHandler.register(new CommandLeave());
         commandHandler.register(new CommandPromote());
         commandHandler.register(new CommandRole());
+
+        getServer().getPluginManager().registerEvents(new ChatListener(), this);
+        getServer().getPluginManager().registerEvents(new JoinListener(), this);
     }
 
     @Override
     public void onDisable() {
+        guildHandler.disable();
         commandHandler.disable();
+        scoreboardHandler.disable();
     }
 
     public DatabaseProvider getDatabaseProvider() {
@@ -83,6 +97,10 @@ public class Main extends JavaPlugin {
 
     public CommandHandler getCommandHandler() {
         return commandHandler;
+    }
+
+    public GuildScoreboardHandler getScoreboardHandler() {
+        return scoreboardHandler;
     }
 
     public static <T> TaskChain<T> newChain() {

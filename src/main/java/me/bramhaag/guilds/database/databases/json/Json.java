@@ -12,6 +12,7 @@ import me.bramhaag.guilds.guild.Guild;
 import java.io.*;
 import java.util.*;
 
+//TODO handle exceptions
 public class Json extends DatabaseProvider {
 
     private Gson gson;
@@ -46,7 +47,11 @@ public class Json extends DatabaseProvider {
         Main.newChain()
             .asyncFirst(() -> write(guilds))
             .syncLast((successful) -> callback.call(successful, null))
-        .execute();
+        .execute((exception, task) -> {
+            if(exception != null) {
+                callback.call(false, exception);
+            }
+        });
 
         Main.getInstance().getGuildHandler().addGuild(guild);
     }

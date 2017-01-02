@@ -34,7 +34,7 @@ public class GuildHandler implements IHandler {
 
             if(result != null) {
                 guilds = result;
-                System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(result));
+                Main.getInstance().getScoreboardHandler().enable();
             }
         }));
 

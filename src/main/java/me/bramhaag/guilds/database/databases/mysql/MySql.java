@@ -8,6 +8,7 @@ import me.bramhaag.guilds.database.Callback;
 import me.bramhaag.guilds.database.DatabaseProvider;
 
 import me.bramhaag.guilds.guild.Guild;
+import me.bramhaag.guilds.guild.GuildMember;
 import me.bramhaag.guilds.guild.GuildRole;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -51,7 +52,7 @@ public class MySql extends DatabaseProvider {
             .async(() -> execute(Query.CREATE_TABLE_GUILDS))
             .async(() -> execute(Query.CREATE_TABLE_MEMBERS))
             .async(() -> execute(Query.CREATE_TABLE_INVITED_MEMBERS))
-            .sync(() -> Main.getInstance().getLogger().log(Level.INFO, "Tables 'guilds', 'members' and 'invited_members' created!"))
+            .sync(()  -> Main.getInstance().getLogger().log(Level.INFO, "Tables 'guilds', 'members' and 'invited_members' created!"))
         .execute((exception, task) -> {
             if(exception != null) {
                 Main.getInstance().getLogger().log(Level.SEVERE, "An error occurred while creating MySQL tables!");
@@ -94,8 +95,8 @@ public class MySql extends DatabaseProvider {
     public void getGuilds(Callback<HashMap<String, Guild>, Exception> callback) {
         TaskChain<?> chain = Main.newChain();
 
-        chain.
-            async(() -> {
+        chain
+            .async(() -> {
                 ResultSet resultSet = executeQuery(Query.GET_GUILDS);
                 if(resultSet == null) {
                     return;
@@ -113,40 +114,54 @@ public class MySql extends DatabaseProvider {
 
                 chain.setTaskData("guild_names", guildNames);
             })
-        .async(() -> {
-            HashMap<String, Guild> guilds = new HashMap<>();
-            List<String> guildNames = chain.getTaskData("guild_names");
+            .async(() -> {
+                HashMap<String, Guild> guilds = new HashMap<>();
+                List<String> guildNames = chain.getTaskData("guild_names");
 
-            for(String name : guildNames) {
-                ResultSet resultSet = executeQuery(Query.GET_GUILD_MEMBERS);
+                for(String name : guildNames) {
+                    ResultSet resultSet = executeQuery(Query.GET_GUILD_MEMBERS);
 
-                if(resultSet == null) {
-                    return;
-                }
-
-                try {
-                    while(resultSet.next()) {
-                        Guild guild = new Guild(name);
-
-                        UUID uuid = UUID.fromString(resultSet.getString("uuid"));
-                        GuildRole role = GuildRole.getRole(resultSet.getInt("role"));
-
-                        guild.addMember(uuid, role);
+                    if(resultSet == null) {
+                        return;
                     }
-                }
-                catch (SQLException e) {
-                    throwRunTimeException(e);
-                }
 
-                chain.setTaskData("guilds", guilds);
+                    try {
+                        while(resultSet.next()) {
+                            Guild guild = new Guild(name);
+
+                            UUID uuid = UUID.fromString(resultSet.getString("uuid"));
+                            GuildRole role = GuildRole.getRole(resultSet.getInt("role"));
+
+                            guild.addMember(uuid, role);
+                        }
+                    }
+                    catch (SQLException e) {
+                        throwRunTimeException(e);
+                    }
+
+                    chain.setTaskData("guilds", guilds);
+                }
+            })
+            .sync(() -> callback.call(chain.getTaskData("guilds"), null))
+        .execute((exception, task) -> {
+            if(exception != null) {
+                callback.call(null, exception);
+                exception.printStackTrace();
             }
-        })
-        .sync(() -> callback.call(chain.getTaskData("guilds"), null));
+        });
     }
 
     @Override
     public void updateGuild(Guild guild, Callback<Boolean, Exception> callback) {
-
+        Main.newChain()
+            .async(() -> guild.getMembers().forEach(member -> execute(Query.ADD_MEMBER, member.getUniqueId(), guild.getName(), member.getUniqueId())))
+            .sync(() -> callback.call(true, null))
+        .execute((exception, task) -> {
+            if(exception != null) {
+                callback.call(false, exception);
+                exception.printStackTrace();
+            }
+        });
     }
 
     private void execute(String query, Object... parameters) {

@@ -6,9 +6,9 @@ import me.bramhaag.guilds.guild.Guild;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class GuildMapDeserializer implements JsonDeserializer<Map<String, Guild>> {
+
     @Override
     public Map<String, Guild> deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
@@ -20,14 +20,6 @@ public class GuildMapDeserializer implements JsonDeserializer<Map<String, Guild>
 
             guilds.put(entry.getKey(), context.deserialize(guild, Guild.class));
         });
-
-        for (Map.Entry entry : object.entrySet()) {
-
-            System.out.println("key:" + entry.getKey());
-            System.out.println("value:" + entry.getValue());
-        }
-
-        System.out.println(object);
 
         return guilds;
     }

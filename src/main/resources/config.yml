@@ -1,14 +1,43 @@
+guild:
+#   Enable or disable friendly fire
+    friendly-fire: false
+#   Enable or disable being able to see invisible guild members
+    see-invisible: true
+
 name:
 # Minimum length of guild names
     min-length: 1
-#   Maximum length of guild names
+# Maximum length of guild names
     max-length: 64
 # RegEx (https://en.wikipedia.org/wiki/Regular_expression) used to only allow certain characters (default only allows alphanumeric characters)
     regex: "^[a-zA-Z0-9]*$"
 
+prefix:
+# Minimum length of the guild prefixes
+    min-length: 1
+# Maximum length of the guild prefixes
+    max-length: 16
+# RegEx (https://en.wikipedia.org/wiki/Regular_expression) used to only allow certain characters (default only allows alphanumeric characters)
+    regex: "^[a-zA-Z0-9]*$"
+# Set the format for the prefix
+    format: "&c[{prefix}] "
+
 members:
 # Set to -1 to disable
     max-members: 64
+
+chat:
+# Enable or disable custom chat formatting for players who are in a guild
+    enable: true
+# Custom chat format (only applied when the setting above is set to true)
+#   - "{guild}" is replaced with the guild prefix
+#   - "%s" (First) is replaced with the player's name
+#   - "%s" (Second) is replaced with the player's message
+    format: "{guild} <%s>: %s"
+
+scoreboard:
+# Enable or disable scoreboard below player's name which displays the guild he is in
+    enable: true
 
 database:
 # Set the type of the database (Either JSON or MySQL)
