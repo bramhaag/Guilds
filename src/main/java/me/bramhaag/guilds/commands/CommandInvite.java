@@ -33,7 +33,7 @@ public class CommandInvite extends CommandBase {
 
         guild.inviteMember(invitedPlayer.getUniqueId());
 
-        Message.sendMessage(invitedPlayer, Message.COMMAND_INVITE_MESSAGE);
-        Message.sendMessage(player, Message.COMMAND_INVITE_SUCCESSFUL);
+        Message.sendMessage(invitedPlayer, Message.COMMAND_INVITE_MESSAGE.replace("{player}", player.getName(), "{guild}", guild.getName()));
+        Message.sendMessage(player, Message.COMMAND_INVITE_SUCCESSFUL.replace("{player}", invitedPlayer.getName()));
     }
 }

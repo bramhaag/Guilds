@@ -33,11 +33,11 @@ public class CommandRole extends CommandBase {
              role = GuildRole.valueOf(args[0].toUpperCase());
         }
         catch (IllegalArgumentException ex) {
-            Message.sendMessage(player, Message.COMMAND_ROLE_ERROR_ROLE_NOT_FOUND);
+            Message.sendMessage(player, Message.COMMAND_ERROR_INVALID_ROLE.replace("{input}", args[0]));
             return;
         }
 
         List<GuildMember> members = guild.getMembers().stream().filter(member -> member.getRole() == role).collect(Collectors.toList());
-        members.forEach(member -> Message.sendMessage(player, Message.COMMAND_ROLE_PLAYERS.replace("{name}", Bukkit.getPlayer(member.getUniqueId()).getName(), "{role}", role.toString())));
+        members.forEach(member -> Message.sendMessage(player, Message.COMMAND_ROLE_PLAYERS.replace("{player}", Bukkit.getPlayer(member.getUniqueId()).getName(), "{role}", role.toString())));
     }
 }

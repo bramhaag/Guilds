@@ -4,6 +4,8 @@ import me.bramhaag.guilds.Main;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import java.util.Arrays;
+
 public enum Message {
 
     COMMAND_ERROR_CONSOLE,
@@ -15,17 +17,19 @@ public enum Message {
     COMMAND_ERROR_INVALID_NUMBER,
     COMMAND_ERROR_ALREADY_IN_GUILD,
     COMMAND_ERROR_PLAYER_NOT_FOUND,
+    COMMAND_ERROR_PLAYER_NOT_IN_GUILD,
+    COMMAND_ERROR_INVALID_ROLE,
+    COMMAND_ERROR_GUILD_NOT_FOUND,
 
     COMMAND_HELP_MESSAGE,
     COMMAND_HELP_NEXT_PAGE,
 
-    COMMAND_ROLE_ERROR_ROLE_NOT_FOUND,
     COMMAND_ROLE_PLAYERS,
 
     COMMAND_CREATE_SUCCESSFUL,
-    COMMAND_CREATE_ERROR_CREATE,
-    COMMAND_CREATE_ERROR_REQUIREMENTS,
-    COMMAND_CREATE_ERROR_GUILD_NAME_TAKEN,
+    COMMAND_CREATE_ERROR,
+    COMMAND_CREATE_REQUIREMENTS,
+    COMMAND_CREATE_GUILD_NAME_TAKEN,
 
     COMMAND_DELETE_SUCCESSFUL,
     COMMAND_DELETE_ERROR,
@@ -37,16 +41,11 @@ public enum Message {
     COMMAND_INFO_RANK,
 
     COMMAND_PROMOTE_CANNOT_PROMOTE,
-    COMMAND_PROMOTE_PLAYER_NOT_IN_GUILD,
-    COMMAND_PROMOTE_INVALID_ROLE,
 
-    COMMAND_DEMOTE_PLAYER_NOT_IN_GUILD,
     COMMAND_DEMOTE_CANNOT_DEMOTE,
-    COMMAND_DEMOTE_INVALID_ROLE,
 
     COMMAND_CHAT_MESSAGE,
 
-    COMMAND_ACCEPT_GUILD_NOT_FOUND,
     COMMAND_ACCEPT_NOT_INVITED,
     COMMAND_ACCEPT_GUILD_FULL,
     COMMAND_ACCEPT_SUCCESSFUL,
@@ -63,7 +62,7 @@ public enum Message {
     COMMAND_BOOT_PLAYER_KICKED;
 
     public static void sendMessage(CommandSender sender, Message message) {
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.PREFIX + Main.getInstance().getConfig().getString("messages." + message.name().toLowerCase().replace('_', '-'))));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.PREFIX + Main.getInstance().getConfig().getString(getPath(message))));
     }
 
     public static void sendMessage(CommandSender sender, String message) {
@@ -75,7 +74,7 @@ public enum Message {
             throw new IllegalArgumentException("Amount of keys and values do not match!");
         }
 
-        String message = Main.getInstance().getConfig().getString("messages." + this.name().toLowerCase().replace('_', '-'));
+        String message = Main.getInstance().getConfig().getString(getPath(this));
 
         if(message == null) {
             return null;
@@ -86,5 +85,18 @@ public enum Message {
         }
 
         return message;
+    }
+
+     private static String getPath(Message message) {
+        StringBuilder pathBuilder = new StringBuilder();
+        String[] parts = message.name().toLowerCase().split("_");
+
+        pathBuilder.append(parts[0])
+                .append(".")
+                .append(parts[1])
+                .append(".")
+                .append(String.join("-", Arrays.copyOfRange(parts, 2, parts.length)));
+
+        return "messages." + pathBuilder.toString();
     }
 }

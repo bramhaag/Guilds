@@ -27,7 +27,7 @@ public class CommandCreate extends CommandBase {
         String regex = Main.getInstance().getConfig().getString("name.regex");
 
         if(args[0].length() < minLength || args[0].length() > maxLength || !args[0].matches(regex)) {
-            Message.sendMessage(player, Message.COMMAND_CREATE_ERROR_REQUIREMENTS);
+            Message.sendMessage(player, Message.COMMAND_CREATE_REQUIREMENTS);
             return;
         }
 
@@ -35,20 +35,20 @@ public class CommandCreate extends CommandBase {
 
         for (String name : Main.getInstance().getGuildHandler().getGuilds().keySet()) {
             if(name.equalsIgnoreCase(args[0])) {
-                Message.sendMessage(player, Message.COMMAND_CREATE_ERROR_GUILD_NAME_TAKEN);
+                Message.sendMessage(player, Message.COMMAND_CREATE_GUILD_NAME_TAKEN);
                 return;
             }
         }
 
         Main.getInstance().getDatabaseProvider().createGuild(new Guild(args[0], player.getUniqueId()), ((result, exception) -> {
             if(result) {
-                Message.sendMessage(player, Message.COMMAND_CREATE_SUCCESSFUL.replace("{guildname}", args[0]));
+                Message.sendMessage(player, Message.COMMAND_CREATE_SUCCESSFUL.replace("{guild}", args[0]));
 
                 Main.getInstance().getScoreboardHandler().update();
                 Main.getInstance().getScoreboardHandler().show(player);
             }
             else {
-                Message.sendMessage(player, Message.COMMAND_CREATE_ERROR_CREATE);
+                Message.sendMessage(player, Message.COMMAND_CREATE_ERROR);
 
                 Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while player '%s' was trying to create guild '%s'", player.getName(), args[0]));
                 if(exception != null) {

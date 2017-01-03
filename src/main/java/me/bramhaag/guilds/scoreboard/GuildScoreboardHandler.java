@@ -73,5 +73,7 @@ public class GuildScoreboardHandler implements IHandler {
         if(guild == null) {
             return;
         }
+
+        board.getTeam(guild.getName()).removePlayer(player);
     }
 }

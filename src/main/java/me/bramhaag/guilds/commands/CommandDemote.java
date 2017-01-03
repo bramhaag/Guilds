@@ -36,7 +36,7 @@ public class CommandDemote extends CommandBase {
 
         GuildMember promotedMember = guild.getMember(demotedPlayer.getUniqueId());
         if(promotedMember == null) {
-            Message.sendMessage(player, Message.COMMAND_DEMOTE_PLAYER_NOT_IN_GUILD.replace("{player}", demotedPlayer.getName()));
+            Message.sendMessage(player, Message.COMMAND_ERROR_PLAYER_NOT_IN_GUILD.replace("{player}", demotedPlayer.getName()));
             return;
         }
 
@@ -54,12 +54,12 @@ public class CommandDemote extends CommandBase {
                 role = GuildRole.valueOf(args[1]);
             }
             catch (IllegalArgumentException ex) {
-                Message.sendMessage(player, Message.COMMAND_DEMOTE_INVALID_ROLE);
+                Message.sendMessage(player, Message.COMMAND_ERROR_INVALID_ROLE.replace("{input}", args[1]));
                 return;
             }
 
             if(role.getLevel() < currentLevel) {
-                Message.sendMessage(player, Message.COMMAND_DEMOTE_INVALID_ROLE);
+                Message.sendMessage(player, Message.COMMAND_ERROR_INVALID_ROLE.replace("{input}", args[1]));
                 return;
             }
         }

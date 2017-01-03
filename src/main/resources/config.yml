@@ -50,46 +50,58 @@ database:
 #    database: "guilds"
 #    pool-size: 10
 
-#Note: Current "messages" are temporary and only for testing, one day they will be made better
-#TODO: Categorize these messages and make the messages better
 messages:
-    command-error-console: "&cThis command can only be executed by a player"
-    command-error-args: "&cInvalid arguments, see /guilds help for more information"
-    command-error-permission: "&cYou do not have permission to execute this command"
-    command-error-not-found: "&cInvalid command, see /guilds help for more information"
-    command-error-no-guild: "&cGuild not found!"
-    command-error-not-guildmaster: "&cYou're not the Guild Master"
-    command-error-invalid-number: "Invalid number"
-    command-error-already-in-guild: "You're already in a guild"
-    command-error-player-not-found: "Player not found"
-    command-help-message: "{command} - {description}"
-    command-help-next-page: "do x to go to next page"
-    command-role-error-role-not-found: "Invalid role"
-    command-role-players: ""
-    command-create-successful: "Created guild"
-    command-create-error-create: "Error creating guild"
-    command-delete-successful: "Guild removed"
-    command-delete-error: "Error removing guild"
-    command-info-header: ""
-    command-info-name: ""
-    command-info-master: ""
-    command-info-member-count: ""
-    command-info-rank: ""
-    command-promote-cannot-promote: "Cannot promote"
-    command-promote-player-not-in-guild: "Player not in guild"
-    command-promote-invalid-role: "Invalid role"
-    command-demote-player-not-in-guild: "Player not in guild"
-    command-demote-cannot-demote: "Cannot demote"
-    command-demote-invalid-role: "Invalid role"
-    command-chat-message: ""
-    command-accept-guild-not-found: "Guild not found"
-    command-accept-not-invited: "Not invited"
-    command-accept-successful: "Accepted"
-    command-accept-player-joined: "Accepted"
-    command-invite-message: "Accepted"
-    command-invite-successful: "Accepted"
-    command-leave-successful: "Left guild"
-    command-leave-player-left: "Someone left the guild"
-    command-boot-successful: "Success"
-    command-boot-kicked: "You got kicked"
-    command-boot-player-kicked: "Someone got kicked"
+    command:
+        error:
+            console: "&cThis command can only be executed by a player!"
+            args: "&cInvalid arguments! See /guilds help for more information"
+            permission: "&cYou don't have permission to do that!"
+            not-found: "&cCommand not found! See /guilds help for all commands"
+            no-guild: "&cYou're not in a guild!"
+            not-guildmaster: "&cYou're not the Guild Master of this guild"
+            invalid_number: "&c{input} is not a valid number!"
+            already-in-guild: "&cYou're already in a guild!"
+            player-not-found: "&cPlayer '{player}' does not exist or is not online!"
+            player-not-in-guild: "&cPlayer '{player}' is not in your guild!"
+            invalid-role: "&cRole '{input}' does not exist!"
+            guild-not-found: "&cGuild '{input}' cannot be found!"
+        help:
+            message: "&f/{command} {arguments} &7- &f{description}"
+            next-page: "&7See /guilds help {next-page} for the next page"
+        role:
+            players: "{player} - {role}"
+        create:
+            successful: "&aGuild '{guild}' created successfully!"
+            error: "&cSomething went wrong while creating your guild!"
+            requirements: "&cYour guild's name does not match the requirements! You can only use alphanumeric characters and the length of the name cannot exceed 64"
+            guild-name-taken: "&cThis name is already taken!"
+        delete:
+            successful: "&aDeleted guild successfully!"
+            error: "&cSomething went wrong while deleting your guild!"
+        info:
+            header: "Information for {guild}"
+            name: "Name: {guild} (Prefix: {prefix})"
+            master: "Guild Master: {master}"
+            member_count: "Current amount of members: {members}/64"
+            rank: "Your rank: {rank}"
+        promote:
+            cannot-promote: "&cThis player cannot be promoted any further!"
+        demote:
+            cannot-demote: "&cThis player cannot be demoted any further!"
+        chat:
+            message: "&7&lGuild Chat> &r[{role}] {player}: {message}"
+        accept:
+            not-invited: "&cYou aren't invited for this guild!"
+            guild-full: "&cThis guild is full!"
+            successful: "&aYou joined guild '{guild}' successfully"
+            player-joined: "&aPlayer '{player}' joined your guild!"
+        invite:
+            message: "&a{player} has invited you to the guild '{guild}"
+            successful: "&aYou've successfully invited {player} to your guild!"
+        leave:
+            successful: "&aYou've successfully left your guild!"
+            player-left: "&bPlayer '{player}' left your guild!"
+        boot:
+            successful: "Successfully kicked {player} from your guild!"
+            kicked: "You have been kicked from your guild by {kicker}!"
+            player-kicked: "Player '{player}' has been kicked from the guild by {kicker}!"

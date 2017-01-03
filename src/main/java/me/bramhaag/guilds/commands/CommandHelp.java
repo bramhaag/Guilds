@@ -22,7 +22,7 @@ public class CommandHelp extends CommandBase {
             try {
                 page = Integer.valueOf(args[0]);
             } catch (NumberFormatException ex) {
-                Message.sendMessage(sender, Message.COMMAND_ERROR_INVALID_NUMBER);
+                Message.sendMessage(sender, Message.COMMAND_ERROR_INVALID_NUMBER.replace("{input}", args[0]));
             }
         }
 
@@ -39,6 +39,6 @@ public class CommandHelp extends CommandBase {
             Message.sendMessage(sender, Message.COMMAND_HELP_MESSAGE.replace("{command}", command.getName(), "{arguments}", String.join(" ", command.getArguments()), "{description}", command.getDescription()));
         }
 
-        Message.sendMessage(sender, Message.COMMAND_HELP_NEXT_PAGE);
+        Message.sendMessage(sender, Message.COMMAND_HELP_NEXT_PAGE.replace("{next-page}", String.valueOf((page + 1))));
     }
 }

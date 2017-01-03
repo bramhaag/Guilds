@@ -23,7 +23,7 @@ public class CommandAccept extends CommandBase {
 
         Guild guild = Guild.getGuild(args[0]);
         if(guild == null) {
-            Message.sendMessage(player, Message.COMMAND_ACCEPT_GUILD_NOT_FOUND);
+            Message.sendMessage(player, Message.COMMAND_ERROR_GUILD_NOT_FOUND.replace("{input}", args[0]));
             return;
         }
 
@@ -38,11 +38,6 @@ public class CommandAccept extends CommandBase {
             return;
         }
 
-        guild.addMember(player.getUniqueId(), GuildRole.MEMBER);
-        guild.removeInvitedPlayer(player.getUniqueId());
-
-        Message.sendMessage(player, Message.COMMAND_ACCEPT_SUCCESSFUL);
-
         for(GuildMember member : guild.getMembers()) {
             Player receiver = Bukkit.getPlayer(member.getUniqueId());
             if (receiver == null || !receiver.isOnline()) {
@@ -50,5 +45,10 @@ public class CommandAccept extends CommandBase {
             }
             Message.sendMessage(player, Message.COMMAND_ACCEPT_PLAYER_JOINED.replace("{player}", player.getName()));
         }
+
+        guild.addMember(player.getUniqueId(), GuildRole.MEMBER);
+        guild.removeInvitedPlayer(player.getUniqueId());
+
+        Message.sendMessage(player, Message.COMMAND_ACCEPT_SUCCESSFUL.replace("{guild}", guild.getName()));
     }
 }

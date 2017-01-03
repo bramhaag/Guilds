@@ -29,7 +29,7 @@ public class CommandLeave extends CommandBase {
                 continue;
             }
 
-            Message.sendMessage(player, Message.COMMAND_LEAVE_PLAYER_LEFT.replace("{player}", player.getName()));
+            Message.sendMessage(receiver, Message.COMMAND_LEAVE_PLAYER_LEFT.replace("{player}", player.getName()));
         }
     }
 }

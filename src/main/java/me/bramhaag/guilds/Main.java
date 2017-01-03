@@ -11,6 +11,7 @@ import me.bramhaag.guilds.database.databases.mysql.MySql;
 import me.bramhaag.guilds.guild.GuildHandler;
 import me.bramhaag.guilds.listeners.ChatListener;
 import me.bramhaag.guilds.listeners.JoinListener;
+import me.bramhaag.guilds.message.Message;
 import me.bramhaag.guilds.scoreboard.GuildScoreboardHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ public class Main extends JavaPlugin {
     private CommandHandler commandHandler;
     private GuildScoreboardHandler scoreboardHandler;
 
-    public static TaskChainFactory taskChainFactory;
+    private static TaskChainFactory taskChainFactory;
 
     public static final String PREFIX = "[Guilds] ";
 
