@@ -66,7 +66,7 @@ public enum Message {
     }
 
     public static void sendMessage(CommandSender sender, String message) {
-        sender.sendMessage(Main.PREFIX + message);
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.PREFIX + message));
     }
 
     public String replace(String... strings) {

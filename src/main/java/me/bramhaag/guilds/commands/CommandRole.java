@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 public class CommandRole extends CommandBase {
 
     public CommandRole() {
-        super("role", "View all players with the specified role", "guilds.command.role", true, null, new String[] { "<" + String.join(" | ", Stream.of(GuildRole.values()).map(Enum::name).collect(Collectors.toList())) + ">" }, 1, 1);
+        super("role", "View all players with the specified role", "guilds.command.role", false, new String[] { "rank" }, new String[] { "<" + String.join(" | ", Stream.of(GuildRole.values()).map(Enum::name).collect(Collectors.toList())) + ">" }, 1, 1);
     }
 
     @Override

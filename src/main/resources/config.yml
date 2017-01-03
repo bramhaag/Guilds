@@ -82,7 +82,7 @@ messages:
             header: "Information for {guild}"
             name: "Name: {guild} (Prefix: {prefix})"
             master: "Guild Master: {master}"
-            member_count: "Current amount of members: {members}/64"
+            member-count: "Current amount of members: {members}/64"
             rank: "Your rank: {rank}"
         promote:
             cannot-promote: "&cThis player cannot be promoted any further!"
