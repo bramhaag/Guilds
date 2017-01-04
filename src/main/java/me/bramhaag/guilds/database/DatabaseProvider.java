@@ -2,7 +2,6 @@ package me.bramhaag.guilds.database;
 
 import me.bramhaag.guilds.guild.Guild;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 
 public abstract class DatabaseProvider {

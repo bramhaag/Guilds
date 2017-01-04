@@ -1,6 +1,5 @@
 package me.bramhaag.guilds.guild;
 
-import com.google.gson.GsonBuilder;
 import me.bramhaag.guilds.IHandler;
 import me.bramhaag.guilds.Main;
 

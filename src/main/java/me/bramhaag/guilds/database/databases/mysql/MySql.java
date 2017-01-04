@@ -6,9 +6,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.database.Callback;
 import me.bramhaag.guilds.database.DatabaseProvider;
-
 import me.bramhaag.guilds.guild.Guild;
-import me.bramhaag.guilds.guild.GuildMember;
 import me.bramhaag.guilds.guild.GuildRole;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -17,9 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 

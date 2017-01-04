@@ -1,7 +1,6 @@
 package me.bramhaag.guilds.commands.base;
 
 import me.bramhaag.guilds.IHandler;
-import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.message.Message;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

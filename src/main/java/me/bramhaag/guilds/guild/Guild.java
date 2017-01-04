@@ -6,7 +6,10 @@ import me.bramhaag.guilds.message.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public class Guild {

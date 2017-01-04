@@ -10,7 +10,8 @@ import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.guild.Guild;
 
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 //TODO handle exceptions
 public class Json extends DatabaseProvider {

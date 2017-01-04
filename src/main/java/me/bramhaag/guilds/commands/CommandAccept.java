@@ -3,10 +3,8 @@ package me.bramhaag.guilds.commands;
 import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.commands.base.CommandBase;
 import me.bramhaag.guilds.guild.Guild;
-import me.bramhaag.guilds.guild.GuildMember;
 import me.bramhaag.guilds.guild.GuildRole;
 import me.bramhaag.guilds.message.Message;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class CommandAccept extends CommandBase {
