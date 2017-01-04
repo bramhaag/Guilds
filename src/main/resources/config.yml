@@ -2,21 +2,21 @@
 plugin-prefix: "&a[Guilds]"
 
 name:
-# Minimum length of guild names
+#   Minimum length of guild names
     min-length: 1
-# Maximum length of guild names
+#   Maximum length of guild names
     max-length: 64
-# RegEx (https://en.wikipedia.org/wiki/Regular_expression) used to only allow certain characters (default only allows alphanumeric characters)
+#   RegEx (https://en.wikipedia.org/wiki/Regular_expression) used to only allow certain characters (default only allows alphanumeric characters)
     regex: "^[a-zA-Z0-9]*$"
 
 prefix:
-# Minimum length of the guild prefixes
+#   Minimum length of the guild prefixes
     min-length: 1
-# Maximum length of the guild prefixes
+#   Maximum length of the guild prefixes
     max-length: 8
-# RegEx (https://en.wikipedia.org/wiki/Regular_expression) used to only allow certain characters (default only allows alphanumeric characters)
+#   RegEx (https://en.wikipedia.org/wiki/Regular_expression) used to only allow certain characters (default only allows alphanumeric characters)
     regex: "^[a-zA-Z0-9]*$"
-# Set the format for the prefix
+#   Set the format for the prefix
     format: "&c[{prefix}] "
 
 members:
