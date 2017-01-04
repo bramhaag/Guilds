@@ -31,8 +31,6 @@ public class CommandCreate extends CommandBase {
             return;
         }
 
-        Main.getInstance().getGuildHandler().getGuilds().keySet().forEach(name -> name.equalsIgnoreCase(args[0]));
-
         for (String name : Main.getInstance().getGuildHandler().getGuilds().keySet()) {
             if(name.equalsIgnoreCase(args[0])) {
                 Message.sendMessage(player, Message.COMMAND_CREATE_GUILD_NAME_TAKEN);

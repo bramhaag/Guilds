@@ -84,11 +84,6 @@ public class Guild {
         if(member == null)
             return;
 
-        Player player = Bukkit.getPlayer(uuid);
-        if(player != null && player.isOnline()) {
-            Main.getInstance().getScoreboardHandler().hide(player);
-        }
-
         if(member == getGuildMaster()) {
             Main.getInstance().getDatabaseProvider().removeGuild(this, (result, exception) -> {
                 if(!result) {
@@ -98,6 +93,11 @@ public class Guild {
                     }
                     return;
                 }
+
+                HashMap<String, Guild> guilds = Main.getInstance().getGuildHandler().getGuilds();
+                guilds.remove(this.name);
+
+                Main.getInstance().getGuildHandler().setGuilds(guilds);
 
                 Main.getInstance().getScoreboardHandler().update();
             });
@@ -152,6 +152,17 @@ public class Guild {
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
+    }
+
+    public void updatePrefix(String prefix) {
+        Main.getInstance().getDatabaseProvider().updateGuild(this, ((result, exception) -> {
+            if(!result) {
+                Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while updating prefix to '%s' for guild '%s'", prefix, this.name));
+                if(exception != null) {
+                    exception.printStackTrace();
+                }
+            }
+        }));
     }
 
     public GuildMember getMember(UUID uuid) {
