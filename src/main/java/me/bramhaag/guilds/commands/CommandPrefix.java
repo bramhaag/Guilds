@@ -31,8 +31,7 @@ public class CommandPrefix extends CommandBase {
             return;
         }
 
-        //TODO update guild
         Message.sendMessage(player, Message.COMMAND_PREFIX_SUCCESSFUL);
-        guild.setPrefix(args[0]);
+        guild.updatePrefix(args[0]);
     }
 }

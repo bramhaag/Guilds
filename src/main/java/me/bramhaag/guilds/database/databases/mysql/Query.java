@@ -18,12 +18,14 @@ class Query {
     static final String CREATE_GUILD                 = "INSERT INTO guilds (name, prefix) VALUES(?, ?)";
     static final String REMOVE_GUILD                 = "DELETE FROM guilds WHERE name=?";
 
+    static final String UPDATE_PREFIX                = "UPDATE guilds (prefix) VALUES(?) WHERE name=?";
+
     static final String ADD_MEMBER                   = "INSERT INTO guild_members (uuid, guild, role) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE guild=VALUES(guild), role=VALUES(role)";
     static final String REMOVE_MEMBER                = "DELETE FROM guild_members WHERE uuid=?";
 
     static final String ADD_INVITED_MEMBER           = "INSERT INTO invited_members (uuid, guild) VALUES(?, ?)";
     static final String REMOVE_INVITED_MEMBER        = "DELETE FROM invited_members WHERE uuid=?";
 
-    static final String GET_GUILDS                   = "SELECT * FROM guilds";
+    static final String GET_GUILDS                   = "SELECT name, prefix FROM guilds";
     static final String GET_GUILD_MEMBERS            = "SELECT uuid, role FROM guild_members WHERE guild=?";
 }

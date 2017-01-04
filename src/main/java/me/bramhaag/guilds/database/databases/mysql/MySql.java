@@ -31,7 +31,6 @@ public class MySql extends DatabaseProvider {
     public void initialize() {
         ConfigurationSection databaseSection = Main.getInstance().getConfig().getConfigurationSection("database");
         if(databaseSection == null) {
-            //TODO probably should disable the plugin
             throw new IllegalStateException("MySQL database configured incorrectly, cannot continue properly");
         }
 
@@ -75,12 +74,14 @@ public class MySql extends DatabaseProvider {
                 callback.call(false, exception);
             }
         });
+
+        Main.getInstance().getGuildHandler().addGuild(guild);
     }
 
     @Override
     public void removeGuild(Guild guild, Callback<Boolean, Exception> callback) {
         Main.newChain()
-            .async(() -> guild.getMembers().forEach(member -> execute(Query.REMOVE_MEMBER, member.getUniqueId())))
+            .async(() -> guild.getMembers().forEach(member -> execute(Query.REMOVE_MEMBER, member.getUniqueId().toString())))
             .async(() -> execute(Query.REMOVE_GUILD, guild.getName()))
             .sync(() -> callback.call(true, null))
         .execute((exception, task) -> {
@@ -119,7 +120,7 @@ public class MySql extends DatabaseProvider {
                 HashMap<String, String> guildData = chain.getTaskData("guild_data");
 
                 for(String name : guildData.keySet()) {
-                    ResultSet resultSet = executeQuery(Query.GET_GUILD_MEMBERS);
+                    ResultSet resultSet = executeQuery(Query.GET_GUILD_MEMBERS, name);
 
                     if(resultSet == null) {
                         return;
@@ -134,6 +135,8 @@ public class MySql extends DatabaseProvider {
                             GuildRole role = GuildRole.getRole(resultSet.getInt("role"));
 
                             guild.addMember(uuid, role);
+
+                            guilds.put(name, guild);
                         }
                     }
                     catch (SQLException e) {
@@ -155,7 +158,24 @@ public class MySql extends DatabaseProvider {
     @Override
     public void updateGuild(Guild guild, Callback<Boolean, Exception> callback) {
         Main.newChain()
-            .async(() -> guild.getMembers().forEach(member -> execute(Query.ADD_MEMBER, member.getUniqueId(), guild.getName(), member.getUniqueId())))
+            .async(() -> {
+                    ResultSet resultSet = executeQuery(Query.GET_GUILD_MEMBERS, guild.getName());
+
+                    if(resultSet == null) {
+                        return;
+                    }
+
+                    try {
+                        while(resultSet.next()) {
+                            execute(Query.REMOVE_MEMBER, UUID.fromString(resultSet.getString("uuid")));
+                        }
+                    }
+                    catch (SQLException e) {
+                        throwRunTimeException(e);
+                    }
+
+                guild.getMembers().forEach(member -> execute(Query.ADD_MEMBER, member.getUniqueId().toString(), guild.getName(), member.getRole().getLevel()));
+            })
             .sync(() -> callback.call(true, null))
         .execute((exception, task) -> {
             if(exception != null) {
@@ -222,6 +242,7 @@ public class MySql extends DatabaseProvider {
         return null;
     }
 
+    @SuppressWarnings("Duplicates")
     private void close(Connection connection, PreparedStatement statement) {
         if (connection != null) {
             try {
@@ -243,9 +264,10 @@ public class MySql extends DatabaseProvider {
     }
 
     private void throwRunTimeException(Exception e) {
-        RuntimeException exception = new RuntimeException();
-        exception.setStackTrace(e.getStackTrace());
+        e.printStackTrace();
 
+        RuntimeException exception = new RuntimeException();
+        exception.setStackTrace(new StackTraceElement[] {});
         throw exception;
     }
 }
