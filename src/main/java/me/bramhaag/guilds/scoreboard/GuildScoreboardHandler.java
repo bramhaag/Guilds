@@ -31,8 +31,8 @@ public class GuildScoreboardHandler implements IHandler {
 
             team.setPrefix(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getConfig().getString("prefix.format").replace("{prefix}", guild.getPrefix())));
 
-            team.setAllowFriendlyFire(Main.getInstance().getConfig().getBoolean("guild.friendly-fire"));
-            team.setCanSeeFriendlyInvisibles(Main.getInstance().getConfig().getBoolean("guild.see-invisible"));
+            team.setAllowFriendlyFire(Main.getInstance().getConfig().getBoolean("scoreboard.friendly-fire"));
+            team.setCanSeeFriendlyInvisibles(Main.getInstance().getConfig().getBoolean("scoreboard.see-invisible"));
         }
 
         for(Player player : Bukkit.getOnlinePlayers()) {
@@ -42,6 +42,7 @@ public class GuildScoreboardHandler implements IHandler {
                 return;
             }
 
+            //noinspection deprecation
             board.getTeam(guild.getName()).addPlayer(player);
         }
     }
@@ -58,6 +59,7 @@ public class GuildScoreboardHandler implements IHandler {
             return;
         }
 
+        //noinspection deprecation
         board.getTeam(guild.getName()).addPlayer(player);
         player.setScoreboard(board);
     }
@@ -67,13 +69,13 @@ public class GuildScoreboardHandler implements IHandler {
             return;
         }
 
-        player.setScoreboard(manager.getNewScoreboard());
         Guild guild = Guild.getGuild(player.getUniqueId());
 
         if(guild == null) {
             return;
         }
 
+        //noinspection deprecation
         board.getTeam(guild.getName()).removePlayer(player);
     }
 }

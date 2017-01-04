@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 public class CommandInvite extends CommandBase {
 
     public CommandInvite() {
-        super("invite", "Invite a player to your guild", "guilds.comamnd.invite", false, null, new String[] { "<player>" }, 1, 1);
+        super("invite", "Invite a player to your guild", "guilds.command.invite", false, null, new String[] { "<player>" }, 1, 1);
     }
 
     public void execute(Player player, String[] args) {

@@ -4,6 +4,7 @@ class Query {
 
     static final String CREATE_TABLE_GUILDS          = "CREATE TABLE IF NOT EXISTS guilds (" +
                                                        "name VARCHAR(255) NOT NULL, " +
+                                                       "prefix VARCHAR(255) NOT NULL," +
                                                        "PRIMARY KEY (name))";
     static final String CREATE_TABLE_MEMBERS         = "CREATE TABLE IF NOT EXISTS guild_members ( " +
                                                        "uuid VARCHAR(36) NOT NULL, " +
@@ -14,7 +15,7 @@ class Query {
                                                        "uuid VARCHAR(36) NOT NULL, " +
                                                        "guild VARCHAR(255) NOT NULL)";
 
-    static final String CREATE_GUILD                 = "INSERT INTO guilds (name) VALUES(?)";
+    static final String CREATE_GUILD                 = "INSERT INTO guilds (name, prefix) VALUES(?, ?)";
     static final String REMOVE_GUILD                 = "DELETE FROM guilds WHERE name=?";
 
     static final String ADD_MEMBER                   = "INSERT INTO guild_members (uuid, guild, role) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE guild=VALUES(guild), role=VALUES(role)";

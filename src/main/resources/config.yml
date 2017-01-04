@@ -1,8 +1,5 @@
-guild:
-#   Enable or disable friendly fire
-    friendly-fire: false
-#   Enable or disable being able to see invisible guild members
-    see-invisible: true
+#The prefix of all messages send by this plugin to a player
+plugin-prefix: "&a[Guilds]"
 
 name:
 # Minimum length of guild names
@@ -16,7 +13,7 @@ prefix:
 # Minimum length of the guild prefixes
     min-length: 1
 # Maximum length of the guild prefixes
-    max-length: 16
+    max-length: 8
 # RegEx (https://en.wikipedia.org/wiki/Regular_expression) used to only allow certain characters (default only allows alphanumeric characters)
     regex: "^[a-zA-Z0-9]*$"
 # Set the format for the prefix
@@ -36,8 +33,12 @@ chat:
     format: "{guild} <%s>: %s"
 
 scoreboard:
-# Enable or disable scoreboard below player's name which displays the guild he is in
+#   Enable or disable prefix before player's nametag which displays the player's guild
     enable: true
+#   Enable or disable friendly fire
+    friendly-fire: false
+#   Enable or disable being able to see invisible guild members
+    see-invisible: true
 
 database:
 # Set the type of the database (Either JSON or MySQL)
@@ -85,8 +86,12 @@ messages:
             member-count: "Current amount of members: {members}/64"
             rank: "Your rank: {rank}"
         promote:
+            promoted: "&aYou've been promoted from {old-rank} to {new-rank}!"
+            successful: "&aYou've successfully promoted {player} from {old-rank} to {new-rank}!"
             cannot-promote: "&cThis player cannot be promoted any further!"
         demote:
+            promoted: "&cYou've been demoted from {old-rank} to {new-rank}!"
+            successful: "&aYou've successfully demoted {player} from {old-rank} to {new-rank}!"
             cannot-demote: "&cThis player cannot be demoted any further!"
         chat:
             message: "&7&lGuild Chat> &r[{role}] {player}: {message}"
@@ -96,12 +101,18 @@ messages:
             successful: "&aYou joined guild '{guild}' successfully"
             player-joined: "&aPlayer '{player}' joined your guild!"
         invite:
-            message: "&a{player} has invited you to the guild '{guild}"
+            message: "&a{player} has invited you to his/her guild, '{guild}'"
             successful: "&aYou've successfully invited {player} to your guild!"
         leave:
             successful: "&aYou've successfully left your guild!"
-            player-left: "&bPlayer '{player}' left your guild!"
+            player-left: "&cPlayer '{player}' left your guild!"
         boot:
-            successful: "Successfully kicked {player} from your guild!"
-            kicked: "You have been kicked from your guild by {kicker}!"
-            player-kicked: "Player '{player}' has been kicked from the guild by {kicker}!"
+            successful: "&aSuccessfully kicked {player} from your guild!"
+            kicked: "&cYou have been kicked from your guild by {kicker}!"
+            player-kicked: "&cPlayer '{player}' has been kicked from the guild by {kicker}!"
+        prefix:
+            successful: "&aGuild's prefix changed successfully!"
+            requirements: "&cYour guild's prefix does not match the requirements! You can only use alphanumeric characters and the length of the prefix cannot exceed 8"
+    event:
+        join:
+            pending-invites: "&aYou have {number} pending invite(s) from the guild(s): &e{guilds}"

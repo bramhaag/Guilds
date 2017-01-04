@@ -16,7 +16,7 @@ public class CommandHelp extends CommandBase {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
-        int page = 0;
+        int page = 1;
 
         if(args.length > 0) {
             try {
@@ -28,7 +28,7 @@ public class CommandHelp extends CommandBase {
 
         for(int i = 0; i < MAX_PAGE_SIZE; i++) {
 
-            int index = (page * 6) + i;
+            int index = ((page - 1) * 6) + i;
             if(index > Main.getInstance().getCommandHandler().getCommands().size() - 1) {
                 //Fail silently
                 break;

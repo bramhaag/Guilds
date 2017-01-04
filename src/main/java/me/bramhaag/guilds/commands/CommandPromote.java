@@ -68,6 +68,8 @@ public class CommandPromote extends CommandBase {
             role = GuildRole.getRole(currentLevel - 1);
         }
 
+        Message.sendMessage(promotedPlayer, Message.COMMAND_PROMOTE_PROMOTED.replace("{old-role}", promotedMember.getRole().name(), "{new-role}", role.name()));
+        Message.sendMessage(player, Message.COMMAND_PROMOTE_SUCCESSFUL.replace("{player}", promotedPlayer.getName(), "{old-role}", promotedMember.getRole().name(), "{new-role}", role.name()));
         promotedMember.setRole(role);
     }
 }

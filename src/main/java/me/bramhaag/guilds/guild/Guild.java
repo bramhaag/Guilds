@@ -2,6 +2,7 @@ package me.bramhaag.guilds.guild;
 
 import com.google.gson.annotations.Expose;
 import me.bramhaag.guilds.Main;
+import me.bramhaag.guilds.message.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -137,6 +138,20 @@ public class Guild {
                 }
             }
         }));
+    }
+
+    public void sendMessage(String message) {
+        for(GuildMember member : this.members) {
+            Player receiver = Bukkit.getPlayer(member.getUniqueId());
+            if (receiver == null || !receiver.isOnline()) {
+                continue;
+            }
+            Message.sendMessage(receiver, message);
+        }
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 
     public GuildMember getMember(UUID uuid) {

@@ -38,13 +38,7 @@ public class CommandAccept extends CommandBase {
             return;
         }
 
-        for(GuildMember member : guild.getMembers()) {
-            Player receiver = Bukkit.getPlayer(member.getUniqueId());
-            if (receiver == null || !receiver.isOnline()) {
-                continue;
-            }
-            Message.sendMessage(player, Message.COMMAND_ACCEPT_PLAYER_JOINED.replace("{player}", player.getName()));
-        }
+        guild.sendMessage(Message.COMMAND_ACCEPT_PLAYER_JOINED.replace("{player}", player.getName()));
 
         guild.addMember(player.getUniqueId(), GuildRole.MEMBER);
         guild.removeInvitedPlayer(player.getUniqueId());

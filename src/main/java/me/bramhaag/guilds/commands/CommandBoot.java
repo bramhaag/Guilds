@@ -37,13 +37,6 @@ public class CommandBoot extends CommandBase {
         Message.sendMessage(kickedPlayer, Message.COMMAND_BOOT_KICKED.replace("{kicker}", player.getName()));
         Message.sendMessage(player, Message.COMMAND_BOOT_SUCCESSFUL.replace("{player}", kickedPlayer.getName()));
 
-        for(GuildMember member : guild.getMembers()) {
-            Player receiver = Bukkit.getPlayer(member.getUniqueId());
-            if (receiver == null || !receiver.isOnline()) {
-                continue;
-            }
-
-            Message.sendMessage(receiver, Message.COMMAND_BOOT_PLAYER_KICKED.replace("{player}", kickedPlayer.getName(), "{kicker}", player.getName()));
-        }
+        guild.sendMessage(Message.COMMAND_BOOT_PLAYER_KICKED.replace("{player}", kickedPlayer.getName(), "{kicker}", player.getName()));
     }
 }

@@ -60,7 +60,7 @@ public class CommandHandler implements CommandExecutor, IHandler {
 
             args = Arrays.copyOfRange(args, 1, args.length);
 
-            if(command.getMinimumArguments() != -1 && command.getMinimumArguments() < args.length || command.getMaximumArguments() != -1 && command.getMaximumArguments() > args.length) {
+            if((command.getMinimumArguments() != -1 && command.getMinimumArguments() > args.length) || (command.getMaximumArguments() != -1 && command.getMaximumArguments() < args.length)) {
                 Message.sendMessage(sender, Message.COMMAND_ERROR_ARGS);
                 return true;
             }
@@ -79,12 +79,11 @@ public class CommandHandler implements CommandExecutor, IHandler {
         return true;
     }
 
-    public List<CommandBase> getCommands() {
-        return commands;
+    private CommandBase getCommand(String name) {
+        return commands.stream().filter(command -> command.getName() != null && command.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
-    public CommandBase getCommand(String name) {
-        return commands.stream().filter(command -> command.getName() != null && command.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
-
+    public List<CommandBase> getCommands() {
+        return commands;
     }
 }

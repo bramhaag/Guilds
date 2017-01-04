@@ -64,7 +64,7 @@ public class MySql extends DatabaseProvider {
     @Override
     public void createGuild(Guild guild, Callback<Boolean, Exception> callback) {
         Main.newChain()
-            .async(() -> execute(Query.CREATE_GUILD, guild.getName()))
+            .async(() -> execute(Query.CREATE_GUILD, guild.getName(), guild.getPrefix()))
             .async(() -> execute(Query.ADD_MEMBER, guild.getGuildMaster().getUniqueId().toString(), guild.getName(), GuildRole.MASTER.getLevel()))
             .sync(() -> callback.call(true, null))
         .execute((exception, task) -> {
@@ -102,23 +102,23 @@ public class MySql extends DatabaseProvider {
                     return;
                 }
 
-                List<String> guildNames = new ArrayList<>();
+                HashMap<String, String> guildData = new HashMap<>();
                 try {
                     while(resultSet.next()) {
-                        guildNames.add(resultSet.getString("name"));
+                        guildData.put(resultSet.getString("name"), resultSet.getString("prefix"));
                     }
                 }
                 catch (SQLException e) {
                     throwRunTimeException(e);
                 }
 
-                chain.setTaskData("guild_names", guildNames);
+                chain.setTaskData("guild_data", guildData);
             })
             .async(() -> {
                 HashMap<String, Guild> guilds = new HashMap<>();
-                List<String> guildNames = chain.getTaskData("guild_names");
+                HashMap<String, String> guildData = chain.getTaskData("guild_data");
 
-                for(String name : guildNames) {
+                for(String name : guildData.keySet()) {
                     ResultSet resultSet = executeQuery(Query.GET_GUILD_MEMBERS);
 
                     if(resultSet == null) {
@@ -128,6 +128,7 @@ public class MySql extends DatabaseProvider {
                     try {
                         while(resultSet.next()) {
                             Guild guild = new Guild(name);
+                            guild.setPrefix(guildData.get(name));
 
                             UUID uuid = UUID.fromString(resultSet.getString("uuid"));
                             GuildRole role = GuildRole.getRole(resultSet.getInt("role"));

@@ -43,7 +43,7 @@
     </dependencies>
 
     <build>
-        <!--<directory>${dir}</directory>-->
+        <directory>${dir}</directory>
 
         <resources>
             <resource>

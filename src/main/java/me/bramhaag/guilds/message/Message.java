@@ -40,8 +40,12 @@ public enum Message {
     COMMAND_INFO_MEMBER_COUNT,
     COMMAND_INFO_RANK,
 
+    COMMAND_PROMOTE_PROMOTED,
+    COMMAND_PROMOTE_SUCCESSFUL,
     COMMAND_PROMOTE_CANNOT_PROMOTE,
 
+    COMMAND_DEMOTE_DEMOTED,
+    COMMAND_DEMOTE_SUCCESSFUL,
     COMMAND_DEMOTE_CANNOT_DEMOTE,
 
     COMMAND_CHAT_MESSAGE,
@@ -59,7 +63,12 @@ public enum Message {
 
     COMMAND_BOOT_SUCCESSFUL,
     COMMAND_BOOT_KICKED,
-    COMMAND_BOOT_PLAYER_KICKED;
+    COMMAND_BOOT_PLAYER_KICKED,
+
+    COMMAND_PREFIX_REQUIREMENTS,
+    COMMAND_PREFIX_SUCCESSFUL,
+
+    EVENT_JOIN_PENDING_INVITES;
 
     public static void sendMessage(CommandSender sender, Message message) {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.PREFIX + Main.getInstance().getConfig().getString(getPath(message))));

@@ -22,13 +22,6 @@ public class CommandChat extends CommandBase {
         }
 
         String message = String.join(" ", args);
-        for(GuildMember member : guild.getMembers()) {
-            Player receiver = Bukkit.getPlayer(member.getUniqueId());
-            if(receiver == null || !receiver.isOnline()) {
-                continue;
-            }
-
-            Message.sendMessage(receiver, Message.COMMAND_CHAT_MESSAGE.replace("{role}", guild.getMember(player.getUniqueId()).getRole().name(), "{player}", player.getName(), "{message}", message));
-        }
+        guild.sendMessage(Message.COMMAND_CHAT_MESSAGE.replace("{role}", guild.getMember(player.getUniqueId()).getRole().name(), "{player}", player.getName(), "{message}", message));
     }
 }

@@ -14,6 +14,7 @@ import me.bramhaag.guilds.listeners.JoinListener;
 import me.bramhaag.guilds.message.Message;
 import me.bramhaag.guilds.scoreboard.GuildScoreboardHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,11 +30,12 @@ public class Main extends JavaPlugin {
 
     private static TaskChainFactory taskChainFactory;
 
-    public static final String PREFIX = "[Guilds] ";
+    public static String PREFIX;
 
     @Override
     public void onEnable() {
         this.saveDefaultConfig();
+        PREFIX = ChatColor.translateAlternateColorCodes('&', getConfig().getString("plugin-prefix")) + ChatColor.RESET + " ";
 
         instance = this;
 
@@ -59,23 +61,30 @@ public class Main extends JavaPlugin {
         commandHandler = new CommandHandler();
         commandHandler.enable();
 
-        //Enable it after guilds have been loaded
+        //scoreboardHandler is enabled after the guilds are loaded
         scoreboardHandler = new GuildScoreboardHandler();
 
         getCommand("guild").setExecutor(commandHandler);
 
-        commandHandler.register(new CommandAccept());
-        commandHandler.register(new CommandBoot());
-        commandHandler.register(new CommandChat());
         commandHandler.register(new CommandCreate());
         commandHandler.register(new CommandDelete());
-        commandHandler.register(new CommandHelp());
-        commandHandler.register(new CommandDemote());
-        commandHandler.register(new CommandInfo());
+
         commandHandler.register(new CommandInvite());
+        commandHandler.register(new CommandAccept());
         commandHandler.register(new CommandLeave());
-        commandHandler.register(new CommandPromote());
+
+        commandHandler.register(new CommandChat());
+
+        commandHandler.register(new CommandInfo());
+
         commandHandler.register(new CommandRole());
+        commandHandler.register(new CommandPromote());
+        commandHandler.register(new CommandDemote());
+
+        commandHandler.register(new CommandPrefix());
+        commandHandler.register(new CommandBoot());
+
+        commandHandler.register(new CommandHelp());
 
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
