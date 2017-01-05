@@ -48,6 +48,7 @@ database:
 #    port: 3306
 #    username: "root"
 #    password: "password"
+##   Note: Database needs to be created manually
 #    database: "guilds"
 #    pool-size: 10
 
