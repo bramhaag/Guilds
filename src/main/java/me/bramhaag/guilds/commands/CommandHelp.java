@@ -30,7 +30,10 @@ public class CommandHelp extends CommandBase {
 
             int index = ((page - 1) * 6) + i;
             if(index > Main.getInstance().getCommandHandler().getCommands().size() - 1) {
-                //Fail silently
+                if(i == 0) {
+                    Message.sendMessage(sender, Message.COMMAND_HELP_INVALID_PAGE);
+                }
+
                 break;
             }
 

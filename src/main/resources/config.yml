@@ -69,6 +69,7 @@ messages:
         help:
             message: "&f/{command} {arguments} &7- &f{description}"
             next-page: "&7See /guilds help {next-page} for the next page"
+            invalid-page: "&cPage not found!"
         role:
             players: "{player} - {role}"
         create:
