@@ -158,6 +158,8 @@ public class Guild {
     }
 
     public void updatePrefix(String prefix) {
+        setPrefix(prefix);
+
         Main.getInstance().getDatabaseProvider().updateGuild(this, ((result, exception) -> {
             if(!result) {
                 Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while updating prefix to '%s' for guild '%s'", prefix, this.name));
