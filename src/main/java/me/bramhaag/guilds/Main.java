@@ -1,5 +1,6 @@
 package me.bramhaag.guilds;
 
+import be.maximvdw.placeholderapi.PlaceholderAPI;
 import co.aikar.taskchain.BukkitTaskChainFactory;
 import co.aikar.taskchain.TaskChain;
 import co.aikar.taskchain.TaskChainFactory;
@@ -8,10 +9,12 @@ import me.bramhaag.guilds.commands.base.CommandHandler;
 import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.database.databases.json.Json;
 import me.bramhaag.guilds.database.databases.mysql.MySql;
+import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.guild.GuildHandler;
 import me.bramhaag.guilds.listeners.ChatListener;
 import me.bramhaag.guilds.listeners.JoinListener;
 import me.bramhaag.guilds.scoreboard.GuildScoreboardHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -48,6 +51,44 @@ public class Main extends JavaPlugin {
 
         //scoreboardHandler is enabled after the guilds are loaded
         scoreboardHandler = new GuildScoreboardHandler();
+
+        if (Bukkit.getPluginManager().isPluginEnabled("MVdWPlaceholderAPI")) {
+            PlaceholderAPI.registerPlaceholder(this, "guild", event -> {
+                Guild guild = Guild.getGuild(event.getPlayer().getUniqueId());
+                if (guild == null) {
+                    return "N/A";
+                }
+
+                return guild.getName();
+            });
+
+            PlaceholderAPI.registerPlaceholder(this, "guild-prefix", event -> {
+                Guild guild = Guild.getGuild(event.getPlayer().getUniqueId());
+                if (guild == null) {
+                    return "N/A";
+                }
+
+                return guild.getPrefix();
+            });
+
+            PlaceholderAPI.registerPlaceholder(this, "guild-master", event -> {
+                Guild guild = Guild.getGuild(event.getPlayer().getUniqueId());
+                if (guild == null) {
+                    return "N/A";
+                }
+
+                return Bukkit.getPlayer(guild.getGuildMaster().getUniqueId()).getName();
+            });
+
+            PlaceholderAPI.registerPlaceholder(this, "member-count", event -> {
+                Guild guild = Guild.getGuild(event.getPlayer().getUniqueId());
+                if (guild == null) {
+                    return "N/A";
+                }
+
+                return String.valueOf(guild.getMembers().size());
+            });
+        }
 
         getCommand("guild").setExecutor(commandHandler);
 

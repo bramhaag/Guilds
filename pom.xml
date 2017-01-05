@@ -13,6 +13,12 @@
             <id>aikar</id>
             <url>http://ci.emc.gs/nexus/content/groups/aikar/</url>
         </repository>
+
+        <repository>
+            <id>mvdw-software</id>
+            <name>MVdW Public Repositories</name>
+            <url>http://repo.mvdw-software.be/content/groups/public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -20,6 +26,13 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
             <version>1.10-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>be.maximvdw</groupId>
+            <artifactId>MVdWPlaceholderAPI</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
