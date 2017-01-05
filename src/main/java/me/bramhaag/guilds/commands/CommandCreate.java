@@ -4,6 +4,7 @@ import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.commands.base.CommandBase;
 import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.message.Message;
+import me.bramhaag.guilds.util.ConfirmAction;
 import org.bukkit.entity.Player;
 
 import java.util.logging.Level;
@@ -38,21 +39,36 @@ public class CommandCreate extends CommandBase {
             }
         }
 
-        Main.getInstance().getDatabaseProvider().createGuild(new Guild(args[0], player.getUniqueId()), ((result, exception) -> {
-            if(result) {
-                Message.sendMessage(player, Message.COMMAND_CREATE_SUCCESSFUL.replace("{guild}", args[0]));
+        Message.sendMessage(player, Message.COMMAND_CREATE_WARNING);
 
-                Main.getInstance().getScoreboardHandler().update();
-                Main.getInstance().getScoreboardHandler().show(player);
-            }
-            else {
-                Message.sendMessage(player, Message.COMMAND_CREATE_ERROR);
+        Main.getInstance().getCommandHandler().addAction(player, new ConfirmAction() {
+            @Override
+            public void accept() {
+                Main.getInstance().getDatabaseProvider().createGuild(new Guild(args[0], player.getUniqueId()), ((result, exception) -> {
+                    if(result) {
+                        Message.sendMessage(player, Message.COMMAND_CREATE_SUCCESSFUL.replace("{guild}", args[0]));
 
-                Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while player '%s' was trying to create guild '%s'", player.getName(), args[0]));
-                if(exception != null) {
-                    exception.printStackTrace();
-                }
+                        Main.getInstance().getScoreboardHandler().update();
+                        Main.getInstance().getScoreboardHandler().show(player);
+                    }
+                    else {
+                        Message.sendMessage(player, Message.COMMAND_CREATE_ERROR);
+
+                        Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while player '%s' was trying to create guild '%s'", player.getName(), args[0]));
+                        if(exception != null) {
+                            exception.printStackTrace();
+                        }
+                    }
+                }));
+
+                Main.getInstance().getCommandHandler().removeAction(player);
             }
-        }));
+
+            @Override
+            public void decline() {
+                Message.sendMessage(player, Message.COMMAND_CREATE_CANCELLED);
+                Main.getInstance().getCommandHandler().removeAction(player);
+            }
+        });
     }
 }

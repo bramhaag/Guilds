@@ -10,8 +10,8 @@ commands:
     description: See the Guild commands
 
 permissions:
-  guilds.*:
-    description: All permissions for the Guilds plugin
+  guilds.command.*:
+    description: All commands for the Guilds plugin
     children:
       guilds.command.accept: true
       guilds.command.boot: true
@@ -26,4 +26,6 @@ permissions:
       guilds.command.prefix: true
       guilds.command.promote: true
       guilds.command.role: true
+      guilds.command.reload: true
+      guilds.command.confirm: true
     default: true

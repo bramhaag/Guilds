@@ -110,6 +110,9 @@ public class Main extends JavaPlugin {
         commandHandler.register(new CommandPrefix());
         commandHandler.register(new CommandBoot());
 
+        commandHandler.register(new CommandAccept());
+        commandHandler.register(new CommandCancel());
+
         commandHandler.register(new CommandReload());
         commandHandler.register(new CommandHelp());
 

@@ -75,11 +75,15 @@ messages:
             players: "{player} - {role}"
         create:
             successful: "&aGuild '{guild}' created successfully!"
+            cancelled: "&cGuild creation cancelled!"
+            warning: "&cType /guilds confirm to create your guild, type /guilds cancel to cancel."
             error: "&cSomething went wrong while creating your guild!"
             requirements: "&cYour guild's name does not match the requirements! You can only use alphanumeric characters and the length of the name cannot exceed 64"
             guild-name-taken: "&cThis name is already taken!"
         delete:
             successful: "&aDeleted '{guild}' successfully!"
+            cancelled: "&cGuild deletion cancelled!"
+            warning: "&cType /guilds confirm to delete your guild, type /guilds cancel to cancel."
             error: "&cSomething went wrong while deleting your guild!"
         info:
             header: "Information for {guild}"
@@ -107,6 +111,9 @@ messages:
             successful: "&aYou've successfully invited {player} to your guild!"
         leave:
             successful: "&aYou've successfully left your guild!"
+            cancelled: "&cLeaving guild cancelled!"
+            warning: "&cType /guilds confirm to leave your guild, type /guilds cancel to cancel."
+            warning-guildmaster: "&cYou're the Guild Master of this guild, leaving the guild will mean that the guild is deleted. Type /guilds confirm to leave and delete your guild, type /guilds cancel to cancel."
             player-left: "&cPlayer '{player}' left your guild!"
         boot:
             successful: "&aSuccessfully kicked {player} from your guild!"
@@ -115,6 +122,10 @@ messages:
         prefix:
             successful: "&aGuild's prefix changed successfully!"
             requirements: "&cYour guild's prefix does not match the requirements! You can only use alphanumeric characters and the length of the prefix cannot exceed 8"
+        confirm:
+            error: "&cYou have no actions to confirm!"
+        cancel:
+            error: "&cYou have no actions to cancel!"
     event:
         join:
             pending-invites: "&aYou have {number} pending invite(s) from the guild(s): &e{guilds}"

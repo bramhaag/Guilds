@@ -2,6 +2,7 @@ package me.bramhaag.guilds.commands.base;
 
 import me.bramhaag.guilds.IHandler;
 import me.bramhaag.guilds.message.Message;
+import me.bramhaag.guilds.util.ConfirmAction;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,21 +10,27 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class CommandHandler implements CommandExecutor, IHandler {
 
     private List<CommandBase> commands;
+    private HashMap<Player, ConfirmAction> actions;
 
     @Override
     public void enable() {
         commands = new ArrayList<>();
+        actions = new HashMap<>();
     }
 
     @Override
     public void disable() {
         commands.clear();
         commands = null;
+
+        actions.clear();
+        actions = null;
     }
 
     public void register(CommandBase command) {
@@ -84,5 +91,19 @@ public class CommandHandler implements CommandExecutor, IHandler {
 
     public List<CommandBase> getCommands() {
         return commands;
+    }
+
+    public HashMap<Player, ConfirmAction> getActions() {
+        return actions;
+    }
+
+    public ConfirmAction addAction(Player player, ConfirmAction action) {
+        actions.put(player, action);
+
+        return action;
+    }
+
+    public void removeAction(Player player) {
+        actions.remove(player);
     }
 }

@@ -1,8 +1,10 @@
 package me.bramhaag.guilds.commands;
 
+import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.commands.base.CommandBase;
 import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.message.Message;
+import me.bramhaag.guilds.util.ConfirmAction;
 import org.bukkit.entity.Player;
 
 public class CommandLeave extends CommandBase {
@@ -18,8 +20,29 @@ public class CommandLeave extends CommandBase {
             return;
         }
 
-        guild.removeMember(player.getUniqueId());
-        Message.sendMessage(player, Message.COMMAND_LEAVE_SUCCESSFUL);
+        if(guild.getGuildMaster().getUniqueId().equals(player.getUniqueId())) {
+            Message.sendMessage(player, Message.COMMAND_LEAVE_WARNING_GUILDMASTER);
+        }
+        else {
+            Message.sendMessage(player, Message.COMMAND_LEAVE_WARNING);
+        }
+
+        Main.getInstance().getCommandHandler().addAction(player, new ConfirmAction() {
+            @Override
+            public void accept() {
+                guild.removeMember(player.getUniqueId());
+                Message.sendMessage(player, Message.COMMAND_LEAVE_SUCCESSFUL);
+
+                Main.getInstance().getCommandHandler().removeAction(player);
+            }
+
+            @Override
+            public void decline() {
+                Message.sendMessage(player, Message.COMMAND_LEAVE_CANCELLED);
+
+                Main.getInstance().getCommandHandler().removeAction(player);
+            }
+        });
 
         guild.sendMessage(Message.COMMAND_LEAVE_PLAYER_LEFT.replace("{player}", player.getName()));
     }
