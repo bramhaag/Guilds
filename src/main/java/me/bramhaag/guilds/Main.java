@@ -36,21 +36,9 @@ public class Main extends JavaPlugin {
 
         instance = this;
 
+        setDatabaseType();
+
         taskChainFactory = BukkitTaskChainFactory.create(this);
-
-        switch (getConfig().getString("database.type").toLowerCase()) {
-            case "json":
-                database = new Json();
-                break;
-            case "mysql":
-                database = new MySql();
-                break;
-            default:
-                database = new Json();
-                break;
-        }
-
-        database.initialize();
 
         guildHandler = new GuildHandler();
         guildHandler.enable();
@@ -81,6 +69,7 @@ public class Main extends JavaPlugin {
         commandHandler.register(new CommandPrefix());
         commandHandler.register(new CommandBoot());
 
+        commandHandler.register(new CommandReload());
         commandHandler.register(new CommandHelp());
 
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
@@ -108,6 +97,22 @@ public class Main extends JavaPlugin {
 
     public GuildScoreboardHandler getScoreboardHandler() {
         return scoreboardHandler;
+    }
+
+    public void setDatabaseType() {
+        switch (getConfig().getString("database.type").toLowerCase()) {
+            case "json":
+                database = new Json();
+                break;
+            case "mysql":
+                database = new MySql();
+                break;
+            default:
+                database = new Json();
+                break;
+        }
+
+        database.initialize();
     }
 
     public static <T> TaskChain<T> newChain() {
