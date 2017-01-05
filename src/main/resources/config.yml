@@ -79,7 +79,7 @@ messages:
             requirements: "&cYour guild's name does not match the requirements! You can only use alphanumeric characters and the length of the name cannot exceed 64"
             guild-name-taken: "&cThis name is already taken!"
         delete:
-            successful: "&aDeleted guild successfully!"
+            successful: "&aDeleted '{guild}' successfully!"
             error: "&cSomething went wrong while deleting your guild!"
         info:
             header: "Information for {guild}"
