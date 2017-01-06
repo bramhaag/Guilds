@@ -2,6 +2,7 @@ package me.bramhaag.guilds.commands;
 
 import me.bramhaag.guilds.commands.base.CommandBase;
 import me.bramhaag.guilds.guild.Guild;
+import me.bramhaag.guilds.guild.GuildRole;
 import me.bramhaag.guilds.message.Message;
 import org.bukkit.entity.Player;
 
@@ -17,6 +18,11 @@ public class CommandChat extends CommandBase {
         if(guild == null) {
             Message.sendMessage(player, Message.COMMAND_ERROR_NO_GUILD);
             return;
+        }
+
+        GuildRole role = guild.getMember(player.getUniqueId()).getRole();
+        if(!role.canChat()) {
+            Message.sendMessage(player, Message.COMMAND_ERROR_ROLE_NO_PERMISSION);
         }
 
         String message = String.join(" ", args);

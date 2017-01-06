@@ -22,9 +22,9 @@ public class CommandPromote extends CommandBase {
             return;
         }
 
-        if(guild.getGuildMaster().getUniqueId() != player.getUniqueId()) {
-            Message.sendMessage(player, Message.COMMAND_ERROR_NOT_GUILDMASTER);
-            return;
+        GuildRole role = guild.getMember(player.getUniqueId()).getRole();
+        if(!role.canPromote()) {
+            Message.sendMessage(player, Message.COMMAND_ERROR_ROLE_NO_PERMISSION);
         }
 
         Player promotedPlayer = Bukkit.getPlayer(args[0]);
@@ -47,28 +47,33 @@ public class CommandPromote extends CommandBase {
             return;
         }
 
-        GuildRole role;
+        GuildRole promotedRole;
 
         if(args.length == 2) {
             try {
-                role = GuildRole.valueOf(args[1]);
+                promotedRole = GuildRole.valueOf(args[1]);
             }
             catch (IllegalArgumentException ex) {
                 Message.sendMessage(player, Message.COMMAND_ERROR_INVALID_ROLE.replace("{input}", args[1]));
                 return;
             }
 
-            if(role.getLevel() > currentLevel) {
-                Message.sendMessage(player, Message.COMMAND_ERROR_INVALID_ROLE.replace("{input}", args[1]));
+            if(role.getLevel() < promotedRole.getLevel()) {
+                Message.sendMessage(player, Message.COMMAND_PROMOTE_NO_PERMISSION);
+                return;
+            }
+
+            if(currentLevel < promotedRole.getLevel()) {
+                Message.sendMessage(player, Message.COMMAND_PROMOTE_NOT_PROMOTION);
                 return;
             }
         }
         else {
-            role = GuildRole.getRole(currentLevel - 1);
+            promotedRole = GuildRole.getRole(currentLevel - 1);
         }
 
-        Message.sendMessage(promotedPlayer, Message.COMMAND_PROMOTE_PROMOTED.replace("{old-role}", promotedMember.getRole().name(), "{new-role}", role.name()));
-        Message.sendMessage(player, Message.COMMAND_PROMOTE_SUCCESSFUL.replace("{player}", promotedPlayer.getName(), "{old-role}", promotedMember.getRole().name(), "{new-role}", role.name()));
-        promotedMember.setRole(role);
+        Message.sendMessage(promotedPlayer, Message.COMMAND_PROMOTE_PROMOTED.replace("{old-role}", promotedMember.getRole().name(), "{new-role}", promotedRole.name()));
+        Message.sendMessage(player, Message.COMMAND_PROMOTE_SUCCESSFUL.replace("{player}", promotedPlayer.getName(), "{old-role}", promotedMember.getRole().name(), "{new-role}", promotedRole.name()));
+        promotedMember.setRole(promotedRole);
     }
 }

@@ -22,9 +22,9 @@ public class CommandDemote extends CommandBase {
             return;
         }
 
-        if(guild.getGuildMaster().getUniqueId() != player.getUniqueId()) {
-            Message.sendMessage(player, Message.COMMAND_ERROR_NOT_GUILDMASTER);
-            return;
+        GuildRole role = guild.getMember(player.getUniqueId()).getRole();
+        if(!role.canDemote()) {
+            Message.sendMessage(player, Message.COMMAND_ERROR_ROLE_NO_PERMISSION);
         }
 
         Player demotedPlayer = Bukkit.getPlayer(args[0]);
@@ -42,33 +42,38 @@ public class CommandDemote extends CommandBase {
 
         int currentLevel = demotedMember.getRole().getLevel();
 
-        if(currentLevel >= GuildRole.values().length - 1) {
+        if(currentLevel <= 1) {
             Message.sendMessage(player, Message.COMMAND_DEMOTE_CANNOT_DEMOTE);
             return;
         }
 
-        GuildRole role;
+        GuildRole demotedRole;
 
         if(args.length == 2) {
             try {
-                role = GuildRole.valueOf(args[1]);
+                demotedRole = GuildRole.valueOf(args[1]);
             }
             catch (IllegalArgumentException ex) {
                 Message.sendMessage(player, Message.COMMAND_ERROR_INVALID_ROLE.replace("{input}", args[1]));
                 return;
             }
 
-            if(role.getLevel() < currentLevel) {
-                Message.sendMessage(player, Message.COMMAND_ERROR_INVALID_ROLE.replace("{input}", args[1]));
+            if(role.getLevel() < demotedMember.getRole().getLevel()) {
+                Message.sendMessage(player, Message.COMMAND_DEMOTE_NO_PERMISSION);
+                return;
+            }
+
+            if(currentLevel > demotedRole.getLevel()) {
+                Message.sendMessage(player, Message.COMMAND_DEMOTE_NOT_DEMOTION);
                 return;
             }
         }
         else {
-            role = GuildRole.getRole(currentLevel + 1);
+            demotedRole = GuildRole.getRole(currentLevel - 1);
         }
 
-        Message.sendMessage(demotedPlayer, Message.COMMAND_DEMOTE_DEMOTED.replace("{old-role}", demotedMember.getRole().name(), "{new-role}", role.name()));
-        Message.sendMessage(player, Message.COMMAND_DEMOTE_SUCCESSFUL.replace("{player}", demotedPlayer.getName(), "{old-role}", demotedMember.getRole().name(), "{new-role}", role.name()));
-        demotedMember.setRole(role);
+        Message.sendMessage(demotedPlayer, Message.COMMAND_DEMOTE_DEMOTED.replace("{old-role}", demotedMember.getRole().name(), "{new-role}", demotedRole.name()));
+        Message.sendMessage(player, Message.COMMAND_DEMOTE_SUCCESSFUL.replace("{player}", demotedPlayer.getName(), "{old-role}", demotedMember.getRole().name(), "{new-role}", demotedRole.name()));
+        demotedMember.setRole(demotedRole);
     }
 }

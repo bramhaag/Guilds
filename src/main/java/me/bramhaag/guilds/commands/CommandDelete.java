@@ -3,6 +3,7 @@ package me.bramhaag.guilds.commands;
 import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.commands.base.CommandBase;
 import me.bramhaag.guilds.guild.Guild;
+import me.bramhaag.guilds.guild.GuildRole;
 import me.bramhaag.guilds.message.Message;
 import me.bramhaag.guilds.util.ConfirmAction;
 import org.bukkit.entity.Player;
@@ -24,9 +25,9 @@ public class CommandDelete extends CommandBase {
             return;
         }
 
-        if(guild.getGuildMaster().getUniqueId() != player.getUniqueId()) {
-            Message.sendMessage(player, Message.COMMAND_ERROR_NOT_GUILDMASTER);
-            return;
+        GuildRole role = guild.getMember(player.getUniqueId()).getRole();
+        if(!role.canRemoveGuild()) {
+            Message.sendMessage(player, Message.COMMAND_ERROR_ROLE_NO_PERMISSION);
         }
 
         Message.sendMessage(player, Message.COMMAND_DELETE_WARNING.replace("{guild}", guild.getName()));

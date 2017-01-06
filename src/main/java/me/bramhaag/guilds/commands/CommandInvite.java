@@ -2,6 +2,7 @@ package me.bramhaag.guilds.commands;
 
 import me.bramhaag.guilds.commands.base.CommandBase;
 import me.bramhaag.guilds.guild.Guild;
+import me.bramhaag.guilds.guild.GuildRole;
 import me.bramhaag.guilds.message.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -19,8 +20,10 @@ public class CommandInvite extends CommandBase {
             return;
         }
 
-        if(!guild.getGuildMaster().getUniqueId().equals(player.getUniqueId())) {
-            Message.sendMessage(player, Message.COMMAND_ERROR_NOT_GUILDMASTER);
+        GuildRole role = guild.getMember(player.getUniqueId()).getRole();
+
+        if(!role.canInvite()) {
+            Message.sendMessage(player, Message.COMMAND_ERROR_ROLE_NO_PERMISSION);
             return;
         }
 

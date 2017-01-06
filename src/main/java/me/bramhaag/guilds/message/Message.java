@@ -80,7 +80,7 @@ public enum Message {
 
     COMMAND_CANCEL_ERROR,
 
-    EVENT_JOIN_PENDING_INVITES;
+    EVENT_JOIN_PENDING_INVITES, COMMAND_INVITE_NO_PERMISSION, COMMAND_ERROR_ROLE_NO_PERMISSION, COMMAND_PROMOTE_NOT_PROMOTION, COMMAND_PROMOTE_NO_PERMISSION, COMMAND_DEMOTE_NO_PERMISSION, COMMAND_DEMOTE_NOT_DEMOTION;
 
     public static void sendMessage(CommandSender sender, Message message) {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.PREFIX + Main.getInstance().getConfig().getString(getPath(message))));
