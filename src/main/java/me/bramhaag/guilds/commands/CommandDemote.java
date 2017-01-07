@@ -1,5 +1,6 @@
 package me.bramhaag.guilds.commands;
 
+import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.commands.base.CommandBase;
 import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.guild.GuildMember;
@@ -14,6 +15,7 @@ public class CommandDemote extends CommandBase {
         super("demote", "Demote a member of your guild", "guilds.command.demote", false, new String[] { "rankdown" }, new String[] { "<player> [new role]" }, 1, 2);
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public void execute(Player player, String[] args) {
         Guild guild = Guild.getGuild(player.getUniqueId());
@@ -22,9 +24,10 @@ public class CommandDemote extends CommandBase {
             return;
         }
 
-        GuildRole role = guild.getMember(player.getUniqueId()).getRole();
+        GuildRole role = GuildRole.getRole(guild.getMember(player.getUniqueId()).getRole());
         if(!role.canDemote()) {
             Message.sendMessage(player, Message.COMMAND_ERROR_ROLE_NO_PERMISSION);
+            return;
         }
 
         Player demotedPlayer = Bukkit.getPlayer(args[0]);
@@ -40,7 +43,7 @@ public class CommandDemote extends CommandBase {
             return;
         }
 
-        int currentLevel = demotedMember.getRole().getLevel();
+        int currentLevel = demotedMember.getRole();
 
         if(currentLevel <= 1) {
             Message.sendMessage(player, Message.COMMAND_DEMOTE_CANNOT_DEMOTE);
@@ -50,15 +53,13 @@ public class CommandDemote extends CommandBase {
         GuildRole demotedRole;
 
         if(args.length == 2) {
-            try {
-                demotedRole = GuildRole.valueOf(args[1]);
-            }
-            catch (IllegalArgumentException ex) {
+            demotedRole = Main.getInstance().getGuildHandler().getRoles().stream().filter(r -> r.getName().equalsIgnoreCase(args[1])).findFirst().orElse(null);
+            if(demotedRole == null) {
                 Message.sendMessage(player, Message.COMMAND_ERROR_INVALID_ROLE.replace("{input}", args[1]));
                 return;
             }
 
-            if(role.getLevel() < demotedMember.getRole().getLevel()) {
+            if(role.getLevel() < demotedMember.getRole()) {
                 Message.sendMessage(player, Message.COMMAND_ERROR_ROLE_NO_PERMISSION);
                 return;
             }
@@ -72,8 +73,10 @@ public class CommandDemote extends CommandBase {
             demotedRole = GuildRole.getRole(currentLevel - 1);
         }
 
-        Message.sendMessage(demotedPlayer, Message.COMMAND_DEMOTE_DEMOTED.replace("{old-rank}", demotedMember.getRole().name(), "{new-rank}", demotedRole.name()));
-        Message.sendMessage(player, Message.COMMAND_DEMOTE_SUCCESSFUL.replace("{player}", demotedPlayer.getName(), "{old-rank}", demotedMember.getRole().name(), "{new-rank}", demotedRole.name()));
+        String oldRank = GuildRole.getRole(demotedMember.getRole()).getName();
+        String newRank = demotedRole.getName();
+        Message.sendMessage(demotedPlayer, Message.COMMAND_DEMOTE_DEMOTED.replace("{old-rank}", oldRank, "{new-rank}", newRank));
+        Message.sendMessage(player, Message.COMMAND_DEMOTE_SUCCESSFUL.replace("{player}", demotedPlayer.getName(), "{old-rank}", oldRank, "{new-rank}", newRank));
         demotedMember.setRole(demotedRole);
     }
 }

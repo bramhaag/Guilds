@@ -20,12 +20,13 @@ public class CommandChat extends CommandBase {
             return;
         }
 
-        GuildRole role = guild.getMember(player.getUniqueId()).getRole();
+        GuildRole role = GuildRole.getRole(guild.getMember(player.getUniqueId()).getRole());
         if(!role.canChat()) {
             Message.sendMessage(player, Message.COMMAND_ERROR_ROLE_NO_PERMISSION);
+            return;
         }
 
         String message = String.join(" ", args);
-        guild.sendMessage(Message.COMMAND_CHAT_MESSAGE.replace("{role}", guild.getMember(player.getUniqueId()).getRole().name(), "{player}", player.getName(), "{message}", message));
+        guild.sendMessage(Message.COMMAND_CHAT_MESSAGE.replace("{role}", GuildRole.getRole(guild.getMember(player.getUniqueId()).getRole()).getName(), "{player}", player.getName(), "{message}", message));
     }
 }

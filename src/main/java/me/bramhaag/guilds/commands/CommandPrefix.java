@@ -22,9 +22,10 @@ public class CommandPrefix extends CommandBase {
             return;
         }
 
-        GuildRole role = guild.getMember(player.getUniqueId()).getRole();
+        GuildRole role = GuildRole.getRole(guild.getMember(player.getUniqueId()).getRole());
         if(!role.canChangePrefix()) {
             Message.sendMessage(player, Message.COMMAND_ERROR_ROLE_NO_PERMISSION);
+            return;
         }
 
         if(!args[0].matches(Main.getInstance().getConfig().getString("prefix.regex"))) {

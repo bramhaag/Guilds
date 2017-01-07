@@ -20,9 +20,10 @@ public class CommandBoot extends CommandBase {
             return;
         }
 
-        GuildRole role = guild.getMember(player.getUniqueId()).getRole();
+        GuildRole role = GuildRole.getRole(guild.getMember(player.getUniqueId()).getRole());
         if(!role.canKick()) {
             Message.sendMessage(player, Message.COMMAND_ERROR_ROLE_NO_PERMISSION);
+            return;
         }
 
         Player kickedPlayer = Bukkit.getPlayer(args[0]);

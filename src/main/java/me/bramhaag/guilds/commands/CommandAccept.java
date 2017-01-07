@@ -38,7 +38,7 @@ public class CommandAccept extends CommandBase {
 
         guild.sendMessage(Message.COMMAND_ACCEPT_PLAYER_JOINED.replace("{player}", player.getName()));
 
-        guild.addMember(player.getUniqueId(), GuildRole.MEMBER);
+        guild.addMember(player.getUniqueId(), GuildRole.getLowestRole());
         guild.removeInvitedPlayer(player.getUniqueId());
 
         Message.sendMessage(player, Message.COMMAND_ACCEPT_SUCCESSFUL.replace("{guild}", guild.getName()));

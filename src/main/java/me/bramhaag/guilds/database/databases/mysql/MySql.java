@@ -60,7 +60,7 @@ public class MySql extends DatabaseProvider {
     public void createGuild(Guild guild, Callback<Boolean, Exception> callback) {
         Main.newChain()
             .async(() -> execute(Query.CREATE_GUILD, guild.getName(), guild.getPrefix()))
-            .async(() -> execute(Query.ADD_MEMBER, guild.getGuildMaster().getUniqueId().toString(), guild.getName(), GuildRole.MASTER.getLevel()))
+            .async(() -> execute(Query.ADD_MEMBER, guild.getGuildMaster().getUniqueId().toString(), guild.getName(), 0))
             .sync(() -> callback.call(true, null))
         .execute((exception, task) -> {
             if(exception != null) {
@@ -170,7 +170,7 @@ public class MySql extends DatabaseProvider {
                         throwRunTimeException(e);
                     }
 
-                guild.getMembers().forEach(member -> execute(Query.ADD_MEMBER, member.getUniqueId().toString(), guild.getName(), member.getRole().getLevel()));
+                guild.getMembers().forEach(member -> execute(Query.ADD_MEMBER, member.getUniqueId().toString(), guild.getName(), member.getRole()));
             })
             .sync(() -> callback.call(true, null))
         .execute((exception, task) -> {

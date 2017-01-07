@@ -1,5 +1,6 @@
 package me.bramhaag.guilds.commands;
 
+import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.commands.base.CommandBase;
 import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.guild.GuildMember;
@@ -15,7 +16,9 @@ import java.util.stream.Stream;
 public class CommandRole extends CommandBase {
 
     public CommandRole() {
-        super("role", "View all players with the specified role", "guilds.command.role", false, new String[] { "rank" }, new String[] { "<" + String.join(" | ", Stream.of(GuildRole.values()).map(Enum::name).collect(Collectors.toList())) + ">" }, 1, 1);
+        super("role", "View all players with the specified role", "guilds.command.role", false, new String[] { "rank" },
+                new String[] { "<" + String.join(" | ", Stream.of(Main.getInstance().getGuildHandler().getRoles().toArray(new GuildRole[0])).map(GuildRole::getName).collect(Collectors.toList())) + ">" },
+                1, 1);
     }
 
     @Override
@@ -27,17 +30,13 @@ public class CommandRole extends CommandBase {
             return;
         }
 
-        GuildRole role;
-
-        try {
-             role = GuildRole.valueOf(args[0].toUpperCase());
-        }
-        catch (IllegalArgumentException ex) {
+        GuildRole role = Main.getInstance().getGuildHandler().getRoles().stream().filter(r -> r.getName().equalsIgnoreCase(args[0])).findFirst().orElse(null);
+        if(role == null) {
             Message.sendMessage(player, Message.COMMAND_ERROR_INVALID_ROLE.replace("{input}", args[0]));
             return;
         }
 
-        List<GuildMember> members = guild.getMembers().stream().filter(member -> member.getRole() == role).collect(Collectors.toList());
-        members.forEach(member -> Message.sendMessage(player, Message.COMMAND_ROLE_PLAYERS.replace("{player}", Bukkit.getPlayer(member.getUniqueId()).getName(), "{role}", role.toString())));
+        List<GuildMember> members = guild.getMembers().stream().filter(member -> member.getRole() == role.getLevel()).collect(Collectors.toList());
+        members.forEach(member -> Message.sendMessage(player, Message.COMMAND_ROLE_PLAYERS.replace("{player}", Bukkit.getPlayer(member.getUniqueId()).getName(), "{role}", role.getName())));
     }
 }

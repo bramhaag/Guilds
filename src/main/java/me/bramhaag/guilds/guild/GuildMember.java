@@ -10,9 +10,9 @@ public class GuildMember {
     private UUID uuid;
 
     @Expose
-    private GuildRole role;
+    private int role;
 
-    public GuildMember(UUID uuid, GuildRole role) {
+    public GuildMember(UUID uuid, int role) {
         this.uuid = uuid;
         this.role = role;
     }
@@ -21,11 +21,11 @@ public class GuildMember {
         return uuid;
     }
 
-    public GuildRole getRole() {
+    public int getRole() {
         return role;
     }
 
     public void setRole(GuildRole role) {
-        this.role = role;
+        this.role = role.getLevel();
     }
 }

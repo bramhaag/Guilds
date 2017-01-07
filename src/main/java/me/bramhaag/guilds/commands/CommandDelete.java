@@ -25,9 +25,10 @@ public class CommandDelete extends CommandBase {
             return;
         }
 
-        GuildRole role = guild.getMember(player.getUniqueId()).getRole();
+        GuildRole role = GuildRole.getRole(guild.getMember(player.getUniqueId()).getRole());
         if(!role.canRemoveGuild()) {
             Message.sendMessage(player, Message.COMMAND_ERROR_ROLE_NO_PERMISSION);
+            return;
         }
 
         Message.sendMessage(player, Message.COMMAND_DELETE_WARNING.replace("{guild}", guild.getName()));

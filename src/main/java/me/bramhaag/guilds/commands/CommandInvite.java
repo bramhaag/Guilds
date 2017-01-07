@@ -20,7 +20,7 @@ public class CommandInvite extends CommandBase {
             return;
         }
 
-        GuildRole role = guild.getMember(player.getUniqueId()).getRole();
+        GuildRole role = GuildRole.getRole(guild.getMember(player.getUniqueId()).getRole());
 
         if(!role.canInvite()) {
             Message.sendMessage(player, Message.COMMAND_ERROR_ROLE_NO_PERMISSION);
@@ -37,6 +37,7 @@ public class CommandInvite extends CommandBase {
         Guild invitedPlayerGuild = Guild.getGuild(invitedPlayer.getUniqueId());
         if(invitedPlayerGuild != null && guild.getName().equals(invitedPlayerGuild.getName())) {
             Message.sendMessage(player, Message.COMMAND_INVITE_ALREADY_IN_GUILD);
+            return;
         }
 
         guild.inviteMember(invitedPlayer.getUniqueId());

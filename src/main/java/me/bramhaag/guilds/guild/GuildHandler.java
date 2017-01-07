@@ -2,17 +2,22 @@ package me.bramhaag.guilds.guild;
 
 import me.bramhaag.guilds.IHandler;
 import me.bramhaag.guilds.Main;
+import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 
 public class GuildHandler implements IHandler {
 
     private HashMap<String, Guild> guilds;
+    private List<GuildRole> roles;
 
     @Override
     public void enable() {
         guilds = new HashMap<>();
+        roles = new ArrayList<>();
 
         initialize();
     }
@@ -21,6 +26,9 @@ public class GuildHandler implements IHandler {
     public void disable() {
         guilds.clear();
         guilds = null;
+
+        roles.clear();
+        roles = null;
     }
 
     private void initialize() {
@@ -38,6 +46,27 @@ public class GuildHandler implements IHandler {
         }));
 
         guilds.values().forEach(this::addGuild);
+
+        ConfigurationSection section = Main.getInstance().getConfig().getConfigurationSection("roles");
+        for(String s : section.getKeys(false)) {
+            String path          = s + ".permissions.";
+
+            String  name         = section.getString(s + ".name");
+
+            int     level        = Integer.parseInt(s);
+
+            boolean chat         = section.getBoolean(path + "chat");
+            boolean invite       = section.getBoolean(path + "invite");
+            boolean kick         = section.getBoolean(path + "kick");
+            boolean promote      = section.getBoolean(path + "promote");
+            boolean demote       = section.getBoolean(path + "demote");
+            boolean changePrefix = section.getBoolean(path + "change-prefix");
+            boolean changeMaster = section.getBoolean(path + "change-master");
+            boolean removeGuild  = section.getBoolean(path + "remove-guild");
+
+            GuildRole role = new GuildRole(name, level, chat, invite, kick, promote, demote, changePrefix, changeMaster, removeGuild);
+            roles.add(role);
+        }
     }
 
     public void addGuild(Guild guild) {
@@ -50,5 +79,13 @@ public class GuildHandler implements IHandler {
 
     public HashMap<String, Guild> getGuilds() {
         return guilds;
+    }
+
+    public void addRole(GuildRole role) {
+        roles.add(role);
+    }
+
+    public List<GuildRole> getRoles() {
+        return roles;
     }
 }

@@ -38,7 +38,7 @@ public class Guild {
 
         this.prefix = name.substring(0, Main.getInstance().getConfig().getInt("prefix.max-length") > name.length() ? name.length() : Main.getInstance().getConfig().getInt("prefix.max-length"));
         this.members = new ArrayList<>();
-        this.members.add(new GuildMember(master, GuildRole.MASTER));
+        this.members.add(new GuildMember(master, 0));
 
         this.invitedMembers = new ArrayList<>();
     }
@@ -60,11 +60,11 @@ public class Guild {
     }
 
     public GuildMember getGuildMaster() {
-        return this.members.stream().filter(member -> GuildRole.MASTER == member.getRole()).findFirst().orElse(null);
+        return this.members.stream().filter(member -> member.getRole() == 0).findFirst().orElse(null);
     }
 
     public void addMember(UUID uuid, GuildRole role) {
-        this.members.add(new GuildMember(uuid, role));
+        this.members.add(new GuildMember(uuid, role.getLevel()));
 
         Player player = Bukkit.getPlayer(uuid);
         if(player != null && player.isOnline()) {
