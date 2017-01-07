@@ -34,6 +34,11 @@ public class CommandInvite extends CommandBase {
             return;
         }
 
+        Guild invitedPlayerGuild = Guild.getGuild(invitedPlayer.getUniqueId());
+        if(invitedPlayerGuild != null && guild.getName().equals(invitedPlayerGuild.getName())) {
+            Message.sendMessage(player, Message.COMMAND_INVITE_ALREADY_IN_GUILD);
+        }
+
         guild.inviteMember(invitedPlayer.getUniqueId());
 
         Message.sendMessage(invitedPlayer, Message.COMMAND_INVITE_MESSAGE.replace("{player}", player.getName(), "{guild}", guild.getName()));

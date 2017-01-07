@@ -59,7 +59,7 @@ public class CommandDemote extends CommandBase {
             }
 
             if(role.getLevel() < demotedMember.getRole().getLevel()) {
-                Message.sendMessage(player, Message.COMMAND_DEMOTE_NO_PERMISSION);
+                Message.sendMessage(player, Message.COMMAND_ERROR_ROLE_NO_PERMISSION);
                 return;
             }
 
@@ -72,8 +72,8 @@ public class CommandDemote extends CommandBase {
             demotedRole = GuildRole.getRole(currentLevel - 1);
         }
 
-        Message.sendMessage(demotedPlayer, Message.COMMAND_DEMOTE_DEMOTED.replace("{old-role}", demotedMember.getRole().name(), "{new-role}", demotedRole.name()));
-        Message.sendMessage(player, Message.COMMAND_DEMOTE_SUCCESSFUL.replace("{player}", demotedPlayer.getName(), "{old-role}", demotedMember.getRole().name(), "{new-role}", demotedRole.name()));
+        Message.sendMessage(demotedPlayer, Message.COMMAND_DEMOTE_DEMOTED.replace("{old-rank}", demotedMember.getRole().name(), "{new-rank}", demotedRole.name()));
+        Message.sendMessage(player, Message.COMMAND_DEMOTE_SUCCESSFUL.replace("{player}", demotedPlayer.getName(), "{old-rank}", demotedMember.getRole().name(), "{new-rank}", demotedRole.name()));
         demotedMember.setRole(demotedRole);
     }
 }

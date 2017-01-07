@@ -59,7 +59,7 @@ public class CommandPromote extends CommandBase {
             }
 
             if(role.getLevel() < promotedRole.getLevel()) {
-                Message.sendMessage(player, Message.COMMAND_PROMOTE_NO_PERMISSION);
+                Message.sendMessage(player, Message.COMMAND_ERROR_ROLE_NO_PERMISSION);
                 return;
             }
 
@@ -72,8 +72,8 @@ public class CommandPromote extends CommandBase {
             promotedRole = GuildRole.getRole(currentLevel - 1);
         }
 
-        Message.sendMessage(promotedPlayer, Message.COMMAND_PROMOTE_PROMOTED.replace("{old-role}", promotedMember.getRole().name(), "{new-role}", promotedRole.name()));
-        Message.sendMessage(player, Message.COMMAND_PROMOTE_SUCCESSFUL.replace("{player}", promotedPlayer.getName(), "{old-role}", promotedMember.getRole().name(), "{new-role}", promotedRole.name()));
+        Message.sendMessage(promotedPlayer, Message.COMMAND_PROMOTE_PROMOTED.replace("{old-rank}", promotedMember.getRole().name(), "{new-rank}", promotedRole.name()));
+        Message.sendMessage(player, Message.COMMAND_PROMOTE_SUCCESSFUL.replace("{player}", promotedPlayer.getName(), "{old-rank}", promotedMember.getRole().name(), "{new-rank}", promotedRole.name()));
         promotedMember.setRole(promotedRole);
     }
 }

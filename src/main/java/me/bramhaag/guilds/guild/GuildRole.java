@@ -3,10 +3,10 @@ package me.bramhaag.guilds.guild;
 import java.util.Arrays;
 
 public enum GuildRole {
-    MASTER(0, true, true, true, true, true, true, true),
-    OFFICER(1, true, true, true, true, true, false, false),
-    VETERAN(2, true, true, false, false, false, false, false),
-    MEMBER(3, true, false, false, false, false, false, false);
+    MASTER(0, true, true, true, true, true, true, true, true),
+    OFFICER(1, true, true, true, true, true, false, false, false),
+    VETERAN(2, true, true, false, false, false, false, false, false),
+    MEMBER(3, true, false, false, false, false, false, false, false);
 
     private int level;
 
@@ -15,10 +15,11 @@ public enum GuildRole {
     private boolean kick;
     private boolean promote;
     private boolean demote;
+    private boolean changePrefix;
     private boolean changeMaster;
     private boolean remove;
 
-    GuildRole(int level, boolean chat, boolean invite, boolean kick, boolean promote, boolean demote, boolean changeMaster, boolean removeGuild) {
+    GuildRole(int level, boolean chat, boolean invite, boolean kick, boolean promote, boolean demote, boolean changePrefix, boolean changeMaster, boolean removeGuild) {
         this.level = level;
 
         this.chat = chat;
@@ -56,6 +57,10 @@ public enum GuildRole {
 
     public boolean canDemote() {
         return demote;
+    }
+
+    public boolean canChangePrefix() {
+        return changePrefix;
     }
 
     public boolean canChangeMaster() {

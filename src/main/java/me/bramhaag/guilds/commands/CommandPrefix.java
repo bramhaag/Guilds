@@ -3,6 +3,7 @@ package me.bramhaag.guilds.commands;
 import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.commands.base.CommandBase;
 import me.bramhaag.guilds.guild.Guild;
+import me.bramhaag.guilds.guild.GuildRole;
 import me.bramhaag.guilds.message.Message;
 import org.bukkit.entity.Player;
 
@@ -21,9 +22,9 @@ public class CommandPrefix extends CommandBase {
             return;
         }
 
-        if(!guild.getGuildMaster().getUniqueId().equals(player.getUniqueId())) {
-            Message.sendMessage(player, Message.COMMAND_ERROR_NOT_GUILDMASTER);
-            return;
+        GuildRole role = guild.getMember(player.getUniqueId()).getRole();
+        if(!role.canChangePrefix()) {
+            Message.sendMessage(player, Message.COMMAND_ERROR_ROLE_NO_PERMISSION);
         }
 
         if(!args[0].matches(Main.getInstance().getConfig().getString("prefix.regex"))) {

@@ -168,6 +168,8 @@ public class Guild {
                 }
             }
         }));
+
+        Main.getInstance().getScoreboardHandler().update();
     }
 
     public GuildMember getMember(UUID uuid) {
