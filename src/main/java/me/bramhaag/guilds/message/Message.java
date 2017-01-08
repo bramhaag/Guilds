@@ -86,7 +86,7 @@ public enum Message {
 
     COMMAND_RELOAD_RELOADED,
 
-    EVENT_JOIN_PENDING_INVITES;
+    EVENT_JOIN_PENDING_INVITES, COMMAND_ADMIN_WARNING_REMOVE, COMMAND_ADMIN_DELETE_SUCCESSFUL, COMMAND_ADMIN_DELETE_ERROR, COMMAND_ADMIN_DELETE_WARNING, COMMAND_ADMIN_DELETE_CANCELLED;
 
     public static void sendMessage(CommandSender sender, Message message) {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.PREFIX + Main.getInstance().getConfig().getString(getPath(message))));

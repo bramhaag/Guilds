@@ -16,7 +16,7 @@ import java.util.List;
 public class CommandHandler implements CommandExecutor, IHandler {
 
     private List<CommandBase> commands;
-    private HashMap<Player, ConfirmAction> actions;
+    private HashMap<CommandSender, ConfirmAction> actions;
 
     @Override
     public void enable() {
@@ -93,17 +93,17 @@ public class CommandHandler implements CommandExecutor, IHandler {
         return commands;
     }
 
-    public HashMap<Player, ConfirmAction> getActions() {
+    public HashMap<CommandSender, ConfirmAction> getActions() {
         return actions;
     }
 
-    public ConfirmAction addAction(Player player, ConfirmAction action) {
-        actions.put(player, action);
+    public ConfirmAction addAction(CommandSender sender, ConfirmAction action) {
+        actions.put(sender, action);
 
         return action;
     }
 
-    public void removeAction(Player player) {
-        actions.remove(player);
+    public void removeAction(CommandSender sender) {
+        actions.remove(sender);
     }
 }
