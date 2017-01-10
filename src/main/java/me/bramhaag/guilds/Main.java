@@ -6,6 +6,7 @@ import co.aikar.taskchain.TaskChain;
 import co.aikar.taskchain.TaskChainFactory;
 import me.bramhaag.guilds.commands.*;
 import me.bramhaag.guilds.commands.base.CommandHandler;
+import me.bramhaag.guilds.database.Callback;
 import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.database.databases.json.Json;
 import me.bramhaag.guilds.database.databases.mysql.MySql;
@@ -14,9 +15,16 @@ import me.bramhaag.guilds.guild.GuildHandler;
 import me.bramhaag.guilds.listeners.ChatListener;
 import me.bramhaag.guilds.listeners.JoinListener;
 import me.bramhaag.guilds.scoreboard.GuildScoreboardHandler;
+import me.bramhaag.guilds.updater.Updater;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.logging.Level;
 
 public class Main extends JavaPlugin {
 
@@ -27,6 +35,8 @@ public class Main extends JavaPlugin {
     private GuildHandler guildHandler;
     private CommandHandler commandHandler;
     private GuildScoreboardHandler scoreboardHandler;
+
+    private static long creationTime;
 
     private static TaskChainFactory taskChainFactory;
 
@@ -119,6 +129,38 @@ public class Main extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
+
+
+        try {
+            BasicFileAttributes attr = Files.readAttributes(Paths.get(getFile().getAbsolutePath()), BasicFileAttributes.class);
+            creationTime = attr.creationTime().toMillis();
+        } catch (IOException e) {
+            getLogger().log(Level.WARNING, "Cannot get plugin file's creation time!");
+            e.printStackTrace();
+
+            creationTime = 0;
+        }
+
+        if(getConfig().getBoolean("updater.check")) {
+            Updater.checkForUpdates((result, exception) -> {
+                if (result) {
+                    getLogger().log(Level.INFO, "A new update for Guilds has been found!");
+
+                    if(getConfig().getBoolean("updater.download")) {
+                        getLogger().log(Level.INFO, "Downloading new update...");
+                        Updater.downloadUpdate((downloadResult, exception1) -> {
+                            if(downloadResult) {
+                                getLogger().log(Level.INFO, "Downloaded new update!");
+                            }
+                            else {
+                                getLogger().log(Level.SEVERE, "Something went wrong while downloading a new update!");
+                            }
+                        });
+
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -166,6 +208,10 @@ public class Main extends JavaPlugin {
 
     public static <T> TaskChain<T> newSharedChain(String name) {
         return taskChainFactory.newSharedChain(name);
+    }
+
+    public static long getCreationTime() {
+        return creationTime;
     }
 
     public static Main getInstance() {

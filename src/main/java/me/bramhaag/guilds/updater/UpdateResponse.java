@@ -1,7 +1,14 @@
 package me.bramhaag.guilds.updater;
 
-public class UpdateResponse {
+class UpdateResponse {
+    private long releaseDate;
+    private int id;
 
-    long releaseDate;
-    int id;
+    long getReleaseDate() {
+        return releaseDate;
+    }
+
+    int getId() {
+        return id;
+    }
 }
