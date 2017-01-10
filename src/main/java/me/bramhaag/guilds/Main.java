@@ -36,12 +36,11 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         this.saveDefaultConfig();
         PREFIX = ChatColor.translateAlternateColorCodes('&', getConfig().getString("plugin-prefix")) + ChatColor.RESET + " ";
-
         instance = this;
 
-        setDatabaseType();
-
         taskChainFactory = BukkitTaskChainFactory.create(this);
+
+        setDatabaseType();
 
         guildHandler = new GuildHandler();
         guildHandler.enable();
