@@ -145,20 +145,8 @@ public class Main extends JavaPlugin {
 
         if(getConfig().getBoolean("updater.check")) {
             Updater.checkForUpdates((result, exception) -> {
-                if (result) {
-                    getLogger().log(Level.INFO, "A new update for Guilds has been found!");
-
-                    if(getConfig().getBoolean("updater.download")) {
-                        getLogger().log(Level.INFO, "Downloading new update...");
-                        Updater.downloadUpdate((downloadResult, exception1) -> {
-                            if(downloadResult) {
-                                getLogger().log(Level.INFO, "Downloaded new update!");
-                            }
-                            else {
-                                getLogger().log(Level.SEVERE, "Something went wrong while downloading a new update!");
-                            }
-                        });
-                    }
+                if (result != null) {
+                    getLogger().log(Level.INFO, "A new update for Guilds has been found! Go to " + result + " to download it!");
                 }
                 else {
                     getLogger().log(Level.INFO, "No updates found!");

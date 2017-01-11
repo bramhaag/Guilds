@@ -3,7 +3,6 @@ plugin-prefix: "&a[Guilds]"
 
 updater:
   check: true
-  download: true
 
 name:
 # Minimum length of guild names
@@ -183,9 +182,8 @@ messages:
     reload:
       reloaded: "&aConfiguration file reloaded!"
     update:
-      found: "&aUpdate found! Downloading..."
-      successful: "&aUpdate downloaded! Restart your server to run the latest version of Guilds!"
-      error: "&cSomething went wrong while downloading the update"
+      found: "&aFound an update! Go to {url} to download it!"
+      not-found: "&cNo update found!"
   event:
     join:
       pending-invites: "&aYou have {number} pending invite(s) from the guild(s): &e{guilds}"

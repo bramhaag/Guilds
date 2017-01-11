@@ -13,18 +13,11 @@ public class CommandUpdate extends CommandBase {
 
     public void execute(CommandSender sender, String[] args) {
         Updater.checkForUpdates((result, exception) -> {
-            if (result) {
-                Message.sendMessage(sender, Message.COMMAND_UPDATE_FOUND);
-
-                Updater.downloadUpdate((downloadResult, downloadException) -> {
-                    if(downloadResult) {
-                        Message.sendMessage(sender, Message.COMMAND_UPDATE_SUCCESSFUL);
-                        return;
-                    }
-                    else {
-                        Message.sendMessage(sender, Message.COMMAND_UPDATE_ERROR);
-                    }
-                });
+            if (result != null) {
+                Message.sendMessage(sender, Message.COMMAND_UPDATE_FOUND.replace("{url}", result));
+            }
+            else {
+                Message.sendMessage(sender, Message.COMMAND_UPDATE_NOT_FOUND);
             }
         });
     }
