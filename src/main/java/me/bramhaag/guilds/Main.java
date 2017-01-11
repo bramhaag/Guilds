@@ -125,6 +125,8 @@ public class Main extends JavaPlugin {
         commandHandler.register(new CommandAdmin());
 
         commandHandler.register(new CommandReload());
+
+        commandHandler.register(new CommandUpdate());
         commandHandler.register(new CommandHelp());
 
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
@@ -156,8 +158,10 @@ public class Main extends JavaPlugin {
                                 getLogger().log(Level.SEVERE, "Something went wrong while downloading a new update!");
                             }
                         });
-
                     }
+                }
+                else {
+                    getLogger().log(Level.INFO, "No updates found!");
                 }
             });
         }
@@ -211,7 +215,7 @@ public class Main extends JavaPlugin {
     }
 
     public static long getCreationTime() {
-        return creationTime;
+        return creationTime / 1000;
     }
 
     public static Main getInstance() {
