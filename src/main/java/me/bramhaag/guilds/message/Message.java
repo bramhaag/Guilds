@@ -94,7 +94,7 @@ public enum Message {
     COMMAND_UPDATE_FOUND,
     COMMAND_UPDATE_NOT_FOUND,
 
-    EVENT_JOIN_PENDING_INVITES;
+    EVENT_JOIN_PENDING_INVITES, COMMAND_ADMIN_PLAYER_ALREADY_IN_GUILD, COMMAND_ADMIN_ADDED_PLAYER, COMMAND_ADMIN_PLAYER_NOT_IN_GUILD, COMMAND_ADMIN_REMOVED_PLAYER;
 
     public static void sendMessage(CommandSender sender, Message message) {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.PREFIX + Main.getInstance().getConfig().getString(getPath(message))));

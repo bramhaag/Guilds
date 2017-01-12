@@ -3,18 +3,20 @@ package me.bramhaag.guilds.commands;
 import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.commands.base.CommandBase;
 import me.bramhaag.guilds.guild.Guild;
+import me.bramhaag.guilds.guild.GuildMember;
 import me.bramhaag.guilds.guild.GuildRole;
 import me.bramhaag.guilds.message.Message;
 import me.bramhaag.guilds.util.ConfirmAction;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.logging.Level;
 
 public class CommandAdmin extends CommandBase {
 
     public CommandAdmin() {
-        super("admin", "Admin command for managing guilds", "guilds.commands.admin", true, null, new String[] { "<remove | info> <guild name>" }, 2, 2);
+        super("admin", "Admin command for managing guilds", "guilds.commands.admin", true, null, new String[] { "<remove | info> <guild name>, or <addplayer | removeplayer> <guild name> <player name>" }, 2, 3);
     }
 
     @Override
@@ -56,6 +58,50 @@ public class CommandAdmin extends CommandBase {
                     Main.getInstance().getCommandHandler().removeAction(sender);
                 }
             });
+        }
+        else if(args[0].equalsIgnoreCase("addplayer")) {
+            if(args.length != 3) {
+                Message.sendMessage(sender, Message.COMMAND_ERROR_ARGS);
+                return;
+            }
+
+            Player player = Bukkit.getPlayer(args[2]);
+            if(player == null || !player.isOnline()) {
+                Message.sendMessage(sender, Message.COMMAND_ERROR_PLAYER_NOT_FOUND);
+                return;
+            }
+
+            if(Guild.getGuild(player.getUniqueId()) != null) {
+                Message.sendMessage(sender, Message.COMMAND_ADMIN_PLAYER_ALREADY_IN_GUILD);
+                return;
+            }
+
+            guild.addMember(player.getUniqueId(), GuildRole.getLowestRole());
+
+            Message.sendMessage(player, Message.COMMAND_ACCEPT_SUCCESSFUL);
+            Message.sendMessage(sender, Message.COMMAND_ADMIN_ADDED_PLAYER);
+        }
+        else if(args[0].equalsIgnoreCase("removeplayer")) {
+            if(args.length != 3) {
+                Message.sendMessage(sender, Message.COMMAND_ERROR_ARGS);
+                return;
+            }
+
+            Player player = Bukkit.getPlayer(args[2]);
+            if(player == null || !player.isOnline()) {
+                Message.sendMessage(sender, Message.COMMAND_ERROR_PLAYER_NOT_FOUND);
+                return;
+            }
+
+            if(Guild.getGuild(player.getUniqueId()) == null) {
+                Message.sendMessage(sender, Message.COMMAND_ADMIN_PLAYER_NOT_IN_GUILD);
+                return;
+            }
+
+            guild.removeMember(player.getUniqueId());
+
+            Message.sendMessage(player, Message.COMMAND_LEAVE_SUCCESSFUL);
+            Message.sendMessage(sender, Message.COMMAND_ADMIN_REMOVED_PLAYER);
         }
         else if(args[0].equalsIgnoreCase("info")) {
             Message.sendMessage(sender, Message.COMMAND_INFO_HEADER.replace("{guild}", guild.getName()));

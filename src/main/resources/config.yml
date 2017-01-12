@@ -184,6 +184,15 @@ messages:
     update:
       found: "&aFound an update! Go to {url} to download it!"
       not-found: "&cNo update found!"
+    admin:
+      delete-successful: "&cGuild removed successfully!"
+      delete-error: "&cSomething went wrong while removing this guild!"
+      delete-warning: "&cType /guilds confirm to remove this guild, type /guilds cancel to cancel."
+      delete-cancelled: "&cGuild deletion cancelled!"
+      player-already-in-guild: "&cThis player is already in a guild!"
+      added-player: "&aAdded player to guild"
+      player-not-in-guild: "&cPlayer is not in this guild!"
+      removed-player: "&aRemoved player from guild!"
   event:
     join:
       pending-invites: "&aYou have {number} pending invite(s) from the guild(s): &e{guilds}"
