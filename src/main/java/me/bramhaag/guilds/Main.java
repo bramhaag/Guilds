@@ -6,14 +6,20 @@ import co.aikar.taskchain.TaskChain;
 import co.aikar.taskchain.TaskChainFactory;
 import me.bramhaag.guilds.commands.*;
 import me.bramhaag.guilds.commands.base.CommandHandler;
-import me.bramhaag.guilds.database.Callback;
 import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.database.databases.json.Json;
 import me.bramhaag.guilds.database.databases.mysql.MySql;
-import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.guild.GuildHandler;
 import me.bramhaag.guilds.listeners.ChatListener;
 import me.bramhaag.guilds.listeners.JoinListener;
+import me.bramhaag.guilds.placeholders.mvdwplaceholderapi.MVdWGuild;
+import me.bramhaag.guilds.placeholders.mvdwplaceholderapi.MVdWGuildMaster;
+import me.bramhaag.guilds.placeholders.mvdwplaceholderapi.MVdWGuildMemberCount;
+import me.bramhaag.guilds.placeholders.mvdwplaceholderapi.MVdWGuildPrefix;
+import me.bramhaag.guilds.placeholders.placeholderapi.ClipGuild;
+import me.bramhaag.guilds.placeholders.placeholderapi.ClipGuildMaster;
+import me.bramhaag.guilds.placeholders.placeholderapi.ClipGuildMemberCount;
+import me.bramhaag.guilds.placeholders.placeholderapi.ClipGuildPrefix;
 import me.bramhaag.guilds.scoreboard.GuildScoreboardHandler;
 import me.bramhaag.guilds.updater.Updater;
 import org.bukkit.Bukkit;
@@ -61,43 +67,7 @@ public class Main extends JavaPlugin {
         //scoreboardHandler is enabled after the guilds are loaded
         scoreboardHandler = new GuildScoreboardHandler();
 
-        if (Bukkit.getPluginManager().isPluginEnabled("MVdWPlaceholderAPI")) {
-            PlaceholderAPI.registerPlaceholder(this, "guild", event -> {
-                Guild guild = Guild.getGuild(event.getPlayer().getUniqueId());
-                if (guild == null) {
-                    return "N/A";
-                }
-
-                return guild.getName();
-            });
-
-            PlaceholderAPI.registerPlaceholder(this, "guild-prefix", event -> {
-                Guild guild = Guild.getGuild(event.getPlayer().getUniqueId());
-                if (guild == null) {
-                    return "N/A";
-                }
-
-                return guild.getPrefix();
-            });
-
-            PlaceholderAPI.registerPlaceholder(this, "guild-master", event -> {
-                Guild guild = Guild.getGuild(event.getPlayer().getUniqueId());
-                if (guild == null) {
-                    return "N/A";
-                }
-
-                return Bukkit.getPlayer(guild.getGuildMaster().getUniqueId()).getName();
-            });
-
-            PlaceholderAPI.registerPlaceholder(this, "member-count", event -> {
-                Guild guild = Guild.getGuild(event.getPlayer().getUniqueId());
-                if (guild == null) {
-                    return "N/A";
-                }
-
-                return String.valueOf(guild.getMembers().size());
-            });
-        }
+        initializePlaceholder();
 
         getCommand("guild").setExecutor(commandHandler);
 
@@ -208,5 +178,21 @@ public class Main extends JavaPlugin {
 
     public static Main getInstance() {
         return instance;
+    }
+
+    private void initializePlaceholder() {
+        if (Bukkit.getPluginManager().isPluginEnabled("MVdWPlaceholderAPI")) {
+            PlaceholderAPI.registerPlaceholder(this, "guild",               new MVdWGuild());
+            PlaceholderAPI.registerPlaceholder(this, "guild-master",        new MVdWGuildMaster());
+            PlaceholderAPI.registerPlaceholder(this, "guild-member-count",  new MVdWGuildMemberCount());
+            PlaceholderAPI.registerPlaceholder(this, "guild-prefix",        new MVdWGuildPrefix());
+        }
+
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new ClipGuild(this).hook();
+            new ClipGuildMaster(this).hook();
+            new ClipGuildMemberCount(this).hook();
+            new ClipGuildPrefix(this).hook();
+        }
     }
 }
