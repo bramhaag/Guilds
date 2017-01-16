@@ -12,19 +12,15 @@ import me.bramhaag.guilds.database.databases.mysql.MySql;
 import me.bramhaag.guilds.guild.GuildHandler;
 import me.bramhaag.guilds.listeners.ChatListener;
 import me.bramhaag.guilds.listeners.JoinListener;
-import me.bramhaag.guilds.placeholders.mvdwplaceholderapi.MVdWGuild;
-import me.bramhaag.guilds.placeholders.mvdwplaceholderapi.MVdWGuildMaster;
-import me.bramhaag.guilds.placeholders.mvdwplaceholderapi.MVdWGuildMemberCount;
-import me.bramhaag.guilds.placeholders.mvdwplaceholderapi.MVdWGuildPrefix;
-import me.bramhaag.guilds.placeholders.placeholderapi.ClipGuild;
-import me.bramhaag.guilds.placeholders.placeholderapi.ClipGuildMaster;
-import me.bramhaag.guilds.placeholders.placeholderapi.ClipGuildMemberCount;
-import me.bramhaag.guilds.placeholders.placeholderapi.ClipGuildPrefix;
+import me.bramhaag.guilds.placeholders.Placeholders;
 import me.bramhaag.guilds.scoreboard.GuildScoreboardHandler;
 import me.bramhaag.guilds.updater.Updater;
+import me.clip.placeholderapi.external.EZPlaceholderHook;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -99,8 +95,16 @@ public class Main extends JavaPlugin {
         commandHandler.register(new CommandUpdate());
         commandHandler.register(new CommandHelp());
 
+
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
+
+        try {
+            Metrics metrics = new Metrics(this);
+            metrics.start();
+        } catch (IOException e) {
+            getLogger().log(Level.WARNING, "Failed to submit stats to mcstats.org!");
+        }
 
 
         try {
@@ -182,17 +186,40 @@ public class Main extends JavaPlugin {
 
     private void initializePlaceholder() {
         if (Bukkit.getPluginManager().isPluginEnabled("MVdWPlaceholderAPI")) {
-            PlaceholderAPI.registerPlaceholder(this, "guild",               new MVdWGuild());
-            PlaceholderAPI.registerPlaceholder(this, "guild-master",        new MVdWGuildMaster());
-            PlaceholderAPI.registerPlaceholder(this, "guild-member-count",  new MVdWGuildMemberCount());
-            PlaceholderAPI.registerPlaceholder(this, "guild-prefix",        new MVdWGuildPrefix());
+            PlaceholderAPI.registerPlaceholder(this, "guild",              (event) -> Placeholders.getGuild(event.getPlayer()));
+            PlaceholderAPI.registerPlaceholder(this, "guild-master",       (event) -> Placeholders.getGuildMaster(event.getPlayer()));
+            PlaceholderAPI.registerPlaceholder(this, "guild-member-count", (event) -> Placeholders.getGuildmemberCount(event.getPlayer()));
+            PlaceholderAPI.registerPlaceholder(this, "guild-prefix",       (event) -> Placeholders.getGuildPrefix(event.getPlayer()));
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            new ClipGuild(this).hook();
-            new ClipGuildMaster(this).hook();
-            new ClipGuildMemberCount(this).hook();
-            new ClipGuildPrefix(this).hook();
+            new EZPlaceholderHook(this, "guild") {
+                @Override
+                public String onPlaceholderRequest(Player player, String placeholder) {
+                    return Placeholders.getGuild(player);
+                }
+            }.hook();
+
+            new EZPlaceholderHook(this, "guild-master") {
+                @Override
+                public String onPlaceholderRequest(Player player, String placeholder) {
+                    return Placeholders.getGuildMaster(player);
+                }
+            }.hook();
+
+            new EZPlaceholderHook(this, "guild-member-count") {
+                @Override
+                public String onPlaceholderRequest(Player player, String placeholder) {
+                    return Placeholders.getGuildmemberCount(player);
+                }
+            }.hook();
+
+            new EZPlaceholderHook(this, "guild-prefix") {
+                @Override
+                public String onPlaceholderRequest(Player player, String placeholder) {
+                    return Placeholders.getGuildPrefix(player);
+                }
+            }.hook();
         }
     }
 }
