@@ -26,6 +26,10 @@ public class GuildScoreboardHandler implements IHandler {
     }
 
     public void update() {
+        if(!Main.getInstance().getConfig().getBoolean("scoreboard.enable")) {
+            return;
+        }
+
         board.getTeams().forEach(Team::unregister);
 
         for(Guild guild : Main.getInstance().getGuildHandler().getGuilds().values()) {
