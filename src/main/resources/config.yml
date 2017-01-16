@@ -136,11 +136,11 @@ messages:
       warning: "&cType /guilds confirm to delete your guild, type /guilds cancel to cancel."
       error: "&cSomething went wrong while deleting your guild!"
     info:
-      header: "Information for {guild}"
-      name: "Name: {guild} (Prefix: {prefix})"
-      master: "Guild Master: {master}"
-      member-count: "Current amount of members: {members}/64"
-      rank: "Your rank: {rank}"
+      header: "Information for &b{guild}"
+      name: "Name: &b{guild}&r (&bPrefix: {prefix}&r)"
+      master: "Guild Master: &b{master}"
+      member-count: "Members: &b{members}/64&r (&bOnline: {members-online}&r)"
+      rank: "Your rank: &b{rank}"
     promote:
       promoted: "&aYou've been promoted from {old-rank} to {new-rank}!"
       successful: "&aYou've successfully promoted {player} from {old-rank} to {new-rank}!"
