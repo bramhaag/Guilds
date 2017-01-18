@@ -192,33 +192,37 @@ public class Main extends JavaPlugin {
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            new EZPlaceholderHook(this, "guild") {
-                @Override
-                public String onPlaceholderRequest(Player player, String placeholder) {
-                    return Placeholders.getGuild(player);
-                }
-            }.hook();
+            try {
+                new EZPlaceholderHook(this, "guild") {
+                    @Override
+                    public String onPlaceholderRequest(Player player, String placeholder) {
+                        return Placeholders.getGuild(player);
+                    }
+                }.hook();
 
-            new EZPlaceholderHook(this, "guild-master") {
-                @Override
-                public String onPlaceholderRequest(Player player, String placeholder) {
-                    return Placeholders.getGuildMaster(player);
-                }
-            }.hook();
+                new EZPlaceholderHook(this, "guild-master") {
+                    @Override
+                    public String onPlaceholderRequest(Player player, String placeholder) {
+                        return Placeholders.getGuildMaster(player);
+                    }
+                }.hook();
 
-            new EZPlaceholderHook(this, "guild-member-count") {
-                @Override
-                public String onPlaceholderRequest(Player player, String placeholder) {
-                    return Placeholders.getGuildmemberCount(player);
-                }
-            }.hook();
+                new EZPlaceholderHook(this, "guild-member-count") {
+                    @Override
+                    public String onPlaceholderRequest(Player player, String placeholder) {
+                        return Placeholders.getGuildmemberCount(player);
+                    }
+                }.hook();
 
-            new EZPlaceholderHook(this, "guild-prefix") {
-                @Override
-                public String onPlaceholderRequest(Player player, String placeholder) {
-                    return Placeholders.getGuildPrefix(player);
-                }
-            }.hook();
+                new EZPlaceholderHook(this, "guild-prefix") {
+                    @Override
+                    public String onPlaceholderRequest(Player player, String placeholder) {
+                        return Placeholders.getGuildPrefix(player);
+                    }
+                }.hook();
+            } catch (Exception ex) {
+                getLogger().log(Level.WARNING, "Error while creating PlaceholderAPI placeholders!");
+            }
         }
     }
 }
