@@ -16,6 +16,8 @@ public class CommandHelp extends CommandBase {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
+        boolean nextPage = true;
+
         int page = 1;
 
         if(args.length > 0) {
@@ -30,6 +32,7 @@ public class CommandHelp extends CommandBase {
 
             int index = ((page - 1) * 6) + i;
             if(index > Main.getInstance().getCommandHandler().getCommands().size() - 1) {
+                nextPage = false;
                 if(i == 0) {
                     Message.sendMessage(sender, Message.COMMAND_HELP_INVALID_PAGE);
                 }
@@ -42,6 +45,8 @@ public class CommandHelp extends CommandBase {
             Message.sendMessage(sender, Message.COMMAND_HELP_MESSAGE.replace("{command}", command.getName(), "{arguments}", String.join(" ", command.getArguments()), "{description}", command.getDescription()));
         }
 
-        Message.sendMessage(sender, Message.COMMAND_HELP_NEXT_PAGE.replace("{next-page}", String.valueOf((page + 1))));
+        if(nextPage) {
+            Message.sendMessage(sender, Message.COMMAND_HELP_NEXT_PAGE.replace("{next-page}", String.valueOf((page + 1))));
+        }
     }
 }
