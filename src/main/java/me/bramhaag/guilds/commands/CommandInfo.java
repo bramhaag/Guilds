@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class CommandInfo extends CommandBase {
 
     public CommandInfo() {
-        super("info", "View your guild's info", "guilds.commands.info", false, null, null, 0, 0);
+        super("info", "View your guild's info", "guilds.command.info", false, null, null, 0, 0);
     }
 
     @Override

@@ -16,7 +16,7 @@ import java.util.logging.Level;
 public class CommandAdmin extends CommandBase {
 
     public CommandAdmin() {
-        super("admin", "Admin command for managing guilds", "guilds.commands.admin", true, null, new String[] { "<remove | info> <guild name>, or <addplayer | removeplayer> <guild name> <player name>" }, 2, 3);
+        super("admin", "Admin command for managing guilds", "guilds.command.admin", true, null, new String[] { "<remove | info> <guild name>, or <addplayer | removeplayer> <guild name> <player name>" }, 2, 3);
     }
 
     @Override

@@ -10,7 +10,7 @@ commands:
     description: See the Guild commands
 
 permissions:
-  guilds.command.*:
+  guilds.group.admin:
     description: All commands for the Guilds plugin
     children:
       guilds.command.accept: true
@@ -31,8 +31,8 @@ permissions:
       guilds.command.reload: true
       guilds.command.role: true
       guilds.command.update: true
-    default: OP
-  guilds.command.member.*:
+    default: op
+  guilds.group.member:
     description: All commands for the Guilds plugin
     children:
       guilds.command.accept: true
@@ -51,3 +51,37 @@ permissions:
       guilds.command.promote: true
       guilds.command.role: true
     default: true
+  guilds.command.accept:
+    description: Accept invite to a guild
+  guilds.command.admin:
+    description: Access to admin commands
+  guilds.command.boot:
+    description: Kick a member from your guild
+  guilds.command.cancel:
+    description: Cancel a command
+  guilds.command.chat:
+    description: Use guild chat
+  guilds.command.confirm:
+    description: Confirm a command
+  guilds.command.create:
+    description: Create a guild
+  guilds.command.delete:
+    description: Delete your guild
+  guilds.command.demote:
+    description: Demote a member of your guild
+  guilds.command.help:
+    description: Use /guilds help command
+  guilds.command.info:
+    description: View Guild's info
+  guilds.command.invite:
+    description: Invite a member to your guild
+  guilds.command.leave:
+    description: Leave your guild
+  guilds.command.prefix:
+    description: Change your guild's prefix
+  guilds.command.promote:
+    description: Promote a member of your guild
+  guilds.command.reload:
+    description: Reload Guilds
+  guilds.command.role:
+    description: Change the role of a member from your guild
