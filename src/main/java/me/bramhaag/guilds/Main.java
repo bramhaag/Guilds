@@ -12,6 +12,7 @@ import me.bramhaag.guilds.database.databases.mysql.MySql;
 import me.bramhaag.guilds.guild.GuildHandler;
 import me.bramhaag.guilds.listeners.ChatListener;
 import me.bramhaag.guilds.listeners.JoinListener;
+import me.bramhaag.guilds.listeners.PlayerDamangeListener;
 import me.bramhaag.guilds.placeholders.Placeholders;
 import me.bramhaag.guilds.scoreboard.GuildScoreboardHandler;
 import me.bramhaag.guilds.updater.Updater;
@@ -101,6 +102,7 @@ public class Main extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerDamangeListener(), this);
 
         try {
             Metrics metrics = new Metrics(this);

@@ -26,6 +26,9 @@ public class Guild {
     @Expose
     private List<UUID> invitedMembers;
 
+    @Expose
+    private List<Guild> allies;
+
     public Guild(String name) {
         this.name = name;
 
@@ -172,6 +175,10 @@ public class Guild {
         Main.getInstance().getScoreboardHandler().update();
     }
 
+    public List<Guild> getAllies() {
+        return allies;
+    }
+
     public GuildMember getMember(UUID uuid) {
         return members.stream().filter(member -> member.getUniqueId().equals(uuid)).findFirst().orElse(null);
     }
@@ -182,5 +189,13 @@ public class Guild {
 
     public static Guild getGuild(String name) {
         return Main.getInstance().getGuildHandler().getGuilds().values().stream().filter(guild -> guild.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    public static boolean areAllies(UUID uuid1, UUID uuid2) {
+        Guild guild1 = getGuild(uuid1);
+        Guild guild2 = getGuild(uuid2);
+
+        return !(guild1 == null || guild2 == null) && guild1.getAllies().contains(guild2);
+
     }
 }
