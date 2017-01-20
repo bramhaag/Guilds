@@ -45,6 +45,8 @@ public class Main extends JavaPlugin {
 
     public static String PREFIX;
 
+    String[] rip;
+
     @Override
     public void onEnable() {
         this.saveDefaultConfig();
