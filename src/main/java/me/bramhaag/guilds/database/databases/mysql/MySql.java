@@ -9,6 +9,7 @@ import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.guild.GuildRole;
 import org.bukkit.configuration.ConfigurationSection;
+import org.spigotmc.SneakyThrow;
 
 import javax.sql.rowset.CachedRowSet;
 import java.sql.Connection;
@@ -105,8 +106,8 @@ public class MySql extends DatabaseProvider {
                         guildData.put(resultSet.getString("name"), resultSet.getString("prefix"));
                     }
                 }
-                catch (SQLException e) {
-                    throwRunTimeException(e);
+                catch (SQLException ex) {
+                    SneakyThrow.sneaky(ex);
                 }
 
                 chain.setTaskData("guild_data", guildData);
@@ -135,8 +136,8 @@ public class MySql extends DatabaseProvider {
                             guilds.put(name, guild);
                         }
                     }
-                    catch (SQLException e) {
-                        throwRunTimeException(e);
+                    catch (SQLException ex) {
+                        SneakyThrow.sneaky(ex);
                     }
 
                     chain.setTaskData("guilds", guilds);
@@ -166,8 +167,8 @@ public class MySql extends DatabaseProvider {
                             execute(Query.REMOVE_MEMBER, UUID.fromString(resultSet.getString("uuid")));
                         }
                     }
-                    catch (SQLException e) {
-                        throwRunTimeException(e);
+                    catch (SQLException ex) {
+                        SneakyThrow.sneaky(ex);
                     }
 
                 guild.getMembers().forEach(member -> execute(Query.ADD_MEMBER, member.getUniqueId().toString(), guild.getName(), member.getRole()));
@@ -198,8 +199,8 @@ public class MySql extends DatabaseProvider {
 
             statement.execute();
         }
-        catch (SQLException e) {
-            throwRunTimeException(e);
+        catch (SQLException ex) {
+            SneakyThrow.sneaky(ex);
         }
         finally {
             close(connection, statement);
@@ -228,8 +229,8 @@ public class MySql extends DatabaseProvider {
 
             return resultCached;
         }
-        catch (SQLException e) {
-            throwRunTimeException(e);
+        catch (SQLException ex) {
+            SneakyThrow.sneaky(ex);
         }
         finally {
           close(connection, statement);
@@ -244,8 +245,8 @@ public class MySql extends DatabaseProvider {
             try {
                 connection.close();
             }
-            catch (SQLException e) {
-                throwRunTimeException(e);
+            catch (SQLException ex) {
+                SneakyThrow.sneaky(ex);
             }
         }
 
@@ -253,17 +254,9 @@ public class MySql extends DatabaseProvider {
             try {
                 statement.close();
             }
-            catch (SQLException e) {
-                throwRunTimeException(e);
+            catch (SQLException ex) {
+                SneakyThrow.sneaky(ex);
             }
         }
-    }
-
-    private void throwRunTimeException(Exception e) {
-        e.printStackTrace();
-
-        RuntimeException exception = new RuntimeException();
-        exception.setStackTrace(new StackTraceElement[] {});
-        throw exception;
     }
 }

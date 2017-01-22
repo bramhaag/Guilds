@@ -1,6 +1,9 @@
+import org.apache.tools.ant.filters.*
+
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'rebel'
 
 group = 'me.bramhaag'
 version = '1.3.3-RELEASE'
@@ -11,8 +14,10 @@ targetCompatibility = 1.8
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
     }
     dependencies {
+        classpath group: 'org.zeroturnaround', name: 'gradle-jrebel-plugin', version: '1.1.5'
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
     }
 }
@@ -28,6 +33,7 @@ repositories {
     maven { url "http://repo.mcstats.org/content/repositories/public" }
     maven { url "http://repo.maven.apache.org/maven2" }
 }
+
 dependencies {
     compileOnly group: 'org.spigotmc',         name: 'spigot',             version: '1.10-R0.1-SNAPSHOT'
 
@@ -39,4 +45,11 @@ dependencies {
 
     compileOnly group: 'be.maximvdw',          name: 'MVdWPlaceholderAPI', version: '1.0.2-SNAPSHOT'
     compileOnly group: 'me.clip',              name: 'placeholderapi',     version: '2.0.8'
+}
+
+processResources {
+    filter ReplaceTokens, tokens: [
+            "project.name":    project.name,
+            "project.version": version
+    ]
 }

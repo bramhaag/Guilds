@@ -1,5 +1,5 @@
-name: ${project.name}
-version: ${project.version}
+name: @project.name@
+version: @project.version@
 main: me.bramhaag.guilds.Main
 softdepend: [MVdWPlaceholderAPI, PlaceholderAPI]
 author: bramhaag
