@@ -1,16 +1,16 @@
 package me.bramhaag.guilds.leaderboard;
 
-public class Score<T> {
+public class Score {
 
-    private T owner;
+    private String owner;
     private long value;
 
-    public Score(T owner, long value) {
+    public Score(String owner, long value) {
         this.owner = owner;
         this.value = value;
     }
 
-    public T getOwner() {
+    public String getOwner() {
         return owner;
     }
 
