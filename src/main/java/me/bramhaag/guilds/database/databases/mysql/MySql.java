@@ -8,6 +8,7 @@ import me.bramhaag.guilds.database.Callback;
 import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.guild.GuildRole;
+import me.bramhaag.guilds.leaderboard.Leaderboard;
 import org.bukkit.configuration.ConfigurationSection;
 import org.spigotmc.SneakyThrow;
 
@@ -180,6 +181,16 @@ public class MySql extends DatabaseProvider {
                 exception.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public void createLeaderboard(String name, Leaderboard.SortType sortType) {
+
+    }
+
+    @Override
+    public void removeLeaderboard(String name) {
+
     }
 
     private void execute(String query, Object... parameters) {

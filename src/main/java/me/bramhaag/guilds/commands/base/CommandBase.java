@@ -16,12 +16,12 @@ public abstract class CommandBase {
     private boolean allowConsole;
 
     private List<String> aliases;
-    private List<String> arguments;
+    private String arguments;
 
     private int minimumArguments;
     private int maximumArguments;
 
-    public CommandBase(String name, String description, String permission, boolean allowConsole, String[] aliases, String[] arguments, int minimumArguments, int maximumArguments) {
+    public CommandBase(String name, String description, String permission, boolean allowConsole, String[] aliases, String arguments, int minimumArguments, int maximumArguments) {
         this.name = name;
         this.description = description;
         this.permission = permission;
@@ -29,7 +29,7 @@ public abstract class CommandBase {
         this.allowConsole = allowConsole;
 
         this.aliases = aliases == null ? new ArrayList<>() : Arrays.asList(aliases);
-        this.arguments = arguments == null ? new ArrayList<>() : Arrays.asList(arguments);
+        this.arguments = arguments == null ? "" : arguments;
 
         this.minimumArguments = minimumArguments;
         this.maximumArguments = maximumArguments;
@@ -62,7 +62,7 @@ public abstract class CommandBase {
         return aliases;
     }
 
-    public List<String> getArguments() {
+    public String getArguments() {
         return arguments;
     }
 

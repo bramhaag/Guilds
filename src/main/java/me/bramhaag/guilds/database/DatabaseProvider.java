@@ -4,6 +4,7 @@ import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.leaderboard.Leaderboard;
 
 import java.util.HashMap;
+import java.util.List;
 
 public abstract class DatabaseProvider {
     public abstract void initialize();
@@ -17,4 +18,5 @@ public abstract class DatabaseProvider {
 
     public abstract void createLeaderboard(String name, Leaderboard.SortType sortType);
     public abstract void removeLeaderboard(String name);
+    public abstract void getLeaderboards(Callback<List<Leaderboard>, Exception> callback);
 }

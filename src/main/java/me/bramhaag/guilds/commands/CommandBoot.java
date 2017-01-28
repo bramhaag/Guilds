@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class CommandBoot extends CommandBase {
 
     public CommandBoot() {
-        super("boot", "Kick a player from your guild", "guilds.command.boot", false, new String[] { "kick" }, new String[] { "<player>" }, 1, 1);
+        super("boot", "Kick a player from your guild", "guilds.command.boot", false, new String[] { "kick" }, "<player>", 1, 1);
     }
 
     public void execute(Player player, String[] args) {

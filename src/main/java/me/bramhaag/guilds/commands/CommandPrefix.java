@@ -11,7 +11,7 @@ public class CommandPrefix extends CommandBase {
 
 
     public CommandPrefix() {
-        super("prefix", "Change your guild's prefix", "guilds.command.prefix", false, null, new String[] { "<new prefix>" }, 1, 1);
+        super("prefix", "Change your guild's prefix", "guilds.command.prefix", false, null, "<new prefix>", 1, 1);
     }
 
     @Override

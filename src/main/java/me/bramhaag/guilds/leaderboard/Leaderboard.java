@@ -68,14 +68,18 @@ public abstract class Leaderboard {
         return scores.stream().filter(score -> score.getOwner().equals(owner)).findFirst().orElse(null);
     }
 
+    /**
+     * Get scores in order depending on the {@code SortType}
+     * @return ordered scores
+     */
     protected List<Score> getSortedScores() {
-        if(sortType == SortType.ASCENDING) {
-            return scores;
-        }
-
-        return Lists.reverse(scores);
+        return sortType == SortType.ASCENDING ? scores : Lists.reverse(scores);
     }
 
+    /**
+     * Show leaderboard to {@code sender}
+     * @param sender User who the leaderboard is showed to
+     */
     public void showLeaderboard(CommandSender sender) {
         if(scores.isEmpty()) {
             sender.sendMessage(ChatColor.RED + "This scoreboard is empty!");
@@ -90,6 +94,10 @@ public abstract class Leaderboard {
         }
     }
 
+    /**
+     * Show player version of the leaderboard
+     * @param sender User who the leaderboard is showed to
+     */
     public void showPlayerLeaderboard(CommandSender sender) {
         sender.sendMessage(ChatColor.AQUA + "Leaderboard " + name);
         for(int i = 0; i < scores.size(); i++) {
@@ -99,6 +107,10 @@ public abstract class Leaderboard {
         }
     }
 
+    /**
+     * Show guild version of the leaderboard
+     * @param sender User who the leaderboard is showed to
+     */
     public void showGuildLeaderboard(CommandSender sender) {
         sender.sendMessage(ChatColor.AQUA + "Leaderboard " + name);
         for(int i = 0; i < scores.size(); i++) {

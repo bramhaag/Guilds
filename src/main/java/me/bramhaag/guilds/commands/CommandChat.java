@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 public class CommandChat extends CommandBase {
 
     public CommandChat() {
-        super("chat", "Send a message to your guild members", "guilds.command.chat", false, new String[] { "c" }, new String[] { "<message>" }, 1, -1);
+        super("chat", "Send a message to your guild members", "guilds.command.chat", false, new String[] { "c" }, "<message>", 1, -1);
     }
 
     public void execute(Player player, String[] args) {

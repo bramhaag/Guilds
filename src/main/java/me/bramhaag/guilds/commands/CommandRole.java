@@ -17,7 +17,7 @@ public class CommandRole extends CommandBase {
 
     public CommandRole() {
         super("role", "View all players with the specified role", "guilds.command.role", false, new String[] { "rank" },
-                new String[] { "<" + String.join(" | ", Stream.of(Main.getInstance().getGuildHandler().getRoles().toArray(new GuildRole[0])).map(GuildRole::getName).collect(Collectors.toList())) + ">" },
+                "<" + String.join(" | ", Stream.of(Main.getInstance().getGuildHandler().getRoles().toArray(new GuildRole[0])).map(GuildRole::getName).collect(Collectors.toList())) + ">",
                 1, 1);
     }
 

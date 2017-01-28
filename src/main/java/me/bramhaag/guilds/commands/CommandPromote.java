@@ -12,10 +12,10 @@ import org.bukkit.entity.Player;
 public class CommandPromote extends CommandBase {
 
     public CommandPromote() {
-        super("promote", "Promote a member of your guild", "guilds.command.promote", false, new String[] { "rankup" }, new String[] { "<player> [new role]" }, 1, 2);
+        super("promote", "Promote a member of your guild", "guilds.command.promote", false, new String[] { "rankup" }, "<player> [new role]", 1, 2);
     }
 
-    @SuppressWarnings("Duplicates")
+    @SuppressWarnings({"Duplicates", "deprecation"})
     @Override
     public void execute(Player player, String[] args) {
         Guild guild = Guild.getGuild(player.getUniqueId());

@@ -12,7 +12,7 @@ import java.util.logging.Level;
 public class CommandCreate extends CommandBase {
 
     public CommandCreate() {
-        super("create", "Create a guild", "guilds.command.create", false, new String[] { "c" }, new String[] { "<name>" }, 1, 1);
+        super("create", "Create a guild", "guilds.command.create", false, new String[] { "c" }, "<name>", 1, 1);
     }
 
     @Override

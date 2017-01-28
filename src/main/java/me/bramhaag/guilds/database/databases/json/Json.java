@@ -8,6 +8,7 @@ import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.database.Callback;
 import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.guild.Guild;
+import me.bramhaag.guilds.leaderboard.Leaderboard;
 
 import java.io.*;
 import java.util.HashMap;
@@ -101,6 +102,16 @@ public class Json extends DatabaseProvider {
             .asyncFirst(() -> write(guilds))
             .syncLast((successful) -> callback.call(successful, null))
         .execute();
+    }
+
+    @Override
+    public void createLeaderboard(String name, Leaderboard.SortType sortType) {
+
+    }
+
+    @Override
+    public void removeLeaderboard(String name) {
+
     }
 
     private boolean write(HashMap<String, Guild> guilds) {

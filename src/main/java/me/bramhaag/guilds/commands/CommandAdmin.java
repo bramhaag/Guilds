@@ -13,10 +13,11 @@ import org.bukkit.entity.Player;
 
 import java.util.logging.Level;
 
+@SuppressWarnings("deprecation")
 public class CommandAdmin extends CommandBase {
 
     public CommandAdmin() {
-        super("admin", "Admin command for managing guilds", "guilds.command.admin", true, null, new String[] { "<remove | info> <guild name>, or <addplayer | removeplayer> <guild name> <player name>" }, 2, 3);
+        super("admin", "Admin command for managing guilds", "guilds.command.admin", true, null, "<remove | info> <guild name>, or <addplayer | removeplayer> <guild name> <player name>", 2, 3);
     }
 
     @Override

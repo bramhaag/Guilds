@@ -22,17 +22,23 @@ public class GuildRole {
     private boolean changePrefix;
     private boolean changeMaster;
     private boolean removeGuild;
+    private boolean addAlly;
+    private boolean removeAlly;
+    private boolean allyChat;
 
-    GuildRole(String name, int level, boolean chat, boolean invite, boolean kick, boolean promote, boolean demote, boolean changePrefix, boolean changeMaster, boolean removeGuild) {
+    GuildRole(String name, int level, boolean chat, boolean allyChat, boolean invite, boolean kick, boolean promote, boolean demote, boolean addAlly, boolean removeAlly, boolean changePrefix, boolean changeMaster, boolean removeGuild) {
         this.name = name;
 
         this.level = level;
 
         this.chat = chat;
+        this.allyChat = allyChat;
         this.invite = invite;
         this.kick = kick;
         this.promote = promote;
         this.demote = demote;
+        this.addAlly = addAlly;
+        this.removeAlly = removeAlly;
         this.changePrefix = changePrefix;
         this.changeMaster = changeMaster;
         this.removeGuild = removeGuild;
@@ -77,6 +83,18 @@ public class GuildRole {
 
     public boolean canRemoveGuild() {
         return removeGuild;
+    }
+
+    public boolean canAddAlly() {
+        return addAlly;
+    }
+
+    public boolean canRemoveAlly() {
+        return removeAlly;
+    }
+
+    public boolean useAllyChat() {
+        return allyChat;
     }
 
     public static GuildRole getRole(int level) {
