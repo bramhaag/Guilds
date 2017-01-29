@@ -130,7 +130,11 @@ public class Json extends DatabaseProvider {
         Main.newChain()
                 .asyncFirst(() -> {
                     System.out.println(leaderboards.size());
-                    return write(leaderboardsFile, leaderboards);
+                    boolean toReturn = write(leaderboardsFile, leaderboards);
+
+                    Main.getInstance().getLeaderboardHandler().addLeaderboard(leaderboard);
+
+                    return toReturn;
                 })
                 .syncLast(successful -> callback.call(successful, null))
             .execute((exception, task) -> {
@@ -139,8 +143,8 @@ public class Json extends DatabaseProvider {
                 }
             });
 
-        //Writes 2x because of this
-        Main.getInstance().getLeaderboardHandler().addLeaderboard(leaderboard);
+        //Writes 2x because of this, moved inside of asyncFirst which seems to solve the issue
+        //Main.getInstance().getLeaderboardHandler().addLeaderboard(leaderboard);
     }
 
     @Override
