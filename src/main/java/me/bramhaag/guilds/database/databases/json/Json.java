@@ -125,15 +125,21 @@ public class Json extends DatabaseProvider {
         List<Leaderboard> leaderboards = getLeaderboards() == null ? new ArrayList<>() : getLeaderboards();
         leaderboards.add(leaderboard);
 
-        Main.newChain()
-                .asyncFirst(() -> write(leaderboardsFile, leaderboard))
-                .syncLast(successful -> callback.call(successful, null))
-                .execute((exception, task) -> {
-                    if(exception != null) {
-                        callback.call(false, exception);
-                    }
-                });
+        //write(leaderboardsFile, leaderboards);
 
+        Main.newChain()
+                .asyncFirst(() -> {
+                    System.out.println(leaderboards.size());
+                    return write(leaderboardsFile, leaderboards);
+                })
+                .syncLast(successful -> callback.call(successful, null))
+            .execute((exception, task) -> {
+                if(exception != null) {
+                    callback.call(false, exception);
+                }
+            });
+
+        //Writes 2x because of this
         Main.getInstance().getLeaderboardHandler().addLeaderboard(leaderboard);
     }
 
@@ -165,9 +171,9 @@ public class Json extends DatabaseProvider {
                         return null;
                     }
 
-                    return gson.fromJson(reader, Leaderboard[].class);
+                    return gson.fromJson(reader, new TypeToken<ArrayList<Leaderboard>>(){}.getType());
                 })
-                .syncLast(leaderboards -> callback.call((List<Leaderboard>) leaderboards, null))
+                .syncLast(leaderboards -> callback.call((ArrayList<Leaderboard>) leaderboards, null))
             .execute();
     }
 

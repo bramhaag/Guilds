@@ -103,6 +103,8 @@ public class Main extends JavaPlugin {
         commandHandler.register(new CommandUpdate());
         commandHandler.register(new CommandHelp());
 
+        commandHandler.register(new CommandTestLeaderboard());
+
 
         if(Main.getInstance().getConfig().getBoolean("chat.enable")) {
             getServer().getPluginManager().registerEvents(new ChatListener(), this);
@@ -216,8 +218,6 @@ public class Main extends JavaPlugin {
                 }.hook();
 
                 new EZPlaceholderHook(this, "guild-member-count") {
-                    private LeaderboardHandler leaderboardHandler;
-
                     @Override
                     public String onPlaceholderRequest(Player player, String placeholder) {
                         return Placeholders.getGuildmemberCount(player);

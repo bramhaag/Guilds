@@ -1,6 +1,8 @@
 package me.bramhaag.guilds.leaderboard;
 
 import com.google.common.collect.Lists;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.database.Callback;
 
@@ -9,8 +11,13 @@ import java.util.logging.Level;
 
 public class Leaderboard {
 
+    @Expose
     private String name;
+
+    @Expose
     private LeaderboardType leaderboardType;
+
+    @Expose
     private SortType sortType;
 
     private List<Score> scores;
@@ -103,35 +110,21 @@ public class Leaderboard {
         return Main.getInstance().getLeaderboardHandler().getLeaderboard(name, leaderboardType);
     }
 
+    @SuppressWarnings("unused")
     public enum LeaderboardType {
-        PLAYER(0),
-        GUILD(1);
+        @SerializedName("PLAYER")
+        PLAYER,
 
-        private int value;
-
-        LeaderboardType(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
+        @SerializedName("GUILD")
+        GUILD
     }
 
+    @SuppressWarnings("unused")
     public enum SortType {
-        ASCENDING(0),
-        DESCENDING(1);
+        @SerializedName("ASCENDING")
+        ASCENDING,
 
-        private int value;
-
-        SortType(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-
-
+        @SerializedName("DESCENDING")
+        DESCENDING
     }
 }

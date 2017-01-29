@@ -2,7 +2,6 @@ package me.bramhaag.guilds.leaderboard;
 
 import me.bramhaag.guilds.IHandler;
 import me.bramhaag.guilds.Main;
-import org.spigotmc.SneakyThrow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,29 +34,16 @@ public class LeaderboardHandler implements IHandler {
 
             if (result != null) {
                 leaderboards = result;
-                Main.getInstance().getScoreboardHandler().enable();
             }
         });
     }
 
     public void addLeaderboard(Leaderboard leaderboard) {
         leaderboards.add(leaderboard);
-
-        Main.getInstance().getDatabaseProvider().createLeaderboard(leaderboard, (result, exception) -> {
-            if(result == null && exception != null) {
-                SneakyThrow.sneaky(exception);
-            }
-        });
     }
 
     public void removeLeaderboard(Leaderboard leaderboard) {
         leaderboards.remove(leaderboard);
-
-        Main.getInstance().getDatabaseProvider().removeLeaderboard(leaderboard, (result, exception) -> {
-            if(!result && exception != null) {
-                SneakyThrow.sneaky(exception);
-            }
-        });
     }
 
     public List<Leaderboard> getLeaderboards() {

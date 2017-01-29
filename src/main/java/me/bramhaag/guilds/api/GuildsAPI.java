@@ -2,7 +2,6 @@ package me.bramhaag.guilds.api;
 
 import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.leaderboard.Leaderboard;
-import me.bramhaag.guilds.leaderboard.LeaderboardHandler;
 import org.spigotmc.SneakyThrow;
 
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ public class GuildsAPI {
         if(leaderboard == null) {
             leaderboard = new Leaderboard(name, leaderboardType, sortType, new ArrayList<>());
             Main.getInstance().getDatabaseProvider().createLeaderboard(leaderboard, (result, exception) -> {
-                if (result == null && exception != null) {
+                if (!result && exception != null) {
                     SneakyThrow.sneaky(exception);
                 }
             });
@@ -26,7 +25,7 @@ public class GuildsAPI {
 
     public static void removeLeaderboard(String name, Leaderboard.LeaderboardType leaderboardType) {
         Main.getInstance().getDatabaseProvider().removeLeaderboard(Leaderboard.getLeaderboard(name, leaderboardType), (result, exception) -> {
-            if(result == null && exception != null) {
+            if(!result && exception != null) {
                 SneakyThrow.sneaky(exception);
             }
         });

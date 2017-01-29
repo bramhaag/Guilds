@@ -53,3 +53,8 @@ processResources {
             "project.version": version
     ]
 }
+
+task copyToServer(type: Copy) {
+    from 'build/libs/' + project.name + '-' + version + '-all.jar'
+    into 'C:/Users/Bram/Desktop/Spigot server/plugins'
+}
