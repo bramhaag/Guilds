@@ -7,10 +7,14 @@ import com.google.gson.stream.JsonReader;
 import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.database.Callback;
 import me.bramhaag.guilds.database.DatabaseProvider;
+import me.bramhaag.guilds.database.databases.json.deserializer.GuildMapDeserializer;
+import me.bramhaag.guilds.database.databases.json.deserializer.LeaderboardListDeserializer;
+import me.bramhaag.guilds.database.databases.json.serializer.LeaderboardListSerializer;
 import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.leaderboard.Leaderboard;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,13 +27,21 @@ public class Json extends DatabaseProvider {
     private File guildsFile;
     private File leaderboardsFile;
 
+    private Type guildsType;
+    private Type leaderboardsType;
+
     @Override
     public void initialize() {
         guildsFile = new File(Main.getInstance().getDataFolder(), "guilds.json");
         leaderboardsFile = new File(Main.getInstance().getDataFolder(), "leaderboards.json");
 
+        guildsType = new TypeToken<Map<String, Guild>>() { }.getType();
+        leaderboardsType = new TypeToken<ArrayList<Leaderboard>>() { }.getType();
+
         gson = new GsonBuilder()
-            .registerTypeAdapter(new TypeToken<Map<String, Guild>>() { }.getType(), new GuildMapDeserializer())
+            .registerTypeAdapter(guildsType, new GuildMapDeserializer())
+            .registerTypeAdapter(leaderboardsType, new LeaderboardListDeserializer())
+            .registerTypeAdapter(leaderboardsType, new LeaderboardListSerializer())
             .excludeFieldsWithoutExposeAnnotation()
             .setPrettyPrinting()
         .create();
@@ -63,7 +75,7 @@ public class Json extends DatabaseProvider {
         guilds.put(guild.getName(), guild);
 
         Main.newChain()
-            .asyncFirst(() -> write(guildsFile, guilds))
+            .asyncFirst(() -> write(guildsFile, guilds, guildsType))
             .syncLast(successful -> callback.call(successful, null))
         .execute((exception, task) -> {
             if(exception != null) {
@@ -85,7 +97,7 @@ public class Json extends DatabaseProvider {
         guilds.remove(guild.getName());
 
         Main.newChain()
-            .asyncFirst(() -> write(guildsFile, guilds))
+            .asyncFirst(() -> write(guildsFile, guilds, guildsType))
             .syncLast(successful -> callback.call(successful, null))
         .execute();
     }
@@ -103,7 +115,7 @@ public class Json extends DatabaseProvider {
                     return null;
                 }
 
-                return gson.fromJson(reader, new TypeToken<Map<String, Guild>>() { }.getType());
+                return gson.fromJson(reader, guildsType);
             })
             .syncLast(guilds -> callback.call((HashMap<String, Guild>)guilds, null))
         .execute();
@@ -115,7 +127,7 @@ public class Json extends DatabaseProvider {
         guilds.put(guild.getName(), guild);
 
         Main.newChain()
-            .asyncFirst(() -> write(guildsFile, guilds))
+            .asyncFirst(() -> write(guildsFile, guilds, guildsType))
             .syncLast(successful -> callback.call(successful, null))
         .execute();
     }
@@ -125,13 +137,9 @@ public class Json extends DatabaseProvider {
         List<Leaderboard> leaderboards = getLeaderboards() == null ? new ArrayList<>() : getLeaderboards();
         leaderboards.add(leaderboard);
 
-        //write(leaderboardsFile, leaderboards);
-
-        Main.newChain()
+       Main.newSharedChain(leaderboardsFile.getName())
                 .asyncFirst(() -> {
-                    System.out.println(leaderboards.size());
-                    boolean toReturn = write(leaderboardsFile, leaderboards);
-
+                    boolean toReturn = write(leaderboardsFile, leaderboards, leaderboardsType);
                     Main.getInstance().getLeaderboardHandler().addLeaderboard(leaderboard);
 
                     return toReturn;
@@ -158,12 +166,13 @@ public class Json extends DatabaseProvider {
         leaderboards.remove(leaderboard);
 
         Main.newChain()
-                .asyncFirst(() -> write(guildsFile, leaderboards))
+                .asyncFirst(() -> write(guildsFile, leaderboards, leaderboardsType))
                 .syncLast(successful -> callback.call(successful, null))
             .execute();
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void getLeaderboards(Callback<List<Leaderboard>, Exception> callback) {
         Main.newChain()
                 .asyncFirst(() -> {
@@ -175,7 +184,7 @@ public class Json extends DatabaseProvider {
                         return null;
                     }
 
-                    return gson.fromJson(reader, new TypeToken<ArrayList<Leaderboard>>(){}.getType());
+                    return gson.fromJson(reader, leaderboardsType);
                 })
                 .syncLast(leaderboards -> callback.call((ArrayList<Leaderboard>) leaderboards, null))
             .execute();
@@ -188,14 +197,14 @@ public class Json extends DatabaseProvider {
         leaderboards.add(leaderboard);
 
         Main.newChain()
-                .asyncFirst(() -> write(leaderboardsFile, leaderboards))
+                .asyncFirst(() -> write(leaderboardsFile, leaderboards, leaderboardsType))
                 .syncLast(successful -> callback.call(successful, null))
             .execute();
     }
 
-    private boolean write(File file, Object toWrite) {
+    private boolean write(File file, Object toWrite, Type typeOfSrc) {
         try (Writer writer = new FileWriter(file)) {
-            gson.toJson(toWrite, writer);
+            gson.toJson(toWrite, typeOfSrc, writer);
             return true;
         }
         catch (IOException e) {

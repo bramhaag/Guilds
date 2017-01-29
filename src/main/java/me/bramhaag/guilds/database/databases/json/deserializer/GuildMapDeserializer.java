@@ -1,4 +1,4 @@
-package me.bramhaag.guilds.database.databases.json;
+package me.bramhaag.guilds.database.databases.json.deserializer;
 
 import com.google.gson.*;
 import me.bramhaag.guilds.guild.Guild;

@@ -185,6 +185,10 @@ public class Main extends JavaPlugin {
         return taskChainFactory.newChain();
     }
 
+    public static <T> TaskChain<T> newSharedChain(String name) {
+        return taskChainFactory.newSharedChain(name);
+    }
+
     public static long getCreationTime() {
         return creationTime / 1000;
     }

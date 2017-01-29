@@ -5,11 +5,16 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.database.Callback;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 
-public class Leaderboard {
+public abstract class Leaderboard {
 
     @Expose
     private String name;
@@ -21,6 +26,10 @@ public class Leaderboard {
     private SortType sortType;
 
     private List<Score> scores;
+
+    public Leaderboard(String name, LeaderboardType leaderboardType, SortType sortType) {
+        this(name, leaderboardType, sortType, new ArrayList<Score>());
+    }
 
     public Leaderboard(String name, LeaderboardType leaderboardType, SortType sortType, List<Score> scores) {
         this.name = name;
@@ -108,6 +117,26 @@ public class Leaderboard {
 
     public static Leaderboard getLeaderboard(String name, LeaderboardType leaderboardType) {
         return Main.getInstance().getLeaderboardHandler().getLeaderboard(name, leaderboardType);
+    }
+
+    public void show(CommandSender sender) {
+        if(scores.isEmpty()) {
+            sender.sendMessage(ChatColor.RED + "This scoreboard is empty!");
+            return;
+        }
+
+        sender.sendMessage(ChatColor.AQUA + "Leaderboard " + name);
+
+        for(int i = 0; i < scores.size(); i++) {
+            Score score = scores.get(i);
+
+            if(leaderboardType == LeaderboardType.PLAYER) {
+                sender.sendMessage(String.format("%d. %s - %d", i + 1, Bukkit.getPlayer(UUID.fromString(score.getOwner())), score.getValue()));
+            }
+            else if(leaderboardType == LeaderboardType.GUILD) {
+                sender.sendMessage(String.format("%d. %s - %d", i + 1, score.getOwner(), score.getValue()));
+            }
+        }
     }
 
     @SuppressWarnings("unused")
