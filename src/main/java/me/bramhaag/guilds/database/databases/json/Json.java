@@ -8,10 +8,11 @@ import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.database.Callback;
 import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.guild.Guild;
-import me.bramhaag.guilds.leaderboard.Leaderboard;
+import me.bramhaag.guilds.__old.leaderboard.Leaderboard;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //TODO handle exceptions
@@ -48,7 +49,7 @@ public class Json extends DatabaseProvider {
 
         Main.newChain()
             .asyncFirst(() -> write(guilds))
-            .syncLast((successful) -> callback.call(successful, null))
+            .syncLast(successful -> callback.call(successful, null))
         .execute((exception, task) -> {
             if(exception != null) {
                 callback.call(false, exception);
@@ -70,7 +71,7 @@ public class Json extends DatabaseProvider {
 
         Main.newChain()
             .asyncFirst(() -> write(guilds))
-            .syncLast((successful) -> callback.call(successful, null))
+            .syncLast(successful -> callback.call(successful, null))
         .execute();
     }
 
@@ -100,17 +101,22 @@ public class Json extends DatabaseProvider {
 
         Main.newChain()
             .asyncFirst(() -> write(guilds))
-            .syncLast((successful) -> callback.call(successful, null))
+            .syncLast(successful -> callback.call(successful, null))
         .execute();
     }
 
     @Override
-    public void createLeaderboard(String name, Leaderboard.SortType sortType) {
+    public void createLeaderboard(String name, me.bramhaag.guilds.leaderboard.Leaderboard.LeaderboardType leaderboardType, me.bramhaag.guilds.leaderboard.Leaderboard.SortType sortType, Callback<me.bramhaag.guilds.leaderboard.Leaderboard, Exception> callback) {
 
     }
 
     @Override
-    public void removeLeaderboard(String name) {
+    public void removeLeaderboard(String name, me.bramhaag.guilds.leaderboard.Leaderboard.LeaderboardType leaderboardType, Callback<Boolean, Exception> callback) {
+
+    }
+
+    @Override
+    public void getLeaderboards(Callback<List<me.bramhaag.guilds.leaderboard.Leaderboard>, Exception> callback) {
 
     }
 

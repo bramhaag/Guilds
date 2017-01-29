@@ -35,7 +35,7 @@ public class CommandAdmin extends CommandBase {
             Main.getInstance().getCommandHandler().addAction(sender, new ConfirmAction() {
                 @Override
                 public void accept() {
-                    Main.getInstance().getDatabaseProvider().removeGuild(guild, ((result, exception) -> {
+                    Main.getInstance().getDatabaseProvider().removeGuild(guild, (result, exception) -> {
                         if(result) {
                             Message.sendMessage(sender, Message.COMMAND_ADMIN_DELETE_SUCCESSFUL.replace("{guild}", guild.getName()));
                             Main.getInstance().getScoreboardHandler().update();
@@ -48,7 +48,7 @@ public class CommandAdmin extends CommandBase {
                                 exception.printStackTrace();
                             }
                         }
-                    }));
+                    });
 
                     Main.getInstance().getCommandHandler().removeAction(sender);
                 }

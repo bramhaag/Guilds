@@ -25,7 +25,7 @@ public class Updater {
     public static void checkForUpdates(Callback<String, Exception> callback) {
         Main.newChain()
             .asyncFirst(Updater::getLatestVersion)
-            .syncLast((latestVersion) -> {
+            .syncLast(latestVersion -> {
                 long creationTime = Main.getCreationTime();
                 callback.call((creationTime != 0 && latestVersion.getReleaseDate() > creationTime) ? String.format("%s/%s/download?version=%s", SPIGOT_URL, RESOURCE_ID, latestVersion.getId()) : null, null);
             })

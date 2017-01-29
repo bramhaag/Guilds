@@ -112,38 +112,38 @@ public class Guild {
 
         this.members.remove(member);
 
-        Main.getInstance().getDatabaseProvider().updateGuild(this, ((result, exception) -> {
+        Main.getInstance().getDatabaseProvider().updateGuild(this, (result, exception) -> {
             if(!result) {
                 Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while removing a member with the UUID of '%s' from guild '%s'", uuid, this.name));
                 if(exception != null) {
                     exception.printStackTrace();
                 }
             }
-        }));
+        });
     }
 
     public void inviteMember(UUID uuid) {
         invitedMembers.add(uuid);
-        Main.getInstance().getDatabaseProvider().updateGuild(this, ((result, exception) -> {
+        Main.getInstance().getDatabaseProvider().updateGuild(this, (result, exception) -> {
             if(!result) {
                 Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while inviting a member with the UUID of '%s' to guild '%s'", uuid, this.name));
                 if(exception != null) {
                     exception.printStackTrace();
                 }
             }
-        }));
+        });
     }
 
     public void removeInvitedPlayer(UUID uuid) {
         invitedMembers.remove(uuid);
-        Main.getInstance().getDatabaseProvider().updateGuild(this, ((result, exception) -> {
+        Main.getInstance().getDatabaseProvider().updateGuild(this, (result, exception) -> {
             if(!result) {
                 Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while removing an invited member member with the UUID of '%s' to guild '%s'", uuid, this.name));
                 if(exception != null) {
                     exception.printStackTrace();
                 }
             }
-        }));
+        });
     }
 
     public void sendMessage(String message) {

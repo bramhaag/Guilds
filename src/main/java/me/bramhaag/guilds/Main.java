@@ -10,6 +10,7 @@ import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.database.databases.json.Json;
 import me.bramhaag.guilds.database.databases.mysql.MySql;
 import me.bramhaag.guilds.guild.GuildHandler;
+import me.bramhaag.guilds.leaderboard.LeaderboardHandler;
 import me.bramhaag.guilds.listeners.ChatListener;
 import me.bramhaag.guilds.listeners.JoinListener;
 import me.bramhaag.guilds.listeners.PlayerDamangeListener;
@@ -35,8 +36,9 @@ public class Main extends JavaPlugin {
 
     private DatabaseProvider database;
 
-    private GuildHandler guildHandler;
-    private CommandHandler commandHandler;
+    private GuildHandler           guildHandler;
+    private CommandHandler         commandHandler;
+    private LeaderboardHandler     leaderboardHandler;
     private GuildScoreboardHandler scoreboardHandler;
 
     private static long creationTime;
@@ -62,6 +64,9 @@ public class Main extends JavaPlugin {
 
         commandHandler = new CommandHandler();
         commandHandler.enable();
+
+        leaderboardHandler = new LeaderboardHandler();
+        leaderboardHandler.enable();
 
         //scoreboardHandler is enabled after the guilds are loaded
         scoreboardHandler = new GuildScoreboardHandler();
@@ -178,10 +183,6 @@ public class Main extends JavaPlugin {
         return taskChainFactory.newChain();
     }
 
-    public static <T> TaskChain<T> newSharedChain(String name) {
-        return taskChainFactory.newSharedChain(name);
-    }
-
     public static long getCreationTime() {
         return creationTime / 1000;
     }
@@ -192,10 +193,10 @@ public class Main extends JavaPlugin {
 
     private void initializePlaceholder() {
         if (Bukkit.getPluginManager().isPluginEnabled("MVdWPlaceholderAPI")) {
-            PlaceholderAPI.registerPlaceholder(this, "guild",              (event) -> Placeholders.getGuild(event.getPlayer()));
-            PlaceholderAPI.registerPlaceholder(this, "guild-master",       (event) -> Placeholders.getGuildMaster(event.getPlayer()));
-            PlaceholderAPI.registerPlaceholder(this, "guild-member-count", (event) -> Placeholders.getGuildmemberCount(event.getPlayer()));
-            PlaceholderAPI.registerPlaceholder(this, "guild-prefix",       (event) -> Placeholders.getGuildPrefix(event.getPlayer()));
+            PlaceholderAPI.registerPlaceholder(this, "guild",              event -> Placeholders.getGuild(event.getPlayer()));
+            PlaceholderAPI.registerPlaceholder(this, "guild-master",       event -> Placeholders.getGuildMaster(event.getPlayer()));
+            PlaceholderAPI.registerPlaceholder(this, "guild-member-count", event -> Placeholders.getGuildmemberCount(event.getPlayer()));
+            PlaceholderAPI.registerPlaceholder(this, "guild-prefix",       event -> Placeholders.getGuildPrefix(event.getPlayer()));
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
@@ -215,6 +216,8 @@ public class Main extends JavaPlugin {
                 }.hook();
 
                 new EZPlaceholderHook(this, "guild-member-count") {
+                    private LeaderboardHandler leaderboardHandler;
+
                     @Override
                     public String onPlaceholderRequest(Player player, String placeholder) {
                         return Placeholders.getGuildmemberCount(player);
@@ -231,5 +234,9 @@ public class Main extends JavaPlugin {
                 getLogger().log(Level.WARNING, "Error while creating PlaceholderAPI placeholders!");
             }
         }
+    }
+
+    public LeaderboardHandler getLeaderboardHandler() {
+        return leaderboardHandler;
     }
 }

@@ -26,7 +26,7 @@ public class CommandInfo extends CommandBase {
         Message.sendMessage(player, Message.COMMAND_INFO_HEADER.replace("{guild}", guild.getName()));
         Message.sendMessage(player, Message.COMMAND_INFO_NAME.replace("{guild}", guild.getName(), "{prefix}", guild.getPrefix()));
         Message.sendMessage(player, Message.COMMAND_INFO_MASTER.replace("{master}", Bukkit.getPlayer(guild.getGuildMaster().getUniqueId()).getName()));
-        Message.sendMessage(player, Message.COMMAND_INFO_MEMBER_COUNT.replace("{members}", String.valueOf(guild.getMembers().size()), "{members-online}", String.valueOf(guild.getMembers().stream().map((member) -> Bukkit.getPlayer(member.getUniqueId())).filter(OfflinePlayer::isOnline).count())));
+        Message.sendMessage(player, Message.COMMAND_INFO_MEMBER_COUNT.replace("{members}", String.valueOf(guild.getMembers().size()), "{members-online}", String.valueOf(guild.getMembers().stream().map(member -> Bukkit.getPlayer(member.getUniqueId())).filter(OfflinePlayer::isOnline).count())));
         Message.sendMessage(player, Message.COMMAND_INFO_RANK.replace("{rank}", GuildRole.getRole(guild.getMember(player.getUniqueId()).getRole()).getName()));
     }
 }

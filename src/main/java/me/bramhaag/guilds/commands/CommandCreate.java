@@ -44,7 +44,7 @@ public class CommandCreate extends CommandBase {
         Main.getInstance().getCommandHandler().addAction(player, new ConfirmAction() {
             @Override
             public void accept() {
-                Main.getInstance().getDatabaseProvider().createGuild(new Guild(args[0], player.getUniqueId()), ((result, exception) -> {
+                Main.getInstance().getDatabaseProvider().createGuild(new Guild(args[0], player.getUniqueId()), (result, exception) -> {
                     if(result) {
                         Message.sendMessage(player, Message.COMMAND_CREATE_SUCCESSFUL.replace("{guild}", args[0]));
 
@@ -59,7 +59,7 @@ public class CommandCreate extends CommandBase {
                             exception.printStackTrace();
                         }
                     }
-                }));
+                });
 
                 Main.getInstance().getCommandHandler().removeAction(player);
             }

@@ -32,7 +32,7 @@ public class GuildHandler implements IHandler {
     }
 
     private void initialize() {
-        Main.getInstance().getDatabaseProvider().getGuilds(((result, exception) -> {
+        Main.getInstance().getDatabaseProvider().getGuilds((result, exception) -> {
             if(result == null && exception != null) {
                 Main.getInstance().getLogger().log(Level.SEVERE, "An error occurred while loading guilds");
                 exception.printStackTrace();
@@ -43,7 +43,7 @@ public class GuildHandler implements IHandler {
                 guilds = result;
                 Main.getInstance().getScoreboardHandler().enable();
             }
-        }));
+        });
 
         guilds.values().forEach(this::addGuild);
 

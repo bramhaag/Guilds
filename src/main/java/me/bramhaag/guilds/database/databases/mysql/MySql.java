@@ -8,7 +8,7 @@ import me.bramhaag.guilds.database.Callback;
 import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.guild.GuildRole;
-import me.bramhaag.guilds.leaderboard.Leaderboard;
+import me.bramhaag.guilds.__old.leaderboard.Leaderboard;
 import org.bukkit.configuration.ConfigurationSection;
 import org.spigotmc.SneakyThrow;
 
@@ -18,6 +18,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -190,6 +191,11 @@ public class MySql extends DatabaseProvider {
 
     @Override
     public void removeLeaderboard(String name) {
+
+    }
+
+    @Override
+    public void getLeaderboards(Callback<List<Leaderboard>, Exception> callback) {
 
     }
 
