@@ -1,8 +1,11 @@
 package me.bramhaag.guilds.leaderboard;
 
 import com.google.common.collect.Lists;
+import me.bramhaag.guilds.Main;
+import me.bramhaag.guilds.database.Callback;
 
 import java.util.List;
+import java.util.logging.Level;
 
 public class Leaderboard {
 
@@ -50,22 +53,54 @@ public class Leaderboard {
                 break;
             }
         }
+
+        Main.getInstance().getDatabaseProvider().updateLeaderboard(this, (result, exception) -> {
+            if(!result && exception != null) {
+                Main.getInstance().getLogger().log(Level.SEVERE, "Something went wrong while saving score for leaderboard " + this.name);
+                exception.printStackTrace();
+            }
+        });
     }
 
     public void removeScore(int position) {
         scores.remove(position);
+
+        Main.getInstance().getDatabaseProvider().updateLeaderboard(this, (result, exception) -> {
+            if(!result && exception != null) {
+                Main.getInstance().getLogger().log(Level.SEVERE, "Something went wrong while removing score from leaderboard " + this.name);
+                exception.printStackTrace();
+            }
+        });
     }
 
     public void removeScore(String owner) {
         removeScore(getScore(owner));
+
+        Main.getInstance().getDatabaseProvider().updateLeaderboard(this, (result, exception) -> {
+            if(!result && exception != null) {
+                Main.getInstance().getLogger().log(Level.SEVERE, "Something went wrong while removing score from leaderboard " + this.name);
+                exception.printStackTrace();
+            }
+        });
     }
 
     public void removeScore(Score score) {
         scores.remove(score);
+
+        Main.getInstance().getDatabaseProvider().updateLeaderboard(this, (result, exception) -> {
+            if(!result && exception != null) {
+                Main.getInstance().getLogger().log(Level.SEVERE, "Something went wrong while removing score from leaderboard " + this.name);
+                exception.printStackTrace();
+            }
+        });
     }
 
     public Score getScore(String owner) {
         return scores.stream().filter(s -> s.getOwner().equals(owner)).findFirst().orElse(null);
+    }
+
+    public static Leaderboard getLeaderboard(String name, LeaderboardType leaderboardType) {
+        return Main.getInstance().getLeaderboardHandler().getLeaderboard(name, leaderboardType);
     }
 
     public enum LeaderboardType {

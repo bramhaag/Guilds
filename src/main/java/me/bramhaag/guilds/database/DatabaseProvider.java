@@ -16,7 +16,10 @@ public abstract class DatabaseProvider {
 
     public abstract void updateGuild(Guild guild, Callback<Boolean, Exception> callback);
 
-    public abstract void createLeaderboard(String name, Leaderboard.LeaderboardType leaderboardType, Leaderboard.SortType sortType, Callback<Leaderboard, Exception> callback);
-    public abstract void removeLeaderboard(String name, Leaderboard.LeaderboardType leaderboardType, Callback<Boolean, Exception> callback);
+    public abstract void createLeaderboard(Leaderboard leaderboard, Callback<Boolean, Exception> callback);
+    public abstract void removeLeaderboard(Leaderboard leaderboard, Callback<Boolean, Exception> callback);
+
     public abstract void getLeaderboards(Callback<List<Leaderboard>, Exception> callback);
+
+    public abstract void updateLeaderboard(Leaderboard leaderboard, Callback<Boolean, Exception> callback);
 }

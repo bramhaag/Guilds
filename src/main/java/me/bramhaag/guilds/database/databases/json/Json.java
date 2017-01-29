@@ -8,9 +8,10 @@ import me.bramhaag.guilds.Main;
 import me.bramhaag.guilds.database.Callback;
 import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.guild.Guild;
-import me.bramhaag.guilds.__old.leaderboard.Leaderboard;
+import me.bramhaag.guilds.leaderboard.Leaderboard;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +21,13 @@ public class Json extends DatabaseProvider {
 
     private Gson gson;
     private File guildsFile;
+    private File leaderboardsFile;
 
     @Override
     public void initialize() {
         guildsFile = new File(Main.getInstance().getDataFolder(), "guilds.json");
+        leaderboardsFile = new File(Main.getInstance().getDataFolder(), "leaderboards.json");
+
         gson = new GsonBuilder()
             .registerTypeAdapter(new TypeToken<Map<String, Guild>>() { }.getType(), new GuildMapDeserializer())
             .excludeFieldsWithoutExposeAnnotation()
@@ -40,6 +44,17 @@ public class Json extends DatabaseProvider {
                 ex.printStackTrace();
             }
         }
+
+        if(!leaderboardsFile.exists()) {
+            try {
+                if(!leaderboardsFile.createNewFile()) {
+                    throw new IOException("Something went wrong when creating the leaderboard storage file!");
+                }
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -48,7 +63,7 @@ public class Json extends DatabaseProvider {
         guilds.put(guild.getName(), guild);
 
         Main.newChain()
-            .asyncFirst(() -> write(guilds))
+            .asyncFirst(() -> write(guildsFile, guilds))
             .syncLast(successful -> callback.call(successful, null))
         .execute((exception, task) -> {
             if(exception != null) {
@@ -70,7 +85,7 @@ public class Json extends DatabaseProvider {
         guilds.remove(guild.getName());
 
         Main.newChain()
-            .asyncFirst(() -> write(guilds))
+            .asyncFirst(() -> write(guildsFile, guilds))
             .syncLast(successful -> callback.call(successful, null))
         .execute();
     }
@@ -100,29 +115,77 @@ public class Json extends DatabaseProvider {
         guilds.put(guild.getName(), guild);
 
         Main.newChain()
-            .asyncFirst(() -> write(guilds))
+            .asyncFirst(() -> write(guildsFile, guilds))
             .syncLast(successful -> callback.call(successful, null))
         .execute();
     }
 
     @Override
-    public void createLeaderboard(String name, me.bramhaag.guilds.leaderboard.Leaderboard.LeaderboardType leaderboardType, me.bramhaag.guilds.leaderboard.Leaderboard.SortType sortType, Callback<me.bramhaag.guilds.leaderboard.Leaderboard, Exception> callback) {
+    public void createLeaderboard(Leaderboard leaderboard, Callback<Boolean, Exception> callback) {
+        List<Leaderboard> leaderboards = getLeaderboards() == null ? new ArrayList<>() : getLeaderboards();
+        leaderboards.add(leaderboard);
 
+        Main.newChain()
+                .asyncFirst(() -> write(leaderboardsFile, leaderboard))
+                .syncLast(successful -> callback.call(successful, null))
+                .execute((exception, task) -> {
+                    if(exception != null) {
+                        callback.call(false, exception);
+                    }
+                });
+
+        Main.getInstance().getLeaderboardHandler().addLeaderboard(leaderboard);
     }
 
     @Override
-    public void removeLeaderboard(String name, me.bramhaag.guilds.leaderboard.Leaderboard.LeaderboardType leaderboardType, Callback<Boolean, Exception> callback) {
+    public void removeLeaderboard(Leaderboard leaderboard, Callback<Boolean, Exception> callback) {
+        List<Leaderboard> leaderboards = getLeaderboards();
 
+        if(leaderboard == null || !leaderboards.contains(leaderboard)) {
+            return;
+        }
+
+        leaderboards.remove(leaderboard);
+
+        Main.newChain()
+                .asyncFirst(() -> write(guildsFile, leaderboards))
+                .syncLast(successful -> callback.call(successful, null))
+            .execute();
     }
 
     @Override
-    public void getLeaderboards(Callback<List<me.bramhaag.guilds.leaderboard.Leaderboard>, Exception> callback) {
+    public void getLeaderboards(Callback<List<Leaderboard>, Exception> callback) {
+        Main.newChain()
+                .asyncFirst(() -> {
+                    JsonReader reader;
+                    try {
+                        reader = new JsonReader(new FileReader(leaderboardsFile));
+                    } catch (FileNotFoundException ex) {
+                        ex.printStackTrace();
+                        return null;
+                    }
 
+                    return gson.fromJson(reader, Leaderboard[].class);
+                })
+                .syncLast(leaderboards -> callback.call((List<Leaderboard>) leaderboards, null))
+            .execute();
     }
 
-    private boolean write(HashMap<String, Guild> guilds) {
-        try (Writer writer = new FileWriter(guildsFile)) {
-            gson.toJson(guilds, writer);
+    @Override
+    public void updateLeaderboard(Leaderboard leaderboard, Callback<Boolean, Exception> callback) {
+        List<Leaderboard> leaderboards = getLeaderboards();
+        leaderboards.remove(leaderboards.stream().filter(l -> l.getName().equals(leaderboard.getName()) && l.getLeaderboardType() == leaderboard.getLeaderboardType()).findFirst().orElse(null));
+        leaderboards.add(leaderboard);
+
+        Main.newChain()
+                .asyncFirst(() -> write(leaderboardsFile, leaderboards))
+                .syncLast(successful -> callback.call(successful, null))
+            .execute();
+    }
+
+    private boolean write(File file, Object toWrite) {
+        try (Writer writer = new FileWriter(file)) {
+            gson.toJson(toWrite, writer);
             return true;
         }
         catch (IOException e) {
@@ -133,5 +196,9 @@ public class Json extends DatabaseProvider {
 
     private HashMap<String, Guild> getGuilds() {
         return Main.getInstance().getGuildHandler().getGuilds();
+    }
+
+    private List<Leaderboard> getLeaderboards() {
+        return Main.getInstance().getLeaderboardHandler().getLeaderboards();
     }
 }

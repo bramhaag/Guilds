@@ -43,7 +43,7 @@ public class LeaderboardHandler implements IHandler {
     public void addLeaderboard(Leaderboard leaderboard) {
         leaderboards.add(leaderboard);
 
-        Main.getInstance().getDatabaseProvider().createLeaderboard(leaderboard.getName(), leaderboard.getLeaderboardType(), leaderboard.getSortType(), (result, exception) -> {
+        Main.getInstance().getDatabaseProvider().createLeaderboard(leaderboard, (result, exception) -> {
             if(result == null && exception != null) {
                 SneakyThrow.sneaky(exception);
             }
@@ -53,8 +53,8 @@ public class LeaderboardHandler implements IHandler {
     public void removeLeaderboard(Leaderboard leaderboard) {
         leaderboards.remove(leaderboard);
 
-        Main.getInstance().getDatabaseProvider().removeLeaderboard(leaderboard.getName(), leaderboard.getLeaderboardType(), (result, exception) -> {
-            if(result == false && exception != null) {
+        Main.getInstance().getDatabaseProvider().removeLeaderboard(leaderboard, (result, exception) -> {
+            if(!result && exception != null) {
                 SneakyThrow.sneaky(exception);
             }
         });
@@ -62,5 +62,9 @@ public class LeaderboardHandler implements IHandler {
 
     public List<Leaderboard> getLeaderboards() {
         return leaderboards;
+    }
+
+    public Leaderboard getLeaderboard(String name, Leaderboard.LeaderboardType leaderboardType) {
+        return leaderboards.stream().filter(leaderboard -> leaderboard.getName().equals(name) && leaderboard.getLeaderboardType() == leaderboardType).findFirst().orElse(null);
     }
 }

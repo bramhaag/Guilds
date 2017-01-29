@@ -8,7 +8,7 @@ import me.bramhaag.guilds.database.Callback;
 import me.bramhaag.guilds.database.DatabaseProvider;
 import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.guild.GuildRole;
-import me.bramhaag.guilds.__old.leaderboard.Leaderboard;
+import me.bramhaag.guilds.leaderboard.Leaderboard;
 import org.bukkit.configuration.ConfigurationSection;
 import org.spigotmc.SneakyThrow;
 
@@ -185,17 +185,22 @@ public class MySql extends DatabaseProvider {
     }
 
     @Override
-    public void createLeaderboard(String name, Leaderboard.SortType sortType) {
+    public void createLeaderboard(Leaderboard leaderboard, Callback<Boolean, Exception> callback) {
 
     }
 
     @Override
-    public void removeLeaderboard(String name) {
+    public void removeLeaderboard(Leaderboard leaderboard, Callback<Boolean, Exception> callback) {
 
     }
 
     @Override
     public void getLeaderboards(Callback<List<Leaderboard>, Exception> callback) {
+
+    }
+
+    @Override
+    public void updateLeaderboard(Leaderboard leaderboard, Callback<Boolean, Exception> callback) {
 
     }
 
