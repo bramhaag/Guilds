@@ -46,7 +46,9 @@ public class Guild {
         this.members = new ArrayList<>();
         this.members.add(new GuildMember(master, 0));
 
+        this.allies = new ArrayList<>();
         this.invitedMembers = new ArrayList<>();
+        this.pendingAllies = new ArrayList<>();
     }
 
     public String getName() {

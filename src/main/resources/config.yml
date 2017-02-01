@@ -27,10 +27,13 @@ roles:
     name: "GuildMaster"
     permissions:
       chat: true
+      ally-chat: true
       invite: true
       kick: true
       promote: true
       demote: true
+      add-ally: true
+      remove-ally: true
       change-prefix: true
       change-master: true
       remove-guild: true
@@ -38,10 +41,13 @@ roles:
     name: "Officer"
     permissions:
       chat: true
+      ally-chat: true
       invite: true
       kick: true
       promote: true
       demote: true
+      add-ally: true
+      remove-ally: true
       change-prefix: false
       change-master: false
       remove-guild: false
@@ -49,10 +55,13 @@ roles:
     name: "Veteran"
     permissions:
       chat: true
+      ally-chat: true
       invite: true
       kick: false
       promote: false
       demote: false
+      add-ally: false
+      remove-ally: false
       change-prefix: false
       change-master: false
       remove-guild: false
@@ -60,10 +69,13 @@ roles:
     name: "Member"
     permissions:
       chat: true
+      ally-chat: true
       invite: false
       kick: false
       promote: false
       demote: false
+      add-ally: false
+      remove-ally: false
       change-prefix: false
       change-master: false
       remove-guild: false
@@ -193,6 +205,17 @@ messages:
       added-player: "&aAdded player to guild"
       player-not-in-guild: "&cPlayer is not in this guild!"
       removed-player: "&aRemoved player from guild!"
+    ally:
+      guild-not-pending: "&cThis guild has not send you an ally request!"
+      accepted: "&aThis guild is now allied with {guild}!"
+      accepted-target: "&a{guild} is now allied with us!"
+      declined: "&c{guild} does not want to be an ally!"
+      send: "&aSend ally request!"
+      send-target: "&aRecieved an ally request from {guild}! Type /guilds ally accept {guild} to accept or type /guilds ally decline {guild} to decline"
+      removed: "&cThis guild is no longer allied with {guild}!"
+      removed-target: "&c{guild} is no longer allied with us!"
+      already-allies: "&cYou're already allied with {guild}!"
+      not-allies: "&cYou aren't allied with {guild}!"
   event:
     join:
       pending-invites: "&aYou have {number} pending invite(s) from the guild(s): &e{guilds}"

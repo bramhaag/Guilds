@@ -47,8 +47,6 @@ public class Main extends JavaPlugin {
 
     public static String PREFIX;
 
-    String[] rip;
-
     @Override
     public void onEnable() {
         this.saveDefaultConfig();
@@ -81,6 +79,8 @@ public class Main extends JavaPlugin {
         commandHandler.register(new CommandInvite());
         commandHandler.register(new CommandAccept());
         commandHandler.register(new CommandLeave());
+
+        commandHandler.register(new CommandAlly());
 
         commandHandler.register(new CommandChat());
 
