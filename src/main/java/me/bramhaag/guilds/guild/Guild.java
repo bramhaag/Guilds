@@ -24,10 +24,13 @@ public class Guild {
     private List<GuildMember> members;
 
     @Expose
+    private List<String> allies;
+
+    @Expose
     private List<UUID> invitedMembers;
 
     @Expose
-    private List<Guild> allies;
+    private List<String> pendingAllies;
 
     public Guild(String name) {
         this.name = name;
@@ -74,15 +77,7 @@ public class Guild {
             Main.getInstance().getScoreboardHandler().show(player);
         }
 
-        Main.getInstance().getDatabaseProvider().updateGuild(this, (result, exception) -> {
-            if(!result) {
-                Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while adding a member with an UUID of '%s' to guild '%s'", uuid, this.name));
-
-                if(exception != null) {
-                    exception.printStackTrace();
-                }
-            }
-        });
+        updateGuild("An error occurred while adding a member with an UUID of '%s' to guild '%s'", uuid.toString(), this.name);
     }
 
     public void removeMember(UUID uuid) {
@@ -112,38 +107,19 @@ public class Guild {
 
         this.members.remove(member);
 
-        Main.getInstance().getDatabaseProvider().updateGuild(this, (result, exception) -> {
-            if(!result) {
-                Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while removing a member with the UUID of '%s' from guild '%s'", uuid, this.name));
-                if(exception != null) {
-                    exception.printStackTrace();
-                }
-            }
-        });
+        updateGuild("An error occurred while removing a member with the UUID of '%s' from guild '%s'", uuid.toString(), this.name);
     }
 
     public void inviteMember(UUID uuid) {
         invitedMembers.add(uuid);
-        Main.getInstance().getDatabaseProvider().updateGuild(this, (result, exception) -> {
-            if(!result) {
-                Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while inviting a member with the UUID of '%s' to guild '%s'", uuid, this.name));
-                if(exception != null) {
-                    exception.printStackTrace();
-                }
-            }
-        });
+
+        updateGuild("An error occurred while inviting a member with the UUID of '%s' to guild '%s'", uuid.toString(), this.name);
     }
 
     public void removeInvitedPlayer(UUID uuid) {
         invitedMembers.remove(uuid);
-        Main.getInstance().getDatabaseProvider().updateGuild(this, (result, exception) -> {
-            if(!result) {
-                Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while removing an invited member member with the UUID of '%s' to guild '%s'", uuid, this.name));
-                if(exception != null) {
-                    exception.printStackTrace();
-                }
-            }
-        });
+
+        updateGuild("An error occurred while removing an invited member member with the UUID of '%s' to guild '%s'", uuid.toString(), this.name);
     }
 
     public void sendMessage(String message) {
@@ -163,19 +139,12 @@ public class Guild {
     public void updatePrefix(String prefix) {
         setPrefix(prefix);
 
-        Main.getInstance().getDatabaseProvider().updateGuild(this, ((result, exception) -> {
-            if(!result) {
-                Main.getInstance().getLogger().log(Level.SEVERE, String.format("An error occurred while updating prefix to '%s' for guild '%s'", prefix, this.name));
-                if(exception != null) {
-                    exception.printStackTrace();
-                }
-            }
-        }));
+        updateGuild("An error occurred while updating prefix to '%s' for guild '%s'", prefix, this.name);
 
         Main.getInstance().getScoreboardHandler().update();
     }
 
-    public List<Guild> getAllies() {
+    public List<String> getAllies() {
         return allies;
     }
 
@@ -195,7 +164,47 @@ public class Guild {
         Guild guild1 = getGuild(uuid1);
         Guild guild2 = getGuild(uuid2);
 
-        return !(guild1 == null || guild2 == null) && guild1.getAllies().contains(guild2);
+        return !(guild1 == null || guild2 == null) && guild1.getAllies().contains(guild2.getName());
 
+    }
+
+    public void addAlly(Guild targetGuild) {
+        allies.add(targetGuild.getName());
+
+        updateGuild("Something went wrong while adding the ally %s from guild %s", targetGuild.getName(), this.getName());
+    }
+
+    public void removeAlly(Guild targetGuild) {
+        allies.remove(targetGuild.getName());
+
+        updateGuild("Something went wrong while removing the ally %s from guild %s", targetGuild.getName(), this.getName());
+    }
+
+    public void addPendingAlly(Guild targetGuild) {
+        pendingAllies.add(targetGuild.getName());
+
+        updateGuild("Something went wrong while adding pending ally %s from guild %s", targetGuild.getName(), this.getName());
+    }
+
+    public void removePendingAlly(Guild targetGuild) {
+        pendingAllies.remove(targetGuild.getName());
+
+        updateGuild("Something went wrong while removing pending ally %s from guild %s", targetGuild.getName(), this.getName());
+    }
+
+    public List<String> getPendingAllies() {
+        return pendingAllies;
+    }
+
+    private void updateGuild(String errorMessage, String... params) {
+        Main.getInstance().getDatabaseProvider().updateGuild(this, (result, exception) -> {
+            if(!result) {
+                Main.getInstance().getLogger().log(Level.SEVERE, String.format(errorMessage, params));
+
+                if(exception != null) {
+                    exception.printStackTrace();
+                }
+            }
+        });
     }
 }
