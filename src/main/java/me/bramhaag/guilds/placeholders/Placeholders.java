@@ -12,7 +12,7 @@ public class Placeholders {
             return "N/A";
         }
 
-        return guild.getPrefix();
+        return guild.getName();
     }
 
     public static String getGuildMaster(Player player) {
