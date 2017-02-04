@@ -1,6 +1,7 @@
 package me.bramhaag.guilds.commands;
 
 import me.bramhaag.guilds.Main;
+import me.bramhaag.guilds.api.events.GuildCreateEvent;
 import me.bramhaag.guilds.commands.base.CommandBase;
 import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.message.Message;
@@ -44,7 +45,14 @@ public class CommandCreate extends CommandBase {
         Main.getInstance().getCommandHandler().addAction(player, new ConfirmAction() {
             @Override
             public void accept() {
-                Main.getInstance().getDatabaseProvider().createGuild(new Guild(args[0], player.getUniqueId()), (result, exception) -> {
+                Guild guild = new Guild(args[0], player.getUniqueId());
+
+                GuildCreateEvent event = new GuildCreateEvent(player, guild);
+                if(event.isCancelled()) {
+                    return;
+                }
+
+                Main.getInstance().getDatabaseProvider().createGuild(guild, (result, exception) -> {
                     if(result) {
                         Message.sendMessage(player, Message.COMMAND_CREATE_SUCCESSFUL.replace("{guild}", args[0]));
 

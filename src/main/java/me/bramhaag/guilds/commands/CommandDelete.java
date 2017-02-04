@@ -1,6 +1,7 @@
 package me.bramhaag.guilds.commands;
 
 import me.bramhaag.guilds.Main;
+import me.bramhaag.guilds.api.events.GuildRemoveEvent;
 import me.bramhaag.guilds.commands.base.CommandBase;
 import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.guild.GuildRole;
@@ -36,6 +37,11 @@ public class CommandDelete extends CommandBase {
         Main.getInstance().getCommandHandler().addAction(player, new ConfirmAction() {
             @Override
             public void accept() {
+                GuildRemoveEvent event = new GuildRemoveEvent(player, guild, GuildRemoveEvent.RemoveCause.REMOVED);
+                if(event.isCancelled()) {
+                    return;
+                }
+
                 Main.getInstance().getDatabaseProvider().removeGuild(guild, (result, exception) -> {
                     if(result) {
                         Message.sendMessage(player, Message.COMMAND_DELETE_SUCCESSFUL.replace("{guild}", guild.getName()));

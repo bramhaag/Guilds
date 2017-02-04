@@ -1,5 +1,7 @@
 package me.bramhaag.guilds.commands;
 
+import me.bramhaag.guilds.api.events.GuildAddAllyEvent;
+import me.bramhaag.guilds.api.events.GuildRemoveAllyEvent;
 import me.bramhaag.guilds.commands.base.CommandBase;
 import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.guild.GuildRole;
@@ -78,6 +80,11 @@ public class CommandAlly extends CommandBase {
                 return;
             }
 
+            GuildAddAllyEvent event = new GuildAddAllyEvent(player, guild, targetGuild);
+            if(event.isCancelled()) {
+                return;
+            }
+
             Message.sendMessage(player, Message.COMMAND_ALLY_SEND);
             targetGuild.getMembers().stream().filter(member -> GuildRole.getRole(member.getRole()).canAddAlly()).forEach(member -> Message.sendMessage(Bukkit.getPlayer(member.getUniqueId()), Message.COMMAND_ALLY_SEND_TARGET.replace("{guild}", guild.getName())));
             targetGuild.addPendingAlly(guild);
@@ -90,6 +97,11 @@ public class CommandAlly extends CommandBase {
 
             if(!guild.getAllies().contains(targetGuild.getName())) {
                 Message.sendMessage(player, Message.COMMAND_ALLY_NOT_ALLIES.replace("{guild}", targetGuild.getName()));
+                return;
+            }
+
+            GuildRemoveAllyEvent event = new GuildRemoveAllyEvent(player, guild, targetGuild);
+            if(event.isCancelled()) {
                 return;
             }
 

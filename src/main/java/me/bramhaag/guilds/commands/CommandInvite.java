@@ -1,5 +1,6 @@
 package me.bramhaag.guilds.commands;
 
+import me.bramhaag.guilds.api.events.GuildInviteEvent;
 import me.bramhaag.guilds.commands.base.CommandBase;
 import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.guild.GuildRole;
@@ -38,6 +39,11 @@ public class CommandInvite extends CommandBase {
         Guild invitedPlayerGuild = Guild.getGuild(invitedPlayer.getUniqueId());
         if(invitedPlayerGuild != null && guild.getName().equals(invitedPlayerGuild.getName())) {
             Message.sendMessage(player, Message.COMMAND_INVITE_ALREADY_IN_GUILD);
+            return;
+        }
+
+        GuildInviteEvent event = new GuildInviteEvent(player, guild, invitedPlayer);
+        if(event.isCancelled()) {
             return;
         }
 

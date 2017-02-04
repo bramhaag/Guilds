@@ -1,6 +1,7 @@
 package me.bramhaag.guilds.commands;
 
 import me.bramhaag.guilds.Main;
+import me.bramhaag.guilds.api.events.GuildJoinEvent;
 import me.bramhaag.guilds.commands.base.CommandBase;
 import me.bramhaag.guilds.guild.Guild;
 import me.bramhaag.guilds.guild.GuildRole;
@@ -33,6 +34,11 @@ public class CommandAccept extends CommandBase {
         int maxMembers = Main.getInstance().getConfig().getInt("members.max-members");
         if(maxMembers != -1 && guild.getMembers().size() >= maxMembers) {
             Message.sendMessage(player, Message.COMMAND_ACCEPT_GUILD_FULL);
+            return;
+        }
+
+        GuildJoinEvent event = new GuildJoinEvent(player, guild);
+        if(event.isCancelled()) {
             return;
         }
 
