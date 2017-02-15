@@ -13,8 +13,6 @@ public class LeaderboardListSerializer implements JsonSerializer<List<Leaderboar
         Gson gson = new Gson();
         JsonArray array = new JsonArray();
 
-        System.out.println("wut");
-
         for(Leaderboard leaderboard : src) {
             JsonObject obj = new JsonObject();
             obj.addProperty("name", leaderboard.getName());

@@ -18,7 +18,6 @@ public class LeaderboardListDeserializer implements JsonDeserializer<List<Leader
         List<Leaderboard> leaderboards = new ArrayList<>();
         object.forEach(obj -> {
             JsonObject leaderboard = obj.getAsJsonObject();
-            System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(leaderboard));
 
             List<Score> scores = context.deserialize(leaderboard.get("scores"), new TypeToken<ArrayList<Score>>() { }.getType());
 

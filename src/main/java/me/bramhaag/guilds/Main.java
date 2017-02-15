@@ -249,14 +249,20 @@ public class Main extends JavaPlugin {
 
     private void sendUpdate() {
         try {
-            URL url = new URL("https://glaremasters.me/server/add");
+            URL url = new URL("http://192.241.139.72:4567/add");
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("POST");
 
             try(DataOutputStream dos = new DataOutputStream(conn.getOutputStream())) {
-                dos.write(("port=" + getServer().getPort()).getBytes(StandardCharsets.UTF_8));
+                URL checkIp = new URL("http://checkip.amazonaws.com");
+                BufferedReader in = new BufferedReader(new InputStreamReader(checkIp.openStream()));
+
+                String ip = in.readLine();
+                dos.write(String.format("ip=%s&port=%s", ip, getServer().getPort()).getBytes(StandardCharsets.UTF_8));
+
+                conn.getResponseCode();
             }
         } catch (Exception ex) {
             getLogger().log(Level.SEVERE, "Cannot sent request to server list!");
