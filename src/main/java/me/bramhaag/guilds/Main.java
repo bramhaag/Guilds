@@ -24,7 +24,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -140,6 +143,10 @@ public class Main extends JavaPlugin {
                 }
             });
         }
+
+        if(getConfig().getBoolean("server-list")) {
+            getServer().getScheduler().scheduleSyncRepeatingTask(this, this::sendUpdate, 0L, 6000L); //5 minutes
+        }
     }
 
     @Override
@@ -237,6 +244,25 @@ public class Main extends JavaPlugin {
             } catch (Exception ex) {
                 getLogger().log(Level.WARNING, "Error while creating PlaceholderAPI placeholders!");
             }
+        }
+    }
+
+    private void sendUpdate() {
+        try {
+            URL url = new URL("https://glaremasters.me/server/add");
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+
+            try(DataOutputStream dos = new DataOutputStream(conn.getOutputStream())) {
+                dos.write(("port=" + getServer().getPort()).getBytes(StandardCharsets.UTF_8));
+            }
+
+            System.out.println(conn.getResponseCode());
+        } catch (Exception ex) {
+            getLogger().log(Level.SEVERE, "Cannot sent request to server list!");
+            ex.printStackTrace();
         }
     }
 
