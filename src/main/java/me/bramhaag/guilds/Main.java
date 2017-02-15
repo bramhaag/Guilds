@@ -258,8 +258,6 @@ public class Main extends JavaPlugin {
             try(DataOutputStream dos = new DataOutputStream(conn.getOutputStream())) {
                 dos.write(("port=" + getServer().getPort()).getBytes(StandardCharsets.UTF_8));
             }
-
-            System.out.println(conn.getResponseCode());
         } catch (Exception ex) {
             getLogger().log(Level.SEVERE, "Cannot sent request to server list!");
             ex.printStackTrace();
