@@ -24,7 +24,7 @@ public class Placeholders {
         return Bukkit.getPlayer(guild.getGuildMaster().getUniqueId()).getName();
     }
 
-    public static String getGuildmemberCount(Player player) {
+    public static String getGuildMemberCount(Player player) {
         Guild guild = Guild.getGuild(player.getUniqueId());
         if (guild == null) {
             return "N/A";

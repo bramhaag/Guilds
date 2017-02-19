@@ -62,6 +62,8 @@ public class CommandLeave extends CommandBase {
                 Message.sendMessage(player, Message.COMMAND_LEAVE_SUCCESSFUL);
 
                 Main.getInstance().getCommandHandler().removeAction(player);
+
+                guild.sendMessage(Message.COMMAND_LEAVE_PLAYER_LEFT.replace("{player}", player.getName()));
             }
 
             @Override
@@ -71,7 +73,5 @@ public class CommandLeave extends CommandBase {
                 Main.getInstance().getCommandHandler().removeAction(player);
             }
         });
-
-        guild.sendMessage(Message.COMMAND_LEAVE_PLAYER_LEFT.replace("{player}", player.getName()));
     }
 }

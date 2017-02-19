@@ -10,7 +10,7 @@ public class CommandHelp extends CommandBase {
     private final int MAX_PAGE_SIZE = 6;
 
     public CommandHelp() {
-        super("help", "View all commands", "guilds.command.help", true, null, null, 0, 1);
+        super("help", "View all commands", "guilds.command.help", true, null, "[page]", 0, 1);
     }
 
     @Override

@@ -50,6 +50,7 @@ public class Main extends JavaPlugin {
 
     public static String PREFIX;
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onEnable() {
         this.saveDefaultConfig();
@@ -145,7 +146,7 @@ public class Main extends JavaPlugin {
         }
 
         if(getConfig().getBoolean("server-list")) {
-            getServer().getScheduler().scheduleSyncRepeatingTask(this, this::sendUpdate, 0L, 6000L); //5 minutes
+            getServer().getScheduler().scheduleAsyncRepeatingTask(this, this::sendUpdate, 0L, 6000L); //5 minutes
         }
     }
 
@@ -206,39 +207,35 @@ public class Main extends JavaPlugin {
 
     private void initializePlaceholder() {
         if (Bukkit.getPluginManager().isPluginEnabled("MVdWPlaceholderAPI")) {
-            PlaceholderAPI.registerPlaceholder(this, "guild",              event -> Placeholders.getGuild(event.getPlayer()));
-            PlaceholderAPI.registerPlaceholder(this, "guild-master",       event -> Placeholders.getGuildMaster(event.getPlayer()));
-            PlaceholderAPI.registerPlaceholder(this, "guild-member-count", event -> Placeholders.getGuildmemberCount(event.getPlayer()));
-            PlaceholderAPI.registerPlaceholder(this, "guild-prefix",       event -> Placeholders.getGuildPrefix(event.getPlayer()));
+            System.out.println("MVDW");
+            PlaceholderAPI.registerPlaceholder(this, "guild_name",         event -> Placeholders.getGuild(event.getPlayer()));
+            PlaceholderAPI.registerPlaceholder(this, "guild_master",       event -> Placeholders.getGuildMaster(event.getPlayer()));
+            PlaceholderAPI.registerPlaceholder(this, "guild_member_count", event -> Placeholders.getGuildMemberCount(event.getPlayer()));
+            PlaceholderAPI.registerPlaceholder(this, "guild_prefix",       event -> Placeholders.getGuildPrefix(event.getPlayer()));
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            System.out.println("Clip");
             try {
                 new EZPlaceholderHook(this, "guild") {
                     @Override
-                    public String onPlaceholderRequest(Player player, String placeholder) {
-                        return Placeholders.getGuild(player);
-                    }
-                }.hook();
+                    public String onPlaceholderRequest(Player player, String identifier) {
+                        if(player == null) {
+                            return "N/A";
+                        }
 
-                new EZPlaceholderHook(this, "guild-master") {
-                    @Override
-                    public String onPlaceholderRequest(Player player, String placeholder) {
-                        return Placeholders.getGuildMaster(player);
-                    }
-                }.hook();
-
-                new EZPlaceholderHook(this, "guild-member-count") {
-                    @Override
-                    public String onPlaceholderRequest(Player player, String placeholder) {
-                        return Placeholders.getGuildmemberCount(player);
-                    }
-                }.hook();
-
-                new EZPlaceholderHook(this, "guild-prefix") {
-                    @Override
-                    public String onPlaceholderRequest(Player player, String placeholder) {
-                        return Placeholders.getGuildPrefix(player);
+                        switch(identifier) {
+                            case "name":
+                                return Placeholders.getGuild(player);
+                            case "master":
+                                Placeholders.getGuildMaster(player);
+                            case "member_count":
+                                Placeholders.getGuildMemberCount(player);
+                            case "prefix":
+                                Placeholders.getGuildPrefix(player);
+                            default:
+                                return "N/A";
+                        }
                     }
                 }.hook();
             } catch (Exception ex) {

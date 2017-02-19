@@ -1,7 +1,7 @@
 name: @project.name@
 version: @project.version@
 main: me.bramhaag.guilds.Main
-softdepend: [MVdWPlaceholderAPI, PlaceholderAPI]
+softdepends: [MVdWPlaceholderAPI, PlaceholderAPI]
 author: bramhaag
 
 commands:
