@@ -204,7 +204,6 @@ public class Main extends JavaPlugin {
 
     private void initializePlaceholder() {
         if (Bukkit.getPluginManager().isPluginEnabled("MVdWPlaceholderAPI")) {
-            System.out.println("MVDW");
             PlaceholderAPI.registerPlaceholder(this, "guild_name",         event -> Placeholders.getGuild(event.getPlayer()));
             PlaceholderAPI.registerPlaceholder(this, "guild_master",       event -> Placeholders.getGuildMaster(event.getPlayer()));
             PlaceholderAPI.registerPlaceholder(this, "guild_member_count", event -> Placeholders.getGuildMemberCount(event.getPlayer()));
@@ -212,7 +211,6 @@ public class Main extends JavaPlugin {
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            System.out.println("Clip");
             try {
                 new EZPlaceholderHook(this, "guild") {
                     @Override
