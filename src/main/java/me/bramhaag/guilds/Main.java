@@ -216,7 +216,7 @@ public class Main extends JavaPlugin {
                     @Override
                     public String onPlaceholderRequest(Player player, String identifier) {
                         if(player == null) {
-                            return "N/A";
+                            return getConfig().getString("placeholders.default");
                         }
 
                         switch(identifier) {
@@ -229,7 +229,7 @@ public class Main extends JavaPlugin {
                             case "prefix":
                                 Placeholders.getGuildPrefix(player);
                             default:
-                                return "N/A";
+                                return getConfig().getString("placeholders.default");
                         }
                     }
                 }.hook();
