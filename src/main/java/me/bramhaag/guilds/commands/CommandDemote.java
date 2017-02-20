@@ -75,7 +75,7 @@ public class CommandDemote extends CommandBase {
 
         String oldRank = GuildRole.getRole(demotedMember.getRole()).getName();
         String newRank = demotedRole.getName();
-        Message.sendMessage(demotedPlayer, Message.COMMAND_DEMOTE_DEMOTED.replace("{old-rank}", oldRank, "{new-rank}", newRank));
+        Message.sendMessage(demotedPlayer, Message.COMMAND_DEMOTE_DEMOTED.replace("{player}", demotedPlayer.getName(), "{old-rank}", oldRank, "{new-rank}", newRank));
         Message.sendMessage(player, Message.COMMAND_DEMOTE_SUCCESSFUL.replace("{player}", demotedPlayer.getName(), "{old-rank}", oldRank, "{new-rank}", newRank));
         demotedMember.setRole(demotedRole);
     }
