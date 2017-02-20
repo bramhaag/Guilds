@@ -13,6 +13,6 @@ public class CommandVersion extends CommandBase
 
     public void execute(CommandSender sender, String[] args) {
         PluginDescriptionFile pdf = Main.getInstance().getDescription();
-        sender.sendMessage("Guilds v" + pdf.getVersion() + " by " + String.join("&", pdf.getAuthors()));
+        sender.sendMessage("Guilds v" + pdf.getVersion() + " by " + String.join(" & ", pdf.getAuthors()));
     }
 }
