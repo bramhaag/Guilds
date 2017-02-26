@@ -224,11 +224,11 @@ public class Main extends JavaPlugin {
                             case "name":
                                 return Placeholders.getGuild(player);
                             case "master":
-                                Placeholders.getGuildMaster(player);
+                                return Placeholders.getGuildMaster(player);
                             case "member_count":
-                                Placeholders.getGuildMemberCount(player);
+                                return Placeholders.getGuildMemberCount(player);
                             case "prefix":
-                                Placeholders.getGuildPrefix(player);
+                                return Placeholders.getGuildPrefix(player);
                             default:
                                 return getConfig().getString("placeholders.default");
                         }
